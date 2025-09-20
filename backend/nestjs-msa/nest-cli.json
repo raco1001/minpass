@@ -8,6 +8,15 @@
   "monorepo": true,
   "root": "apps",
   "projects": {
+    "activities": {
+      "type": "application",
+      "root": "apps/activities",
+      "entryFile": "main",
+      "sourceRoot": "apps/activities/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/activities/tsconfig.app.json"
+      }
+    },
     "apis": {
       "type": "application",
       "root": "apps/apis",
@@ -15,6 +24,51 @@
       "sourceRoot": "apps/apis/src",
       "compilerOptions": {
         "tsConfigPath": "apps/apis/tsconfig.app.json"
+      }
+    },
+    "auth": {
+      "type": "application",
+      "root": "apps/auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/auth/tsconfig.app.json"
+      }
+    },
+    "notifications": {
+      "type": "application",
+      "root": "apps/notifications",
+      "entryFile": "main",
+      "sourceRoot": "apps/notifications/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notifications/tsconfig.app.json"
+      }
+    },
+    "ontology": {
+      "type": "application",
+      "root": "apps/ontology",
+      "entryFile": "main",
+      "sourceRoot": "apps/ontology/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/ontology/tsconfig.app.json"
+      }
+    },
+    "schedules": {
+      "type": "application",
+      "root": "apps/schedules",
+      "entryFile": "main",
+      "sourceRoot": "apps/schedules/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/schedules/tsconfig.app.json"
+      }
+    },
+    "tasks": {
+      "type": "application",
+      "root": "apps/tasks",
+      "entryFile": "main",
+      "sourceRoot": "apps/tasks/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/tasks/tsconfig.app.json"
       }
     },
     "users": {
