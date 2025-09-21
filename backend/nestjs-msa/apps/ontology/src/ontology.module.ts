@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { OntologyController } from './ontology.controller';
-import { OntologyService } from './ontology.service';
+import { Module } from "@nestjs/common";
+import { OntologyController } from "./presentation/web/controllers/ontology.controller";
+import { OntologyService } from "./services/ontology.service";
 
 @Module({
   imports: [],

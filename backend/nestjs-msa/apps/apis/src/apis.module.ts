@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { ApisController } from './apis.controller';
-import { ApisService } from './apis.service';
+import { Module } from "@nestjs/common";
+import { ApisController } from "./presentation/web/controllers/apis.controller";
+import { ApisService } from "./services/apis.service";
 
 @Module({
   imports: [],

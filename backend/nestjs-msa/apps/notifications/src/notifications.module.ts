@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { NotificationsController } from './notifications.controller';
-import { NotificationsService } from './notifications.service';
+import { Module } from "@nestjs/common";
+import { NotificationsController } from "./presentation/web/controllers/notifications.controller";
+import { NotificationsService } from "./services/notifications.service";
 
 @Module({
   imports: [],
