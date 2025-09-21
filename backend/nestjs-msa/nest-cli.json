@@ -35,6 +35,15 @@
         "tsConfigPath": "apps/auth/tsconfig.app.json"
       }
     },
+    "journals": {
+      "type": "application",
+      "root": "apps/journals",
+      "entryFile": "main",
+      "sourceRoot": "apps/journals/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/journals/tsconfig.app.json"
+      }
+    },
     "notifications": {
       "type": "application",
       "root": "apps/notifications",
