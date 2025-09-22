@@ -4,12 +4,10 @@ import { eq } from "drizzle-orm";
 import { MySql2Database } from "drizzle-orm/mysql2";
 import { DRIZZLE_DB } from "../../../../../../../libs/integrations/database/mariadb/constants/mariadb.constants";
 import * as dbSchema from "./schema/users";
-
 import { IUserRepository as UserRepositoryPort } from "../../../../core/ports/out/user.repository.port";
 import { User } from "../../../../core/domain/entities/user.entity";
 import { toDomainUser, toRowUser } from "./mappers/user.mapper";
 import { UserStatus } from "apps/users/src/core/domain/constants/user.constants";
-import { uuidToBin } from "../../../../../../../libs/global/utils/id-util/convertUuid";
 
 @Injectable()
 export class UserRepository implements UserRepositoryPort {
@@ -19,11 +17,10 @@ export class UserRepository implements UserRepositoryPort {
   ) {}
 
   async findById(id: string): Promise<User | null> {
-    const binId = uuidToBin(id).toString();
     const rows = await this.db
       .select()
       .from(dbSchema.users)
-      .where(eq(dbSchema.users.id, binId))
+      .where(eq(dbSchema.users.id, id))
       .limit(1);
 
     if (rows.length === 0) return null;
@@ -66,7 +63,6 @@ export class UserRepository implements UserRepositoryPort {
   }
 
   async delete(id: string): Promise<void> {
-    const binId = uuidToBin(id).toString();
     await this.db
       .update(dbSchema.users)
       .set({
@@ -74,6 +70,6 @@ export class UserRepository implements UserRepositoryPort {
         updatedAt: new Date(),
         deletedAt: new Date(),
       })
-      .where(eq(dbSchema.users.id, binId));
+      .where(eq(dbSchema.users.id, id));
   }
 }

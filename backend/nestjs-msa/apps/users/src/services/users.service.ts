@@ -43,16 +43,8 @@ export class UsersService implements IUserService {
     code: "tos" | "privacy" | "marketing",
     version: string,
     grantedAt: Date,
-    payloadHash?: string,
   ) {
-    const consent = Consent.record(
-      userId,
-      uuidv7(),
-      code,
-      version,
-      grantedAt,
-      payloadHash,
-    );
+    const consent = Consent.record(userId, code, version, grantedAt);
     await this.consents.append(consent);
     return consent;
   }

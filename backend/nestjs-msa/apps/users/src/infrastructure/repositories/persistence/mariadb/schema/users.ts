@@ -1,8 +1,9 @@
 import { sql } from "drizzle-orm";
-import { mysqlTable, varchar, datetime, binary } from "drizzle-orm/mysql-core";
+import { mysqlTable, varchar, datetime } from "drizzle-orm/mysql-core";
+import { uuidv7Binary } from "../../../../../../../../libs/global/utils/id-util/uuidv7-binary";
 
 export const users = mysqlTable("users", {
-  id: binary("id", { length: 16 }).primaryKey(),
+  id: uuidv7Binary("id", { length: 16 }).primaryKey(),
   email: varchar("email", { length: 100 }).notNull(),
   displayName: varchar("display_name", { length: 100 }),
   locale: varchar("locale", { length: 50 }).notNull(),

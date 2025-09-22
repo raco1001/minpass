@@ -1,11 +1,10 @@
 import { User } from "../../../../../core/domain/entities/user.entity";
 import { UserStatus } from "../../../../../core/domain/constants/user.constants";
-import { uuidToBin } from "../../../../../../../../libs/global/utils/id-util/convertUuid";
 import { UserRow } from "../schema/users";
 
 export const toDomainUser = (row: UserRow): User => {
   return User.restore({
-    id: row.id.toString(),
+    id: row.id,
     email: row.email,
     displayName: row.displayName ?? undefined,
     status: row.status as UserStatus,
@@ -21,7 +20,7 @@ export const toRowUser = (
 ): Omit<UserRow, "createdAt" | "updatedAt"> &
   Partial<Pick<UserRow, "createdAt" | "updatedAt">> => {
   return {
-    id: uuidToBin(user.id).toString(),
+    id: user.id,
     email: user.email,
     displayName: user.displayName ?? null,
     status: user.status,

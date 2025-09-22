@@ -1,15 +1,11 @@
 import { sql } from "drizzle-orm";
-import {
-  mysqlTable,
-  varchar,
-  datetime,
-  json,
-  binary,
-} from "drizzle-orm/mysql-core";
+import { mysqlTable, varchar, datetime, json } from "drizzle-orm/mysql-core";
 import { users } from "./users";
+import { uuidv7Binary } from "../../../../../../../../libs/global/utils/id-util/uuidv7-binary";
+
 export const consents = mysqlTable("consents", {
-  id: binary("id", { length: 16 }).primaryKey(),
-  userId: binary("user_id", { length: 16 })
+  id: uuidv7Binary("id", { length: 16 }).primaryKey(),
+  userId: uuidv7Binary("user_id", { length: 16 })
     .notNull()
     .references(() => users.id),
   purpose: varchar("purpose", { length: 100 }),
@@ -23,3 +19,6 @@ export const consents = mysqlTable("consents", {
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
 });
+
+export type ConsentRow = typeof consents.$inferSelect;
+export type NewConsentRow = typeof consents.$inferInsert;

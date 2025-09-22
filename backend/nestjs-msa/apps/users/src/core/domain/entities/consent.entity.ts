@@ -1,5 +1,6 @@
 import { Purpose } from "../constants/consent.constants";
 import { IConsentProps } from "../types/consent.types";
+import { v7 as uuidv7 } from "uuid";
 
 export class Consent {
   private props: IConsentProps;
@@ -12,27 +13,26 @@ export class Consent {
     this.props = Object.freeze({ ...props });
   }
 
+  static restore(props: IConsentProps) {
+    return new Consent(props);
+  }
+
   static record(
     userId: string,
-    id: string,
     purpose: Purpose,
     scope: string,
     grantedAt: Date,
-    payloadHash?: string,
   ) {
     return new Consent({
-      id,
+      id: uuidv7(),
       userId,
       purpose,
       scope,
       grantedAt,
       revokedAt: null,
-      payloadHash,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
-  }
-
-  static restore(props: IConsentProps) {
-    return new Consent(props);
   }
 
   revoke() {

@@ -13,7 +13,6 @@ export interface IUserService {
     code: string,
     version: string,
     grantedAt: Date,
-    payloadHash?: string,
   ): Promise<Consent>;
   getConsents(userId: string): Promise<Consent[]>;
 }

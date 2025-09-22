@@ -36,14 +36,12 @@ export class UsersController {
   //   code: string;
   //   version: string;
   //   grantedAt: Date;
-  //   payloadHash?: string;
   // }) {
   //   return this.usersService.recordConsent(
   //     req.userId,
   //     req.code,
   //     req.version,
   //     req.grantedAt,
-  //     req.payloadHash,
   //   );
   // }
 

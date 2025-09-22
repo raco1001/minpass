@@ -1,36 +1,26 @@
 import { Consent } from "../../../../../core/domain/entities/consent.entity";
-import {
-  binToUuid,
-  uuidToBin,
-} from "../../../../../../../../libs/global/utils/id-util/convertUuid";
-
-export type ConsentRow = {
-  id: Buffer;
-  userId: Buffer;
-  purpose: "tos" | "privacy" | "marketing";
-  scope: string;
-  grantedAt: Date;
-  revokedAt: Date | null;
-  payloadHash: string | null;
-};
+import { ConsentRow } from "../schema/consents";
+import { Purpose } from "../../../../../core/domain/constants/consent.constants";
 
 export const toDomainConsent = (row: ConsentRow): Consent =>
   Consent.restore({
-    id: binToUuid(row.id),
-    userId: binToUuid(row.userId),
-    purpose: row.purpose,
-    scope: row.scope,
-    grantedAt: row.grantedAt,
+    id: row.id,
+    userId: row.userId,
+    purpose: row.purpose as Purpose,
+    scope: row.scope as string,
+    grantedAt: row.grantedAt as Date,
+    createdAt: new Date(row.createdAt),
+    updatedAt: new Date(row.updatedAt),
     revokedAt: row.revokedAt ?? null,
-    payloadHash: row.payloadHash ?? undefined,
   });
 
 export const toRowConsent = (c: Consent): ConsentRow => ({
-  id: uuidToBin(c.data.id),
-  userId: uuidToBin(c.data.userId),
+  id: c.data.id,
+  userId: c.data.userId,
   purpose: c.data.purpose,
   scope: c.data.scope,
+  createdAt: new Date(c.data.createdAt),
   grantedAt: c.data.grantedAt,
+  updatedAt: new Date(c.data.updatedAt),
   revokedAt: c.data.revokedAt ?? null,
-  payloadHash: c.data.payloadHash ?? null,
 });

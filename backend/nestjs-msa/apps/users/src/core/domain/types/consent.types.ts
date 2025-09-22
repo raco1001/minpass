@@ -6,6 +6,7 @@ export interface IConsentProps {
   purpose: Purpose;
   scope: string;
   grantedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
   revokedAt?: Date | null;
-  payloadHash?: string;
 }
