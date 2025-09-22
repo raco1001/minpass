@@ -1,5 +1,5 @@
 import { mysqlTable, varchar, datetime, json } from "drizzle-orm/mysql-core";
-import { users } from "apps/users/src/infrastructure/repositories/persistence/mariadb/schema/user";
+import { users } from "apps/users/src/infrastructure/repositories/persistence/mariadb/schema/users";
 import { sql } from "drizzle-orm";
 
 export const activityLogs = mysqlTable("activity_logs", {

@@ -20,6 +20,8 @@
     "test:e2e": "jest --config ./apps/nestjs-msa/test/jest-e2e.json"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.14.0",
+    "@grpc/proto-loader": "^0.8.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -33,7 +35,8 @@
     "nest-neo4j": "^0.3.1",
     "nestjs-pino": "^4.4.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -48,6 +51,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.7",
     "@types/supertest": "^6.0.2",
+    "@types/uuid": "^11.0.0",
     "drizzle-kit": "^0.31.4",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
