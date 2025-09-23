@@ -1,4 +1,4 @@
-import { Purpose } from "../constants/consent.constants";
+import { Purpose } from "./consent.constants";
 
 export interface IConsentProps {
   id: string;

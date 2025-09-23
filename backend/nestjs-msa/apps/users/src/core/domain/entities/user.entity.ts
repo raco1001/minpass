@@ -1,6 +1,6 @@
 import { v7 as uuidv7 } from "uuid";
 import { UserStatus } from "../constants/user.constants";
-import { IUserProps } from "../types/user.types";
+import { IUserProps } from "../constants/user.props";
 
 export class User {
   private props: IUserProps;

@@ -1,52 +1,49 @@
-import { Controller } from "@nestjs/common";
+import { Controller, Inject } from "@nestjs/common";
 import { IUserService } from "apps/users/src/core/ports/in/user.service.port";
 import { GrpcMethod } from "@nestjs/microservices";
+import {
+  CreateUserDto,
+  FindOneUserDto,
+  UpdateUserDto,
+} from "../../../core/dtos/user.dtos";
+import { IUserProps } from "apps/users/src/core/domain/constants/user.props";
 
 @Controller()
 export class UsersController {
-  constructor(private readonly usersService: IUserService) {}
-  @GrpcMethod("UsersService", "getHello")
-  getHello() {
-    return "Hello World!";
+  constructor(
+    @Inject(IUserService)
+    private readonly usersService: IUserService,
+  ) {}
+
+  @GrpcMethod("UsersService", "CreateUser")
+  createUser(data: CreateUserDto): Promise<IUserProps | null> {
+    console.log("CreateUser called with:", data);
+    return this.usersService.register(data);
   }
 
-  @GrpcMethod("UsersService", "getUser")
-  getUser(req: { id: string }) {
-    return this.usersService.getById(req.id);
+  @GrpcMethod("UsersService", "FindAllUsers")
+  findAllUsers(): Promise<IUserProps[]> {
+    console.log("FindAllUsers called");
+    return Promise.resolve([]);
   }
 
-  // @GrpcMethod("UsersService", "register")
-  // register(req: { email: string; displayName?: string }) {
-  //   return this.usersService.register(req.email, req.displayName);
-  // }
+  @GrpcMethod("UsersService", "FindOneUser")
+  findOneUser(data: FindOneUserDto): Promise<IUserProps | null> {
+    console.log("FindOneUser called with:", data);
+    return this.usersService.getById(data);
+  }
 
-  // @GrpcMethod("UsersService", "changeDisplayName")
-  // changeDisplayName(req: { id: string; newName: string }) {
-  //   return this.usersService.changeDisplayName(req.id, req.newName);
-  // }
+  @GrpcMethod("UsersService", "UpdateUser")
+  updateUser(data: UpdateUserDto): Promise<IUserProps | null> {
+    console.log("UpdateUser called with:", data);
+    return this.usersService.changeDisplayName(data);
+  }
 
-  // @GrpcMethod("UsersService", "deleteUser")
-  // deleteUser(req: { id: string }) {
-  //   return this.usersService.deleteUser(req.id);
-  // }
-
-  // @GrpcMethod("UsersService", "recordConsent")
-  // recordConsent(req: {
-  //   userId: string;
-  //   code: string;
-  //   version: string;
-  //   grantedAt: Date;
-  // }) {
-  //   return this.usersService.recordConsent(
-  //     req.userId,
-  //     req.code,
-  //     req.version,
-  //     req.grantedAt,
-  //   );
-  // }
-
-  // @GrpcMethod("UsersService", "getConsents")
-  // getConsents(req: { userId: string }) {
-  //   return this.usersService.getConsents(req.userId);
-  // }
+  @GrpcMethod("UsersService", "RemoveUser")
+  async removeUser(data: FindOneUserDto): Promise<IUserProps | null> {
+    console.log("RemoveUser called with:", data);
+    const user = await this.usersService.getById(data);
+    await this.usersService.deleteUser(data);
+    return user;
+  }
 }

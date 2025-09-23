@@ -1,5 +1,5 @@
 {
-  "name": "nestjs-msa",
+  "name": "minpass",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -9,15 +9,24 @@
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/apps/nestjs-msa/main",
+    "start:dev": "nest start apis --watch",
+    "start:debug": "nest start apis --debug --watch",
+    "start:prod": "node dist/apps/apis/main",
+    "start:apis": "nest start apis --watch",
+    "start:auth": "nest start auth --watch",
+    "start:users": "nest start users --watch",
+    "start:activities": "nest start activities --watch",
+    "start:journals": "nest start journals --watch",
+    "start:notifications": "nest start notifications --watch",
+    "start:ontology": "nest start ontology --watch",
+    "start:schedules": "nest start schedules --watch",
+    "start:tasks": "nest start tasks --watch",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/nestjs-msa/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/apis/test/jest-e2e.json"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.14.0",
@@ -36,6 +45,7 @@
     "nestjs-pino": "^4.4.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "ts-proto": "^2.7.7",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

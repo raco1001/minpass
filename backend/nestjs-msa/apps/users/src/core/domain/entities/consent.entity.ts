@@ -1,5 +1,5 @@
 import { Purpose } from "../constants/consent.constants";
-import { IConsentProps } from "../types/consent.types";
+import { IConsentProps } from "../constants/consent.props";
 import { v7 as uuidv7 } from "uuid";
 
 export class Consent {
