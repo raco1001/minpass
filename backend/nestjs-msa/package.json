@@ -39,10 +39,13 @@
     "@nestjs/terminus": "^11.0.0",
     "dotenv": "^17.2.2",
     "drizzle-orm": "^0.44.5",
+    "file-stream-rotator": "^1.0.0",
     "mysql2": "^3.15.0",
     "neo4j-driver": "^5.28.2",
     "nest-neo4j": "^0.3.1",
     "nestjs-pino": "^4.4.0",
+    "pino-http": "^10.5.0",
+    "pino-pretty": "^13.1.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "ts-proto": "^2.7.7",
@@ -96,7 +99,12 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/"
-    ]
+      "<rootDir>/apps/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^@app/integration(|/.*)$": "<rootDir>/libs/integration/src/$1",
+      "^@app/library(|/.*)$": "<rootDir>/libs/library/src/$1"
+    }
   }
 }

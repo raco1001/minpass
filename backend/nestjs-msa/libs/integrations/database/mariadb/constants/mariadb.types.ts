@@ -5,17 +5,10 @@ export interface MariaDbOptions {
   port?: number;
   user: string;
   password: string;
-  database: string; // MariaDB: database == schema
+  database: string;
   connectionLimit?: number;
-  /**
-   * 각 서비스 내부에서 export 하는 schema 객체
-   * (ex: import * as Schema from './schema')
-   */
   schema?: Record<string, unknown>;
-  /**
-   * 연결 이름(서비스명). 토큰 네임스페이스로 사용
-   */
-  name?: string; // e.g. 'users', 'auth'
+  name?: string;
 }
 
 export type DrizzleDb = MySql2Database<any>;
