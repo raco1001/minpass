@@ -1,15 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "baseUrl": "./",
     "declaration": false,
-    "outDir": "../../dist/apps/users"
+    "outDir": "../../dist/apps/users",
+    "paths": {
+      "@users": ["src"],
+      "@users/*": ["src/*"]
+    }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"],
-  "paths": {
-    "@app/core": ["src/core"],
-    "@app/infrastructure": ["src/infrastructure"],
-    "@app/presentation": ["src/presentation"],
-    "@app/services": ["src/services"]
-  }
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

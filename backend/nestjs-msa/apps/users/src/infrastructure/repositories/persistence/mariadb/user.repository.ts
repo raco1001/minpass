@@ -7,7 +7,7 @@ import * as dbSchema from "./schema/users";
 import { IUserRepository as UserRepositoryPort } from "../../../../core/ports/out/user.repository.port";
 import { User } from "../../../../core/domain/entities/user.entity";
 import { toDomainUser, toRowUser } from "./mappers/user.mapper";
-import { UserStatus } from "apps/users/src/core/domain/constants/user.constants";
+import { UserStatus } from "../../../../core/domain/constants/user.constants";
 
 @Injectable()
 export class UserRepository implements UserRepositoryPort {

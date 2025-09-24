@@ -18,10 +18,10 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/integration": ["libs/integration/src"],
-      "@app/integration/*": ["libs/integration/src/*"],
-      "@app/common": ["libs/common/src"],
-      "@app/common/*": ["libs/common/src/*"]
+      "@mariadb": ["libs/integrations/database/mariadb"],
+      "@mariadb/*": ["libs/integrations/database/mariadb/*"],
+      "@common": ["libs/common"],
+      "@common/*": ["libs/common/*"]
     }
   }
 }

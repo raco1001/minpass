@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { IConsentRepository } from "apps/users/src/core/ports/out/consent.repository.port";
-import { Consent } from "apps/users/src/core/domain/entities/consent.entity";
+import { IConsentRepository } from "../../../../core/ports/out/consent.repository.port";
+import { Consent } from "../../../../core/domain/entities/consent.entity";
 import { toDomainConsent, toRowConsent } from "./mappers/consent.mapper";
 import * as dbSchema from "./schema/consents";
 import { eq } from "drizzle-orm";

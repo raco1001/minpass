@@ -1,6 +1,6 @@
 // logger.config.ts
 import { Params } from "nestjs-pino";
-import { redaction } from "./constants/redact";
+import { defaultRedactPaths } from "./constants/redact";
 import fs from "fs";
 import path from "path";
 import { randomUUID } from "crypto";
@@ -29,7 +29,7 @@ export function getPinoHttpOptions(): Params {
         return id;
       },
       level: process.env.LOG_LEVEL || "info",
-      redact: redaction,
+      redact: defaultRedactPaths,
       transport:
         process.env.NODE_ENV === "production"
           ? {

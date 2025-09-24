@@ -1,11 +1,10 @@
-export const redaction = {
-  paths: [
-    "req.headers.authorization",
-    "req.headers.cookie",
-    "body.password",
-    "body.token",
-    "query.token",
-    "res.headers.set-cookie",
-  ],
-  censor: "***",
-};
+export const defaultRedactPaths = [
+  "req.headers.authorization",
+  "req.headers.cookie",
+  "req.headers['set-cookie']",
+  "body.password",
+  "body.token",
+  "body.refreshToken",
+  "query.token",
+  "res.headers.set-cookie",
+];

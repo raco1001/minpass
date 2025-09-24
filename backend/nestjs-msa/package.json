@@ -114,8 +114,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/integration(|/.*)$": "<rootDir>/libs/integration/src/$1",
-      "^@app/library(|/.*)$": "<rootDir>/libs/library/src/$1"
+      "^@libs/integrations(|/.*)$": "<rootDir>/libs/integrations/src/$1",
+      "^@libs/common(|/.*)$": "<rootDir>/libs/common/src/$1"
     }
   }
 }

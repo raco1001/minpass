@@ -36,13 +36,22 @@
         "tsConfigPath": "apps/auth/tsconfig.app.json"
       }
     },
-    "integration": {
+    "integrations": {
       "type": "library",
-      "root": "libs/integration",
+      "root": "libs/integrations",
       "entryFile": "index",
-      "sourceRoot": "libs/integration/src",
+      "sourceRoot": "libs/integrations/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/integration/tsconfig.lib.json"
+        "tsConfigPath": "libs/integrations/tsconfig.lib.json"
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
     "journals": {
@@ -52,15 +61,6 @@
       "sourceRoot": "apps/journals/src",
       "compilerOptions": {
         "tsConfigPath": "apps/journals/tsconfig.app.json"
-      }
-    },
-    "library": {
-      "type": "library",
-      "root": "libs/library",
-      "entryFile": "index",
-      "sourceRoot": "libs/library/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/library/tsconfig.lib.json"
       }
     },
     "notifications": {
@@ -106,9 +106,7 @@
       "sourceRoot": "apps/users/src",
       "compilerOptions": {
         "tsConfigPath": "apps/users/tsconfig.app.json",
-        "assets": [
-          "proto/**/*"
-        ]
+        "assets": ["proto/**/*"]
       }
     }
   }

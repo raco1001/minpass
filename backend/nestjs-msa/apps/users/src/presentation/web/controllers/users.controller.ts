@@ -1,12 +1,12 @@
 import { Controller, Inject } from "@nestjs/common";
-import { IUserService } from "apps/users/src/core/ports/in/user.service.port";
+import { IUserService } from "../../../core/ports/in/user.service.port";
 import { GrpcMethod } from "@nestjs/microservices";
 import {
   CreateUserDto,
   FindOneUserDto,
   UpdateUserDto,
 } from "../../../core/dtos/user.dtos";
-import { IUserProps } from "apps/users/src/core/domain/constants/user.props";
+import { IUserProps } from "../../../core/domain/constants/user.props";
 
 @Controller()
 export class UsersController {
