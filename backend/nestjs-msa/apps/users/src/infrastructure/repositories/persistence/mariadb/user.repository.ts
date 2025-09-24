@@ -2,12 +2,14 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { eq } from "drizzle-orm";
 import { MySql2Database } from "drizzle-orm/mysql2";
+
 import { DRIZZLE_DB } from "../../../../../../../libs/integrations/database/mariadb/constants/mariadb.constants";
-import * as dbSchema from "./schema/users";
-import { IUserRepository as UserRepositoryPort } from "../../../../core/ports/out/user.repository.port";
-import { User } from "../../../../core/domain/entities/user.entity";
-import { toDomainUser, toRowUser } from "./mappers/user.mapper";
 import { UserStatus } from "../../../../core/domain/constants/user.constants";
+import { User } from "../../../../core/domain/entities/user.entity";
+import { IUserRepository as UserRepositoryPort } from "../../../../core/ports/out/user.repository.port";
+
+import { toDomainUser, toRowUser } from "./mappers/user.mapper";
+import * as dbSchema from "./schema/users";
 
 @Injectable()
 export class UserRepository implements UserRepositoryPort {

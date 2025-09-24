@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import { mysqlTable, varchar, datetime, boolean } from "drizzle-orm/mysql-core";
+
 import { users } from "apps/users/src/infrastructure/repositories/persistence/mariadb/schema/users";
 
 export const authClients = mysqlTable("auth_clients", {

@@ -1,4 +1,5 @@
 import { Controller, Get } from "@nestjs/common";
+
 import { OntologyService } from "../../../services/ontology.service";
 
 @Controller()

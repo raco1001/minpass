@@ -1,5 +1,6 @@
-import { NestFactory } from '@nestjs/core';
-import { OntologyModule } from './ontology.module';
+import { NestFactory } from "@nestjs/core";
+
+import { OntologyModule } from "./ontology.module";
 
 async function bootstrap() {
   const app = await NestFactory.create(OntologyModule);

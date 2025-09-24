@@ -1,5 +1,6 @@
-import { ClientGrpc, Transport, Client } from "@nestjs/microservices";
 import { join } from "path";
+
+import { ClientGrpc, Transport, Client } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 
 interface UserServiceClient {

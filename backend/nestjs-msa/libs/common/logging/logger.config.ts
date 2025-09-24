@@ -1,10 +1,12 @@
 // logger.config.ts
-import { Params } from "nestjs-pino";
-import { defaultRedactPaths } from "./constants/redact";
+import { randomUUID } from "crypto";
 import fs from "fs";
 import path from "path";
-import { randomUUID } from "crypto";
 
+import { Params } from "nestjs-pino";
+
+import { defaultRedactPaths } from "./constants/redact";
+import { targetVos } from "./constants/target.vo";
 function ensureLogDirs() {
   const dirs = [
     "./logs/app",
@@ -33,33 +35,7 @@ export function getPinoHttpOptions(): Params {
       transport:
         process.env.NODE_ENV === "production"
           ? {
-              targets: [
-                {
-                  target: "pino/file",
-                  options: { destination: "./logs/app/app.log" },
-                  level: "info",
-                },
-                {
-                  target: "pino/file",
-                  options: { destination: "./logs/error/error.log" },
-                  level: "error",
-                },
-                {
-                  target: "pino/file",
-                  options: { destination: "./logs/warn/warn.log" },
-                  level: "warn",
-                },
-                {
-                  target: "pino/file",
-                  options: { destination: "./logs/debug/debug.log" },
-                  level: "debug",
-                },
-                {
-                  target: "pino/file",
-                  options: { destination: "./logs/trace/trace.log" },
-                  level: "trace",
-                },
-              ],
+              targets: targetVos,
             }
           : {
               target: "pino-pretty",

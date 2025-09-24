@@ -1,7 +1,8 @@
 import { DynamicModule, Module } from "@nestjs/common";
-import { createMariaDbProviders } from "./mariadb.provider";
+
 import { MARIADB_OPTIONS } from "./constants/mariadb.constants";
 import { MariaDbOptions } from "./constants/mariadb.types";
+import { createMariaDbProviders } from "./mariadb.provider";
 
 @Module({})
 export class MariaDbModule {

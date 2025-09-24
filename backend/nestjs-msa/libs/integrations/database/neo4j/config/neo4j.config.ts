@@ -1,4 +1,5 @@
 import { registerAs } from "@nestjs/config";
+
 import { Neo4jModuleOptions } from "../constants/neo4j.types";
 
 export default registerAs(

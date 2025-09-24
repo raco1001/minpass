@@ -1,4 +1,5 @@
 import { Controller, Get } from "@nestjs/common";
+
 import { SchedulesService } from "../../../services/schedules.service";
 
 @Controller()

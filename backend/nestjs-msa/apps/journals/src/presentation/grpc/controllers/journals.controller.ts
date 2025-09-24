@@ -1,4 +1,5 @@
 import { Controller, Get } from "@nestjs/common";
+
 import { JournalsService } from "../../../services/journals.service";
 
 @Controller()

@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+
 import { JournalsController } from "./presentation/grpc/controllers/journals.controller";
 import { JournalsService } from "./services/journals.service";
 

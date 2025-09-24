@@ -1,12 +1,13 @@
 import { Controller, Inject } from "@nestjs/common";
-import { IUserService } from "../../../core/ports/in/user.service.port";
 import { GrpcMethod } from "@nestjs/microservices";
+
+import { IUserProps } from "../../../core/domain/constants/user.props";
 import {
   CreateUserDto,
   FindOneUserDto,
   UpdateUserDto,
 } from "../../../core/dtos/user.dtos";
-import { IUserProps } from "../../../core/domain/constants/user.props";
+import { IUserService } from "../../../core/ports/in/user.service.port";
 
 @Controller()
 export class UsersController {
@@ -14,7 +15,6 @@ export class UsersController {
     @Inject(IUserService)
     private readonly usersService: IUserService,
   ) {}
-
   @GrpcMethod("UsersService", "CreateUser")
   createUser(data: CreateUserDto): Promise<IUserProps | null> {
     console.log("CreateUser called with:", data);

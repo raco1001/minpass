@@ -1,6 +1,7 @@
-import { mysqlTable, varchar, datetime, json } from "drizzle-orm/mysql-core";
-import { users } from "apps/users/src/infrastructure/repositories/persistence/mariadb/schema/users";
 import { sql } from "drizzle-orm";
+import { mysqlTable, varchar, datetime, json } from "drizzle-orm/mysql-core";
+
+import { users } from "apps/users/src/infrastructure/repositories/persistence/mariadb/schema/users";
 
 export const notifications = mysqlTable("notifications", {
   id: varchar("id", { length: 36 }).primaryKey(),

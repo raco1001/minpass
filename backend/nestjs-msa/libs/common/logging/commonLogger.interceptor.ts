@@ -1,3 +1,5 @@
+import { performance } from "perf_hooks";
+
 import {
   CallHandler,
   ExecutionContext,
@@ -5,7 +7,6 @@ import {
   NestInterceptor,
 } from "@nestjs/common";
 import { Observable, tap } from "rxjs";
-import { performance } from "perf_hooks";
 
 @Injectable()
 export class CommonLoggerInterceptor implements NestInterceptor {
@@ -18,7 +19,7 @@ export class CommonLoggerInterceptor implements NestInterceptor {
     req.log.info(
       {
         category: "access",
-        route: req.originalUrl || req.url,
+        route: (req.originalUrl as string) || (req.url as string),
         service: process.env.SERVICE_NAME,
         env: process.env.NODE_ENV,
       },

@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   mysqlTable,
   varchar,
@@ -5,8 +6,8 @@ import {
   json,
   date,
 } from "drizzle-orm/mysql-core";
+
 import { users } from "apps/users/src/infrastructure/repositories/persistence/mariadb/schema/users";
-import { sql } from "drizzle-orm";
 
 export const schedules = mysqlTable("schedules", {
   id: varchar("id", { length: 36 }).primaryKey(),

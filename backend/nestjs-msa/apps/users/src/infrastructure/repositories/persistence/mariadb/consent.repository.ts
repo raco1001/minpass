@@ -1,11 +1,13 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { IConsentRepository } from "../../../../core/ports/out/consent.repository.port";
-import { Consent } from "../../../../core/domain/entities/consent.entity";
-import { toDomainConsent, toRowConsent } from "./mappers/consent.mapper";
-import * as dbSchema from "./schema/consents";
 import { eq } from "drizzle-orm";
 import { MySql2Database } from "drizzle-orm/mysql2";
+
 import { DRIZZLE_DB } from "../../../../../../../libs/integrations/database/mariadb/constants/mariadb.constants";
+import { Consent } from "../../../../core/domain/entities/consent.entity";
+import { IConsentRepository } from "../../../../core/ports/out/consent.repository.port";
+
+import { toDomainConsent, toRowConsent } from "./mappers/consent.mapper";
+import * as dbSchema from "./schema/consents";
 
 @Injectable()
 export class ConsentRepository implements IConsentRepository {

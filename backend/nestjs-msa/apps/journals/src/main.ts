@@ -1,4 +1,5 @@
 import { NestFactory } from "@nestjs/core";
+
 import { JournalsModule } from "./journals.module";
 
 async function bootstrap() {

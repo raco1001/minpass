@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   mysqlTable,
   varchar,
@@ -6,8 +7,8 @@ import {
   int,
   date,
 } from "drizzle-orm/mysql-core";
+
 import { users } from "apps/users/src/infrastructure/repositories/persistence/mariadb/schema/users";
-import { sql } from "drizzle-orm";
 
 export const bridgeSessions = mysqlTable("bridge_sessions", {
   id: varchar("id", { length: 36 }).primaryKey(),

@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { HealthCheck } from "@nestjs/terminus";
 import { HealthCheckResult } from "@nestjs/terminus/dist/health-check/health-check-result.interface";
+
 import { Neo4jService } from "./neo4j.service";
 
 @Injectable()

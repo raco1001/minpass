@@ -15,6 +15,7 @@ CREATE TABLE `tasks` (
 
 **/
 
+import { sql } from "drizzle-orm";
 import {
   mysqlTable,
   varchar,
@@ -22,8 +23,8 @@ import {
   json,
   int,
 } from "drizzle-orm/mysql-core";
+
 import { schedules } from "apps/schedules/src/infrastructure/repositories/persistence/mariadb/schema/schedule";
-import { sql } from "drizzle-orm";
 
 export const tasks = mysqlTable("tasks", {
   id: varchar("id", { length: 36 }).primaryKey(),

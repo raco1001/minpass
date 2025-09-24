@@ -1,5 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from "@nestjs/common";
 import { Driver, Session } from "neo4j-driver";
+
 import { NEO4J_DRIVER, NEO4J_CONFIG } from "./constants/neo4j.constants";
 import { Neo4jModuleOptions } from "./constants/neo4j.types";
 

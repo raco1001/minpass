@@ -1,16 +1,17 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { User } from "../core/domain/entities/user.entity";
-import { IUserRepository } from "../core/ports/out/user.repository.port";
-import { IConsentRepository } from "../core/ports/out/consent.repository.port";
-import { Consent } from "../core/domain/entities/consent.entity";
-import { IUserService } from "../core/ports/in/user.service.port";
+
 import { Purpose } from "../core/domain/constants/consent.constants";
+import { Consent } from "../core/domain/entities/consent.entity";
+import { User } from "../core/domain/entities/user.entity";
+import { CreateConsentDto } from "../core/dtos/consent.dtos";
 import {
   CreateUserDto,
   FindOneUserDto,
   UpdateUserDto,
 } from "../core/dtos/user.dtos";
-import { CreateConsentDto } from "../core/dtos/consent.dtos";
+import { IUserService } from "../core/ports/in/user.service.port";
+import { IConsentRepository } from "../core/ports/out/consent.repository.port";
+import { IUserRepository } from "../core/ports/out/user.repository.port";
 
 @Injectable()
 export class UsersService implements IUserService {

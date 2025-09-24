@@ -1,6 +1,7 @@
+import { v7 as uuidv7 } from "uuid";
+
 import { Purpose } from "../constants/consent.constants";
 import { IConsentProps } from "../constants/consent.props";
-import { v7 as uuidv7 } from "uuid";
 
 export class Consent {
   private props: IConsentProps;

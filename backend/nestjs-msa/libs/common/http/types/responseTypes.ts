@@ -1,3 +1,5 @@
+import { Level } from "../../logging/types/target.types";
+
 /**
 ### 1. 리턴 형식
 
@@ -28,6 +30,34 @@
 }
 
 ```
+*/
+
+export type SuccessResponse<
+  T,
+  R = {
+    id: string;
+    received_at: string;
+    idempotency_key?: string;
+    trace_id?: string;
+    version: string;
+  },
+> = {
+  success: true;
+  data: T;
+  meta?: {
+    total?: number | null;
+    page_size?: number;
+    cursor?: string | null;
+    next_cursor?: string | null;
+    elapsed_ms?: number;
+  };
+  request: R;
+  version: string;
+};
+
+/**
+
+
 
 ### 에러
 
@@ -65,7 +95,34 @@
 }
 
 ```
+*/
+export type FailureResponse<
+  P = {
+    type: string;
+    title: string;
+    status: number;
+    code: string;
+    detail?: string;
+    instance?: string;
+    errors?: { field: string; issue: string; value?: unknown }[];
+    retriable?: boolean;
+    retry_after?: number | null;
+    suggestion?: string;
+    links?: Record<string, string>;
+  },
+  R = {
+    id: string;
+    trace_id?: string;
+    received_at: string;
+  },
+> = {
+  success: false;
+  error: P;
+  request: R;
+  version: string;
+};
 
+/** 
 ### 로그
 
 - **PII 금지 기본값**: `privacy.pii=false`. PII가 섞일 가능성 있으면 **사전 마스킹** 후 전송.
@@ -97,7 +154,40 @@
   }
 }
 ```
+*/
 
+export type LogEvent = {
+  ts: string;
+  level: Level;
+  event: string;
+  route?: string;
+  status: number;
+  durationMs?: number;
+  error?: {
+    name: string;
+    message: string;
+    stack: string;
+  };
+  pid: string;
+  host: string;
+  service: string;
+  env: string;
+  user_id?: string | null;
+  session_id?: string | null;
+  trace_id?: string | null;
+  source: "mobile" | "web" | "server" | "worker";
+  device?: {
+    platform?: string;
+    version?: string;
+    app_version?: string;
+    model?: string;
+  };
+  metrics?: Record<string, number>;
+  context?: Record<string, unknown>;
+  privacy?: { pii: boolean; fields_redacted?: string[] };
+};
+
+/**
 ### 배치
 
 ```json
@@ -164,7 +254,11 @@ type Failure = {
 };
 
 type LogEvent = {
-  ts: string; level: "DEBUG"|"INFO"|"WARN"|"ERROR";
+  ts: string; level: Level;
+  pid: string;
+  host: string;
+  service: string;
+  env: string;
   event: string; user_id?: string | null; session_id?: string | null; trace_id?: string | null;
   source: "mobile"|"web"|"server"|"worker";
   device?: { platform?: string; version?: string; app_version?: string; model?: string };

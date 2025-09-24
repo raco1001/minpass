@@ -1,8 +1,12 @@
-import type { Params } from "nestjs-pino";
 import fs from "fs";
 import path from "path";
+
+import type { Params } from "nestjs-pino";
+
 import { defaultRedactPaths } from "./constants/redact";
+import { targetVos } from "./constants/target.vo";
 import type { CommonLoggerOptions } from "./constants/token";
+import type { Targets } from "./types/target.types";
 
 function ensureLogDirs(base?: string) {
   if (!base) return;
@@ -25,36 +29,10 @@ export function buildPinoHttpParams(opts: CommonLoggerOptions): Params {
 
   const redact = Array.from(new Set([...defaultRedactPaths, ...redactPaths]));
 
-  const targets: any[] = [];
+  const targets: Targets = [];
   if (logDir) {
     ensureLogDirs(logDir);
-    targets.push(
-      {
-        target: "pino/file",
-        options: { destination: path.join(logDir, "app/app.log") },
-        level: "info",
-      },
-      {
-        target: "pino/file",
-        options: { destination: path.join(logDir, "error/error.log") },
-        level: "error",
-      },
-      {
-        target: "pino/file",
-        options: { destination: path.join(logDir, "warn/warn.log") },
-        level: "warn",
-      },
-      {
-        target: "pino/file",
-        options: { destination: path.join(logDir, "debug/debug.log") },
-        level: "debug",
-      },
-      {
-        target: "pino/file",
-        options: { destination: path.join(logDir, "trace/trace.log") },
-        level: "trace",
-      },
-    );
+    targets.push(...targetVos);
   }
 
   if (enableStdout) {

@@ -2,19 +2,18 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 
-import { MariaDbModule } from "../../../libs/integrations/database/mariadb/mariadb.module";
-import { MariaDbOptions } from "../../../libs/integrations/database/mariadb/constants/mariadb.types";
+import { MariaDbOptions } from "@mariadb/constants/mariadb.types";
+import { MariaDbModule } from "@mariadb/mariadb.module";
 
-import * as userSchema from "./infrastructure/repositories/persistence/mariadb/schema/users";
-import { UsersService } from "./services/users.service";
-import { UserRepository } from "./infrastructure/repositories/persistence/mariadb/user.repository";
-import { ConsentRepository } from "./infrastructure/repositories/persistence/mariadb/consent.repository";
-
-import * as consentSchema from "./infrastructure/repositories/persistence/mariadb/schema/consents";
-import { IUserRepository } from "./core/ports/out/user.repository.port";
-import { IConsentRepository } from "./core/ports/out/consent.repository.port";
 import { IUserService } from "./core/ports/in/user.service.port";
+import { IConsentRepository } from "./core/ports/out/consent.repository.port";
+import { IUserRepository } from "./core/ports/out/user.repository.port";
+import { ConsentRepository } from "./infrastructure/repositories/persistence/mariadb/consent.repository";
+import { consents } from "./infrastructure/repositories/persistence/mariadb/schema/consents";
+import { users } from "./infrastructure/repositories/persistence/mariadb/schema/users";
+import { UserRepository } from "./infrastructure/repositories/persistence/mariadb/user.repository";
 import { UsersController } from "./presentation/web/controllers/users.controller";
+import { UsersService } from "./services/users.service";
 
 @Module({
   imports: [
@@ -32,7 +31,7 @@ import { UsersController } from "./presentation/web/controllers/users.controller
         password: cfg.get<string>("DB_USER_SCHEMA_PASSWORD", "user"),
         database: cfg.get<string>("DB_NAME", "minpass"),
         connectionLimit: 10,
-        schema: { ...userSchema, ...consentSchema },
+        schema: { users, consents },
       }),
       [ConfigService],
       [ConfigModule],

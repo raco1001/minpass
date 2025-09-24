@@ -1,8 +1,9 @@
 import { Global, Module, OnModuleDestroy } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import neo4j, { Driver, auth } from "neo4j-driver";
-import { NEO4J_DRIVER, NEO4J_CONFIG } from "./constants/neo4j.constants";
+
 import neo4jConfig from "./config/neo4j.config";
+import { NEO4J_DRIVER, NEO4J_CONFIG } from "./constants/neo4j.constants";
 import { Neo4jModuleOptions } from "./constants/neo4j.types";
 import { Neo4jService } from "./neo4j.service";
 

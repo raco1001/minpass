@@ -7,7 +7,7 @@ export interface MariaDbOptions {
   password: string;
   database: string;
   connectionLimit?: number;
-  schema?: Record<string, unknown>;
+  schema: Record<string, unknown>;
   name?: string;
 }
 

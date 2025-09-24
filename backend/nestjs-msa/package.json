@@ -79,6 +79,8 @@
     "drizzle-kit": "^0.31.4",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.2.2",
     "globals": "^16.0.0",
     "jest": "^29.7.0",
@@ -112,10 +114,6 @@
     "roots": [
       "<rootDir>/apps/",
       "<rootDir>/libs/"
-    ],
-    "moduleNameMapper": {
-      "^@libs/integrations(|/.*)$": "<rootDir>/libs/integrations/src/$1",
-      "^@libs/common(|/.*)$": "<rootDir>/libs/common/src/$1"
-    }
+    ]
   }
 }

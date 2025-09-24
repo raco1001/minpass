@@ -1,6 +1,6 @@
+import { Purpose } from "../../../../../core/domain/constants/consent.constants";
 import { Consent } from "../../../../../core/domain/entities/consent.entity";
 import { ConsentRow } from "../schema/consents";
-import { Purpose } from "../../../../../core/domain/constants/consent.constants";
 
 export const toDomainConsent = (row: ConsentRow): Consent =>
   Consent.restore({

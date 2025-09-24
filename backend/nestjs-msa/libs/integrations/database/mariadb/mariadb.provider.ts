@@ -1,6 +1,7 @@
 import { Provider } from "@nestjs/common";
-import { createPool } from "mysql2/promise";
 import { drizzle } from "drizzle-orm/mysql2";
+import { createPool } from "mysql2/promise";
+
 import {
   DRIZZLE_DB,
   MARIADB_OPTIONS,

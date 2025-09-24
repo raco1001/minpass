@@ -5,8 +5,12 @@
     "declaration": false,
     "outDir": "../../dist/apps/users",
     "paths": {
-      "@users": ["src"],
-      "@users/*": ["src/*"]
+      "@mariadb": ["../../libs/integrations/database/mariadb"],
+      "@mariadb/*": ["../../libs/integrations/database/mariadb/*"],
+      "@common": ["../../libs/common"],
+      "@common/*": ["../../libs/common/*"],
+      "@core": ["./src/core"],
+      "@core/*": ["./src/core/*"]
     }
   },
   "include": ["src/**/*"],
