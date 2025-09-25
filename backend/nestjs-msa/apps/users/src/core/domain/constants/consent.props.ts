@@ -1,8 +1,10 @@
+import { FindOneUserDto } from "../../dtos/user.dtos";
+
 import { Purpose } from "./consent.constants";
 
 export interface IConsentProps {
   id: string;
-  userId: string;
+  userId: FindOneUserDto["id"];
   purpose: Purpose;
   scope: string;
   grantedAt: Date;

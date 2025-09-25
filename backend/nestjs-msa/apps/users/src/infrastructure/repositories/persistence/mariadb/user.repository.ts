@@ -6,7 +6,7 @@ import { MySql2Database } from "drizzle-orm/mysql2";
 import { DRIZZLE_DB } from "../../../../../../../libs/integrations/database/mariadb/constants/mariadb.constants";
 import { UserStatus } from "../../../../core/domain/constants/user.constants";
 import { User } from "../../../../core/domain/entities/user.entity";
-import { IUserRepository as UserRepositoryPort } from "../../../../core/ports/out/user.repository.port";
+import { IUsersRepositoryPort as UserRepositoryPort } from "../../../../core/ports/out/users.repository.port";
 
 import { toDomainUser, toRowUser } from "./mappers/user.mapper";
 import * as dbSchema from "./schema/users";

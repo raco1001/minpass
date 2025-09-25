@@ -9,8 +9,7 @@
       "@mariadb/*": ["../../libs/integrations/database/mariadb/*"],
       "@common": ["../../libs/common"],
       "@common/*": ["../../libs/common/*"],
-      "@core": ["./src/core"],
-      "@core/*": ["./src/core/*"]
+      "@users": ["users/src"]
     }
   },
   "include": ["src/**/*"],

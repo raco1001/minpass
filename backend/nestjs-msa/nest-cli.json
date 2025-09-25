@@ -106,7 +106,10 @@
       "sourceRoot": "apps/users/src",
       "compilerOptions": {
         "tsConfigPath": "apps/users/tsconfig.app.json",
-        "assets": ["proto/**/*"]
+        "assets": [
+          "libs/contracts/proto/users/v1/users.proto",
+          "libs/contracts/proto/users/v1/consents.proto"
+        ]
       }
     }
   }

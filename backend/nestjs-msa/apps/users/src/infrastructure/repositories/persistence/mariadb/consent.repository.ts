@@ -4,13 +4,13 @@ import { MySql2Database } from "drizzle-orm/mysql2";
 
 import { DRIZZLE_DB } from "../../../../../../../libs/integrations/database/mariadb/constants/mariadb.constants";
 import { Consent } from "../../../../core/domain/entities/consent.entity";
-import { IConsentRepository } from "../../../../core/ports/out/consent.repository.port";
+import { IConsentsRepositoryPort } from "../../../../core/ports/out/consents.repository.port";
 
 import { toDomainConsent, toRowConsent } from "./mappers/consent.mapper";
 import * as dbSchema from "./schema/consents";
 
 @Injectable()
-export class ConsentRepository implements IConsentRepository {
+export class ConsentRepository implements IConsentsRepositoryPort {
   constructor(
     @Inject(DRIZZLE_DB("users"))
     private readonly db: MySql2Database<typeof dbSchema>,

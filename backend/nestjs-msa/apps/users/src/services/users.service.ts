@@ -9,17 +9,17 @@ import {
   FindOneUserDto,
   UpdateUserDto,
 } from "../core/dtos/user.dtos";
-import { IUserService } from "../core/ports/in/user.service.port";
-import { IConsentRepository } from "../core/ports/out/consent.repository.port";
-import { IUserRepository } from "../core/ports/out/user.repository.port";
+import { IUsersServicePort } from "../core/ports/in/users.service.port";
+import { IConsentsRepositoryPort } from "../core/ports/out/consents.repository.port";
+import { IUsersRepositoryPort } from "../core/ports/out/users.repository.port";
 
 @Injectable()
-export class UsersService implements IUserService {
+export class UsersService implements IUsersServicePort {
   constructor(
-    @Inject(IUserRepository)
-    private readonly users: IUserRepository,
-    @Inject(IConsentRepository)
-    private readonly consents: IConsentRepository,
+    @Inject(IUsersRepositoryPort)
+    private readonly users: IUsersRepositoryPort,
+    @Inject(IConsentsRepositoryPort)
+    private readonly consents: IConsentsRepositoryPort,
   ) {}
 
   async register(createUserDto: CreateUserDto) {

@@ -1,8 +1,8 @@
 import { User } from "../../domain/entities/user.entity";
 
-export const IUserRepository = Symbol("IUserRepository");
+export const IUsersRepositoryPort = Symbol("IUsersRepositoryPort");
 
-export interface IUserRepository {
+export interface IUsersRepositoryPort {
   save(user: User): Promise<void>;
   findById(id: string): Promise<User | null>;
   findByEmail(email: string): Promise<User | null>;
