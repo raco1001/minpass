@@ -1,10 +1,15 @@
 import { join } from "path";
 
 import { Module } from "@nestjs/common";
-import { ClientsModule, Transport } from "@nestjs/microservices";
+import { ClientGrpc, ClientsModule, Transport } from "@nestjs/microservices";
 
+import {
+  UsersServiceClient,
+  USERS_SERVICE_NAME,
+} from "../../../../../../libs/contracts/generated/users/v1/users";
 import { MICROSERVICE_CLIENTS } from "../../../core/domain/constants/services.constant";
 
+import { USERS_SERVICE_CLIENT } from "./users-client.constants";
 import { UsersClientController } from "./users.client.controller";
 
 @Module({
@@ -28,6 +33,15 @@ import { UsersClientController } from "./users.client.controller";
         },
       },
     ]),
+  ],
+  providers: [
+    {
+      provide: USERS_SERVICE_CLIENT,
+      useFactory: (client: ClientGrpc) => {
+        return client.getService<UsersServiceClient>(USERS_SERVICE_NAME);
+      },
+      inject: [MICROSERVICE_CLIENTS.USERS_SERVICE],
+    },
   ],
   controllers: [UsersClientController],
 })

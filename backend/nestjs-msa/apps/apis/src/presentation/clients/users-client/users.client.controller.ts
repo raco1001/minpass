@@ -1,49 +1,57 @@
-import { Controller, Get, Inject } from "@nestjs/common";
-import { ClientGrpc } from "@nestjs/microservices";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Patch,
+  Post,
+} from "@nestjs/common";
 import { Observable } from "rxjs";
 
-import { Empty } from "../../../../../../libs/contracts/generated/google/protobuf/empty";
 import {
   CreateUserRequest,
-  FindOneUserRequest,
   UpdateUserRequest,
   User,
   UserList,
   UsersServiceClient,
 } from "../../../../../../libs/contracts/generated/users/v1/users";
-import { MICROSERVICE_CLIENTS } from "../../../core/domain/constants/services.constant";
+
+import { USERS_SERVICE_CLIENT } from "./users-client.constants";
 
 @Controller("users")
-export class UsersClientController implements UsersServiceClient {
+export class UsersClientController {
   constructor(
-    @Inject(MICROSERVICE_CLIENTS.USERS_SERVICE)
-    private client: ClientGrpc,
+    @Inject(USERS_SERVICE_CLIENT)
+    private readonly usersService: UsersServiceClient,
   ) {}
 
+  @Post()
+  createUser(@Body() request: CreateUserRequest): Observable<User> {
+    return this.usersService.createUser(request);
+  }
+
   @Get()
-  findAllUsers(request: Empty): Observable<UserList> {
-    return this.client
-      .getService<UsersServiceClient>("UserService")
-      .findAllUsers(request);
+  findAllUsers(): Observable<UserList> {
+    return this.usersService.findAllUsers({});
   }
-  createUser(request: CreateUserRequest): Observable<User> {
-    return this.client
-      .getService<UsersServiceClient>("UserService")
-      .createUser(request);
+
+  @Get(":id")
+  findOneUser(@Param("id") id: string): Observable<User> {
+    return this.usersService.findOneUser({ id });
   }
-  findOneUser(request: FindOneUserRequest): Observable<User> {
-    return this.client
-      .getService<UsersServiceClient>("UserService")
-      .findOneUser(request);
+
+  @Patch(":id")
+  updateUser(
+    @Param("id") id: string,
+    @Body() request: Omit<UpdateUserRequest, "id">,
+  ): Observable<User> {
+    return this.usersService.updateUser({ id, ...request });
   }
-  updateUser(request: UpdateUserRequest): Observable<User> {
-    return this.client
-      .getService<UsersServiceClient>("UserService")
-      .updateUser(request);
-  }
-  removeUser(request: FindOneUserRequest): Observable<User> {
-    return this.client
-      .getService<UsersServiceClient>("UserService")
-      .removeUser(request);
+
+  @Delete(":id")
+  removeUser(@Param("id") id: string): Observable<User> {
+    return this.usersService.removeUser({ id });
   }
 }
