@@ -1,10 +1,51 @@
-import { Module } from '@nestjs/common';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
+import { Module } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+
+import { MariaDbOptions } from "@mariadb/constants/mariadb.types";
+import { MariaDbModule } from "@mariadb/mariadb.module";
+
+import { IUsersServicePort } from "./core/ports/in/users.service.port";
+import { IConsentsRepositoryPort } from "./core/ports/out/consents.repository.port";
+import { IUsersRepositoryPort } from "./core/ports/out/users.repository.port";
+import { ConsentRepository } from "./infrastructure/repositories/persistence/mariadb/consent.repository";
+import { consents } from "./infrastructure/repositories/persistence/mariadb/schema/consents";
+import { users } from "./infrastructure/repositories/persistence/mariadb/schema/users";
+import { UserRepository } from "./infrastructure/repositories/persistence/mariadb/user.repository";
+import { UsersController } from "./presentation/web/controllers/users.controller";
+import { UsersService } from "./services/users.service";
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
+    MariaDbModule.registerAsync(
+      "users",
+      (cfg: ConfigService): MariaDbOptions => ({
+        name: "users",
+        host: cfg.get<string>("DB_HOST", "127.0.0.1"),
+        port: parseInt(cfg.get<string>("DB_PORT", "3307"), 10),
+        user: cfg.get<string>("DB_USER_SCHEMA_NAME", "svc-user"),
+        password: cfg.get<string>("DB_USER_SCHEMA_PASSWORD", "user"),
+        database: cfg.get<string>("DB_NAME", "minpass"),
+        connectionLimit: 10,
+        schema: { users, consents },
+      }),
+      [ConfigService],
+      [ConfigModule],
+    ),
+  ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [
+    { provide: IUsersServicePort, useClass: UsersService },
+    { provide: IUsersRepositoryPort, useClass: UserRepository },
+    { provide: IConsentsRepositoryPort, useClass: ConsentRepository },
+  ],
+  exports: [
+    { provide: IUsersServicePort, useClass: UsersService },
+    { provide: IUsersRepositoryPort, useClass: UserRepository },
+    { provide: IConsentsRepositoryPort, useClass: ConsentRepository },
+  ],
 })
 export class UsersModule {}

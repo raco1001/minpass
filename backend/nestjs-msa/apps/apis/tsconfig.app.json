@@ -1,8 +1,15 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "baseUrl": "./",
     "declaration": false,
-    "outDir": "../../dist/apps/apis"
+    "outDir": "../../dist/apps/apis",
+    "paths": {
+      "@mariadb": ["../../libs/integrations/database/mariadb"],
+      "@mariadb/*": ["../../libs/integrations/database/mariadb/*"],
+      "@common": ["../../libs/common"],
+      "@common/*": ["../../libs/common/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]

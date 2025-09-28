@@ -17,6 +17,10 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": {}
+    "paths": {
+      "@mariadb/*": ["libs/integrations/database/mariadb/*"],
+      "@common/*": ["libs/common/*"],
+      "@contracts/*": ["libs/contracts/*"]
+    }
   }
 }
