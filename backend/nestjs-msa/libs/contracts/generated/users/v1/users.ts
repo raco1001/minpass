@@ -31,6 +31,8 @@ export interface User {
   email: string;
   locale: string;
   displayName: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface UserList {
@@ -52,28 +54,58 @@ export interface UsersServiceClient {
 }
 
 export interface UsersServiceController {
-  createUser(request: CreateUserRequest): Promise<User> | Observable<User> | User;
+  createUser(
+    request: CreateUserRequest,
+  ): Promise<User> | Observable<User> | User;
 
-  findAllUsers(request: Empty): Promise<UserList> | Observable<UserList> | UserList;
+  findAllUsers(
+    request: Empty,
+  ): Promise<UserList> | Observable<UserList> | UserList;
 
-  findOneUser(request: FindOneUserRequest): Promise<User> | Observable<User> | User;
+  findOneUser(
+    request: FindOneUserRequest,
+  ): Promise<User> | Observable<User> | User;
 
-  updateUser(request: UpdateUserRequest): Promise<User> | Observable<User> | User;
+  updateUser(
+    request: UpdateUserRequest,
+  ): Promise<User> | Observable<User> | User;
 
-  removeUser(request: FindOneUserRequest): Promise<User> | Observable<User> | User;
+  removeUser(
+    request: FindOneUserRequest,
+  ): Promise<User> | Observable<User> | User;
 }
 
 export function UsersServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createUser", "findAllUsers", "findOneUser", "updateUser", "removeUser"];
+    const grpcMethods: string[] = [
+      "createUser",
+      "findAllUsers",
+      "findOneUser",
+      "updateUser",
+      "removeUser",
+    ];
     for (const method of grpcMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcMethod("UsersService", method)(constructor.prototype[method], method, descriptor);
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(
+        constructor.prototype,
+        method,
+      );
+      GrpcMethod("UsersService", method)(
+        constructor.prototype[method],
+        method,
+        descriptor,
+      );
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcStreamMethod("UsersService", method)(constructor.prototype[method], method, descriptor);
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(
+        constructor.prototype,
+        method,
+      );
+      GrpcStreamMethod("UsersService", method)(
+        constructor.prototype[method],
+        method,
+        descriptor,
+      );
     }
   };
 }

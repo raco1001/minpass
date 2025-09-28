@@ -23,6 +23,10 @@ message Consent {
   string user_id = 2;
   Purpose purpose = 3;
   string scope = 4;
+  string granted_at = 5;
+  string revoked_at = 6;
+  string created_at = 7;
+  string updated_at = 8;
 }
 
 message ConsentList {

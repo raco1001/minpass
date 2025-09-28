@@ -30,6 +30,10 @@ export interface Consent {
   userId: string;
   purpose: Purpose;
   scope: string;
+  grantedAt: string;
+  revokedAt: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ConsentList {

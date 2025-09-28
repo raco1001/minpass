@@ -9,6 +9,7 @@ export const IUsersServicePort = Symbol("IUsersServicePort");
 export interface IUsersServicePort {
   register(createUserDto: CreateUserDto): Promise<User>;
   getById(findOneUserDto: FindOneUserDto): Promise<User | null>;
+  findAll(): Promise<User[]>;
   changeDisplayName(updateUserDto: UpdateUserDto): Promise<User>;
   deleteUser(findOneUserDto: FindOneUserDto): Promise<void>;
   recordConsent(createConsentDto: CreateConsentDto): Promise<Consent>;

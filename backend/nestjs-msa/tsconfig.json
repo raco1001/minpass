@@ -20,8 +20,7 @@
     "paths": {
       "@mariadb/*": ["libs/integrations/database/mariadb/*"],
       "@common/*": ["libs/common/*"],
-      "@contracts/generated/*": ["contracts/generated/*"],
-      "@contracts/proto/*": ["contracts/proto/*"]
+      "@contracts/*": ["libs/contracts/*"]
     }
   }
 }

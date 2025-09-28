@@ -24,6 +24,8 @@ message User {
   string email = 2;
   string locale = 3;
   string display_name = 4;
+  string created_at = 5;
+  string updated_at = 6;
 }
 
 message UserList {

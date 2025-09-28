@@ -32,6 +32,10 @@ export class UsersService implements IUsersServicePort {
     return user;
   }
 
+  async findAll() {
+    return await this.users.findAll();
+  }
+
   async getById(findOneUserDto: FindOneUserDto) {
     return await this.users.findById(findOneUserDto.id);
   }

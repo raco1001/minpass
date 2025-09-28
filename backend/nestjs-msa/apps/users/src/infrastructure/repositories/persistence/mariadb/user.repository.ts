@@ -29,6 +29,14 @@ export class UserRepository implements UserRepositoryPort {
     return toDomainUser(rows[0]);
   }
 
+  async findAll(): Promise<User[]> {
+    const rows = await this.db
+      .select()
+      .from(dbSchema.users)
+      .where(eq(dbSchema.users.status, UserStatus.Active));
+    return rows.map(toDomainUser);
+  }
+
   async findByEmail(email: string): Promise<User | null> {
     const rows = await this.db
       .select()

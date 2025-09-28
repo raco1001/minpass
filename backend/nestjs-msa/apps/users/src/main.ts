@@ -11,18 +11,17 @@ async function bootstrap() {
     {
       transport: Transport.GRPC,
       options: {
-        package: "users.v1",
-        protoPath: [
-          join(process.cwd(), "libs/contracts/proto/users/v1/users.proto"),
-          join(process.cwd(), "libs/contracts/proto/users/v1/consents.proto"),
-        ],
+        package: ["users.v1"],
+        protoPath: ["users/v1/users.proto", "users/v1/consents.proto"],
         loader: {
           keepCase: false,
           longs: String,
           enums: String,
           defaults: true,
           oneofs: true,
+          includeDirs: [join(process.cwd(), "libs/contracts/proto")],
         },
+        url: "0.0.0.0:4001",
       },
     },
   );
