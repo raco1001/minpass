@@ -63,7 +63,7 @@ export class UsersControllerMapper {
 
   static toUserListResponse(users: UserEntity[]): UserList {
     return {
-      items: users.map((user) => this.toUserResponse(user)),
+      users: users.map((user) => this.toUserResponse(user)),
     };
   }
 
@@ -81,7 +81,7 @@ export class UsersControllerMapper {
   }
   static toConsentsResponse(consents: ConsentEntity[]): ConsentList {
     return {
-      items: consents.map((c) => this.toConsentResponse(c)),
+      consents: consents.map((c) => this.toConsentResponse(c)),
     };
   }
 

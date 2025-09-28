@@ -37,7 +37,7 @@ export interface Consent {
 }
 
 export interface ConsentList {
-  items: Consent[];
+  consents: Consent[];
 }
 
 export const USERS_V1_PACKAGE_NAME = "users.v1";

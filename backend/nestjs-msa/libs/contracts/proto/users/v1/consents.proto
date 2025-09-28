@@ -30,7 +30,7 @@ message Consent {
 }
 
 message ConsentList {
-  repeated Consent items = 1;
+  repeated Consent consents = 1;
 }
 
 service ConsentsService {
