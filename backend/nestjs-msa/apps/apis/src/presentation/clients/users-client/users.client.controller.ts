@@ -16,7 +16,7 @@ import {
   User,
   UserList,
   UsersServiceClient,
-} from "../../../../../../libs/contracts/generated/users/v1/users";
+} from "@contracts/generated/users/v1/users";
 
 import { USERS_SERVICE_CLIENT } from "./users-client.constants";
 

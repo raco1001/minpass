@@ -1,8 +1,8 @@
-import { Consent } from "../../domain/entities/consent.entity";
+import { Consent } from "@src/core/domain/entities/consent.entity";
 import { User } from "../../domain/entities/user.entity";
-import { CreateConsentDto } from "../../dtos/consent.dtos";
-import { CreateUserDto, FindOneUserDto } from "../../dtos/user.dtos";
-import { UpdateUserDto } from "../../dtos/user.dtos";
+import { CreateConsentDto } from "@src/core/dtos/consent.dtos";
+import { CreateUserDto, FindOneUserDto } from "@src/core/dtos/user.dtos";
+import { UpdateUserDto } from "@src/core/dtos/user.dtos";
 
 export const IUsersServicePort = Symbol("IUsersServicePort");
 

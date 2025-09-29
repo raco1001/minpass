@@ -1,4 +1,6 @@
 {
+  "files": [],
+  "references": [{ "path": "./apps/apis" }, { "path": "./apps/users" }],
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,

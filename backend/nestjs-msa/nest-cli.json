@@ -15,7 +15,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/activities/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/activities/tsconfig.app.json"
+        "tsConfigPath": "apps/activities/tsconfig.json"
       }
     },
     "apis": {
@@ -24,7 +24,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/apis/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/apis/tsconfig.app.json"
+        "tsConfigPath": "apps/apis/tsconfig.json"
       }
     },
     "auth": {
@@ -33,7 +33,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/auth/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/auth/tsconfig.app.json"
+        "tsConfigPath": "apps/auth/tsconfig.json"
       }
     },
     "integrations": {
@@ -60,7 +60,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/journals/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/journals/tsconfig.app.json"
+        "tsConfigPath": "apps/journals/tsconfig.json"
       }
     },
     "notifications": {
@@ -69,7 +69,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/notifications/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/notifications/tsconfig.app.json"
+        "tsConfigPath": "apps/notifications/tsconfig.json"
       }
     },
     "ontology": {
@@ -78,7 +78,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/ontology/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/ontology/tsconfig.app.json"
+        "tsConfigPath": "apps/ontology/tsconfig.json"
       }
     },
     "schedules": {
@@ -87,7 +87,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/schedules/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/schedules/tsconfig.app.json"
+        "tsConfigPath": "apps/schedules/tsconfig.json"
       }
     },
     "tasks": {
@@ -96,7 +96,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/tasks/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/tasks/tsconfig.app.json"
+        "tsConfigPath": "apps/tasks/tsconfig.json"
       }
     },
     "users": {
@@ -105,7 +105,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/users/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/users/tsconfig.app.json",
+        "tsConfigPath": "apps/users/tsconfig.json",
         "assets": [
           "libs/contracts/proto/users/v1/users.proto",
           "libs/contracts/proto/users/v1/consents.proto"

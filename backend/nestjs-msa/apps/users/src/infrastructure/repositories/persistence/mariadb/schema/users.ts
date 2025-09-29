@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { mysqlTable, varchar, datetime } from "drizzle-orm/mysql-core";
 
-import { uuidv7Binary } from "../../../../../../../../libs/integrations/database/mariadb/util/uuidv7-binary";
+import { uuidv7Binary } from "@mariadb/util/uuidv7-binary";
 
 export const users = mysqlTable("users", {
   id: uuidv7Binary("id", { length: 16 }).primaryKey(),

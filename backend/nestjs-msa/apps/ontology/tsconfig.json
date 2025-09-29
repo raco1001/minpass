@@ -3,14 +3,18 @@
   "compilerOptions": {
     "baseUrl": "./",
     "declaration": false,
-    "outDir": "../../dist/apps/apis",
+    "outDir": "../../dist/apps/ontology",
     "paths": {
       "@mariadb": ["../../libs/integrations/database/mariadb"],
       "@mariadb/*": ["../../libs/integrations/database/mariadb/*"],
       "@common": ["../../libs/common"],
-      "@common/*": ["../../libs/common/*"]
+      "@common/*": ["../../libs/common/*"],
+      "@contracts": ["../../libs/contracts"],
+      "@contracts/*": ["../../libs/contracts/*"],
+      "@src": ["src"],
+      "@src/*": ["src/*"]
     }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+  "exclude": ["../../node_modules", "../../dist", "test", "**/*spec.ts"]
 }

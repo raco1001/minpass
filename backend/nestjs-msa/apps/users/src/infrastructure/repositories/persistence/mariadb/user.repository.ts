@@ -3,10 +3,10 @@ import { Inject, Injectable } from "@nestjs/common";
 import { eq } from "drizzle-orm";
 import { MySql2Database } from "drizzle-orm/mysql2";
 
-import { DRIZZLE_DB } from "../../../../../../../libs/integrations/database/mariadb/constants/mariadb.constants";
-import { UserStatus } from "../../../../core/domain/constants/user.constants";
-import { User } from "../../../../core/domain/entities/user.entity";
-import { IUsersRepositoryPort as UserRepositoryPort } from "../../../../core/ports/out/users.repository.port";
+import { DRIZZLE_DB } from "@mariadb/constants/mariadb.constants";
+import { UserStatus } from "@src/core/domain/constants/user.constants";
+import { User } from "@src/core/domain/entities/user.entity";
+import { IUsersRepositoryPort as UserRepositoryPort } from "@src/core/ports/out/users.repository.port";
 
 import { toDomainUser, toRowUser } from "./mappers/user.mapper";
 import * as dbSchema from "./schema/users";

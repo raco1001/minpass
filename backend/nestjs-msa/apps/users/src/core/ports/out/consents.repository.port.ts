@@ -1,4 +1,4 @@
-import { Consent } from "../../domain/entities/consent.entity";
+import { Consent } from "@src/core/domain/entities/consent.entity";
 
 export const IConsentsRepositoryPort = Symbol("IConsentsRepositoryPort");
 
