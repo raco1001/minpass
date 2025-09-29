@@ -1,27 +1,24 @@
 import {
   Purpose as PurposeEnum,
   RecordConsentRequest,
-} from "../../../../../../libs/contracts/generated/users/v1/consents";
-import {
-  Consent,
-  ConsentList,
-} from "../../../../../../libs/contracts/generated/users/v1/consents";
+} from "@contracts/generated/users/v1/consents";
+import { Consent, ConsentList } from "@contracts/generated/users/v1/consents";
 import {
   CreateUserRequest,
   FindOneUserRequest,
   UpdateUserRequest,
   User,
   UserList,
-} from "../../../../../../libs/contracts/generated/users/v1/users";
-import { Purpose } from "../../../core/domain/constants/consent.constants";
-import { Consent as ConsentEntity } from "../../../core/domain/entities/consent.entity";
-import { User as UserEntity } from "../../../core/domain/entities/user.entity";
-import { CreateConsentDto } from "../../../core/dtos/consent.dtos";
+} from "@contracts/generated/users/v1/users";
+import { Purpose } from "@src/core/domain/constants/consent.constants";
+import { Consent as ConsentEntity } from "@src/core/domain/entities/consent.entity";
+import { User as UserEntity } from "@src/core/domain/entities/user.entity";
+import { CreateConsentDto } from "@src/core/dtos/consent.dtos";
 import {
   CreateUserDto,
   FindOneUserDto,
   UpdateUserDto,
-} from "../../../core/dtos/user.dtos";
+} from "@src/core/dtos/user.dtos";
 
 export class PurposeMapper {
   static toPurpose(purpose: PurposeEnum): Purpose {

@@ -1,51 +1,49 @@
 // @ts-check
 import eslint from "@eslint/js";
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import tseslint from "typescript-eslint"; // flat presets
+import prettierRecommended from "eslint-plugin-prettier/recommended";
 import importPlugin from "eslint-plugin-import";
+import globals from "globals";
+import { defineConfig } from "@eslint/config-helpers";
+import path from "node:path";
 
-export default tseslint.config(
+const r = (...p) => path.resolve(process.cwd(), ...p);
+
+export default defineConfig(
   {
-    ignores: ["eslint.config.mjs", "jest.config.js"],
+    ignores: [
+      "eslint.config.mjs",
+      "node_modules",
+      "dist",
+      "coverage",
+      "**/*.d.ts",
+    ],
   },
+
   eslint.configs.recommended,
-  tseslint.configs.recommendedTypeChecked,
-  eslintPluginPrettierRecommended,
+
+  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+
+  prettierRecommended,
+
   {
-    plugins: {
-      import: importPlugin,
-    },
+    plugins: { import: importPlugin },
     settings: {
       "import/resolver": {
         typescript: {
           alwaysTryTypes: true,
-          project: ["tsconfig.json"],
+          project: [r("tsconfig.json")],
         },
-        node: true,
+        node: { extensions: [".js", ".ts", ".json"] },
       },
     },
     languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
-      },
-      ecmaVersion: 5,
+      globals: { ...globals.node, ...globals.jest },
+      ecmaVersion: "latest",
       sourceType: "module",
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
     },
-  },
-  {
     rules: {
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-floating-promises": "warn",
-      "@typescript-eslint/no-unsafe-argument": "warn",
-      "@typescript-eslint/no-unsafe-assignment": "warn",
-      "@typescript-eslint/no-unsafe-call": "warn",
-      "@typescript-eslint/no-unsafe-member-access": "warn",
       quotes: ["error", "double", { avoidEscape: true }],
       semi: ["error", "always"],
       "import/order": [
@@ -60,12 +58,39 @@ export default tseslint.config(
             "index",
           ],
           "newlines-between": "always",
-          alphabetize: {
-            order: "asc",
-            caseInsensitive: true,
-          },
+          alphabetize: { order: "asc", caseInsensitive: true },
         },
       ],
+
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-floating-promises": "warn",
+      "@typescript-eslint/no-unsafe-argument": "warn",
+      "@typescript-eslint/no-unsafe-assignment": "warn",
+      "@typescript-eslint/no-unsafe-call": "warn",
+      "@typescript-eslint/no-unsafe-member-access": "warn",
+    },
+  },
+
+  {
+    files: ["apps/apis/**/*.{ts,tsx}"],
+    settings: {
+      "import/resolver": {
+        typescript: {
+          alwaysTryTypes: true,
+          project: [r("apps/apis/tsconfig.app.json"), r("tsconfig.json")],
+        },
+      },
+    },
+  },
+  {
+    files: ["apps/users/**/*.{ts,tsx}"],
+    settings: {
+      "import/resolver": {
+        typescript: {
+          alwaysTryTypes: true,
+          project: [r("apps/users/tsconfig.app.json"), r("tsconfig.json")],
+        },
+      },
     },
   },
 );

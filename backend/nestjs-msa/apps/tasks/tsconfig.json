@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "declaration": false,
-    "outDir": "../../dist/apps/journals",
+    "outDir": "../../dist/apps/tasks",
     "paths": {
       "@mariadb": ["../../libs/integrations/database/mariadb"],
       "@mariadb/*": ["../../libs/integrations/database/mariadb/*"],

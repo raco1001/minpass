@@ -5,7 +5,7 @@ import {
   Consent,
   ConsentList,
   RecordConsentRequest,
-} from "../../../../../../libs/contracts/generated/users/v1/consents";
+} from "@contracts/generated/users/v1/consents";
 import {
   CreateUserRequest,
   FindOneUserRequest,
@@ -13,8 +13,8 @@ import {
   User,
   UserList,
   UsersServiceController,
-} from "../../../../../../libs/contracts/generated/users/v1/users";
-import { IUsersServicePort } from "../../../core/ports/in/users.service.port";
+} from "@contracts/generated/users/v1/users";
+import { IUsersServicePort } from "@src/core/ports/in/users.service.port";
 
 import { UsersControllerMapper } from "./users.controller.mapper";
 @Controller()

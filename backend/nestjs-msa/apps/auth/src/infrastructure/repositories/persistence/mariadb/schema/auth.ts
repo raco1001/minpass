@@ -1,16 +1,14 @@
 import { sql } from "drizzle-orm";
 import { mysqlTable, varchar, datetime, boolean } from "drizzle-orm/mysql-core";
 
-import { users } from "apps/users/src/infrastructure/repositories/persistence/mariadb/schema/users";
+import { uuidv7Binary } from "../../../../../../../../libs/integrations/database/mariadb/util/uuidv7-binary";
 
 export const authClients = mysqlTable("auth_clients", {
-  id: varchar("id", { length: 36 }).primaryKey(),
-  providerId: varchar("provider_id", { length: 36 })
+  id: uuidv7Binary("id", { length: 16 }).primaryKey(),
+  providerId: uuidv7Binary("provider_id", { length: 16 })
     .notNull()
     .references(() => authProviders.id),
-  userId: varchar("user_id", { length: 36 })
-    .notNull()
-    .references(() => users.id),
+  userId: uuidv7Binary("user_id", { length: 16 }).notNull(),
   clientId: varchar("client_id", { length: 100 }),
   salt: varchar("salt", { length: 100 }),
   createdAt: datetime("created_at")
@@ -22,7 +20,7 @@ export const authClients = mysqlTable("auth_clients", {
 });
 
 export const authProviders = mysqlTable("auth_providers", {
-  id: varchar("id", { length: 36 }).primaryKey(),
+  id: uuidv7Binary("id", { length: 16 }).primaryKey(),
   provider: varchar("provider", { length: 100 }).notNull(),
   imgUrl: varchar("img_url", { length: 1000 }),
   createdAt: datetime("created_at")
@@ -34,8 +32,8 @@ export const authProviders = mysqlTable("auth_providers", {
 });
 
 export const authTokens = mysqlTable("auth_tokens", {
-  id: varchar("id", { length: 36 }).primaryKey(),
-  authClientId: varchar("auth_client_id", { length: 36 })
+  id: uuidv7Binary("id", { length: 16 }).primaryKey(),
+  authClientId: uuidv7Binary("auth_client_id", { length: 16 })
     .notNull()
     .references(() => authClients.id),
   providerAccessToken: varchar("provider_access_token", { length: 1000 }),

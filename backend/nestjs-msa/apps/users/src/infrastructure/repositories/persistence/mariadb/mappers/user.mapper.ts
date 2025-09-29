@@ -1,5 +1,5 @@
-import { UserStatus } from "../../../../../core/domain/constants/user.constants";
-import { User } from "../../../../../core/domain/entities/user.entity";
+import { UserStatus } from "@src/core/domain/constants/user.constants";
+import { User } from "@src/core/domain/entities/user.entity";
 import { UserRow } from "../schema/users";
 
 export const toDomainUser = (row: UserRow): User => {

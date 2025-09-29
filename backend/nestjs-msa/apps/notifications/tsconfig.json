@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "declaration": false,
-    "outDir": "../../dist/apps/users",
+    "outDir": "../../dist/apps/notifications",
     "paths": {
       "@mariadb": ["../../libs/integrations/database/mariadb"],
       "@mariadb/*": ["../../libs/integrations/database/mariadb/*"],
@@ -11,9 +11,10 @@
       "@common/*": ["../../libs/common/*"],
       "@contracts": ["../../libs/contracts"],
       "@contracts/*": ["../../libs/contracts/*"],
-      "@users": ["./src"]
+      "@src": ["src"],
+      "@src/*": ["src/*"]
     }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
+  "exclude": ["../../node_modules", "../../dist", "test", "**/*spec.ts"]
 }

@@ -73,9 +73,7 @@ export function buildPinoHttpParams(opts: CommonLoggerOptions): Params {
         level: (label) => ({ level: label }),
         bindings: (bindings: { pid: string; hostname: string }) => ({
           pid: bindings.pid,
-          host: bindings.hostname,
-          service: serviceName,
-          env,
+          hostname: bindings.hostname,
         }),
       },
       ...(targets.length ? { transport: { targets } } : {}),

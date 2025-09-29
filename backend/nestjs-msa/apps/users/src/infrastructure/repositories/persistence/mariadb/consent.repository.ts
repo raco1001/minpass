@@ -2,9 +2,9 @@ import { Inject, Injectable } from "@nestjs/common";
 import { eq } from "drizzle-orm";
 import { MySql2Database } from "drizzle-orm/mysql2";
 
-import { DRIZZLE_DB } from "../../../../../../../libs/integrations/database/mariadb/constants/mariadb.constants";
-import { Consent } from "../../../../core/domain/entities/consent.entity";
-import { IConsentsRepositoryPort } from "../../../../core/ports/out/consents.repository.port";
+import { DRIZZLE_DB } from "@mariadb/constants/mariadb.constants";
+import { Consent } from "@src/core/domain/entities/consent.entity";
+import { IConsentsRepositoryPort } from "@src/core/ports/out/consents.repository.port";
 
 import { toDomainConsent, toRowConsent } from "./mappers/consent.mapper";
 import * as dbSchema from "./schema/consents";

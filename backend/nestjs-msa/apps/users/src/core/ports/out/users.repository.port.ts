@@ -1,4 +1,4 @@
-import { User } from "../../domain/entities/user.entity";
+import { User } from "@src/core/domain/entities/user.entity";
 
 export const IUsersRepositoryPort = Symbol("IUsersRepositoryPort");
 
