@@ -13,14 +13,19 @@ import {
   User,
   UserList,
   UsersServiceController,
+  UsersServiceControllerMethods,
+  USERS_V1_PACKAGE_NAME,
 } from "@contracts/generated/users/v1/users";
 import { IUsersServicePort } from "@src/core/ports/in/users.service.port";
 
 import { UsersControllerMapper } from "./users.controller.mapper";
+
+@UsersServiceControllerMethods()
 @Controller()
 export class UsersController implements UsersServiceController {
   constructor(
     @Inject(IUsersServicePort)
+    @Inject(USERS_V1_PACKAGE_NAME)
     private readonly usersService: IUsersServicePort,
   ) {}
   @GrpcMethod("UsersService", "CreateUser")
