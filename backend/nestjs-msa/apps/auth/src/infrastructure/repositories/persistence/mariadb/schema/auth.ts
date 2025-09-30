@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { mysqlTable, varchar, datetime, boolean } from "drizzle-orm/mysql-core";
 
-import { uuidv7Binary } from "../../../../../../../../libs/integrations/database/mariadb/util/uuidv7-binary";
+import { uuidv7Binary } from "@mariadb/util/uuidv7-binary";
 
 export const authClients = mysqlTable("auth_clients", {
   id: uuidv7Binary("id", { length: 16 }).primaryKey(),
@@ -9,8 +9,8 @@ export const authClients = mysqlTable("auth_clients", {
     .notNull()
     .references(() => authProviders.id),
   userId: uuidv7Binary("user_id", { length: 16 }).notNull(),
-  clientId: varchar("client_id", { length: 100 }),
-  salt: varchar("salt", { length: 100 }),
+  clientId: varchar("client_id", { length: 100 }).notNull(),
+  salt: varchar("salt", { length: 100 }).notNull(),
   createdAt: datetime("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -21,7 +21,7 @@ export const authClients = mysqlTable("auth_clients", {
 
 export const authProviders = mysqlTable("auth_providers", {
   id: uuidv7Binary("id", { length: 16 }).primaryKey(),
-  provider: varchar("provider", { length: 100 }).notNull(),
+  provider: varchar("provider", { length: 100 }).notNull().unique(),
   imgUrl: varchar("img_url", { length: 1000 }),
   createdAt: datetime("created_at")
     .default(sql`CURRENT_TIMESTAMP`)

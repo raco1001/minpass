@@ -1,5 +1,6 @@
-import { SocialUserProfile } from "@/core/auth/core/domain/types/social-user-profile.interface";
+import { SocialUserProfile } from "@src/core/domain/dto/social-user-profile.dto";
 
+export const IAuthHandlerPort = Symbol("IAuthHandlerPort");
 export interface IAuthHandler {
   getUserInfo(user: SocialUserProfile): Promise<void>;
   validateToken(user: SocialUserProfile): Promise<void>;

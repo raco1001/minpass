@@ -2,7 +2,6 @@ export class OAuthToken {
   constructor(
     public readonly id: string,
     public readonly oauthClientId: string,
-    public readonly userId: string,
     public readonly providerAccessToken: string,
     public readonly providerRefreshToken: string,
     public readonly refreshToken: string,
