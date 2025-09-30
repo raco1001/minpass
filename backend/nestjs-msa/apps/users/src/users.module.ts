@@ -13,6 +13,7 @@ import { users } from "./infrastructure/repositories/persistence/mariadb/schema/
 import { UserRepository } from "./infrastructure/repositories/persistence/mariadb/user.repository";
 import { UsersController } from "./presentation/web/controllers/users.controller";
 import { UsersService } from "./services/users.service";
+import { USERS_V1_PACKAGE_NAME } from "@contracts/generated/users/v1/users";
 
 @Module({
   imports: [
@@ -38,11 +39,13 @@ import { UsersService } from "./services/users.service";
   ],
   controllers: [UsersController],
   providers: [
+    { provide: USERS_V1_PACKAGE_NAME, useValue: USERS_V1_PACKAGE_NAME },
     { provide: IUsersServicePort, useClass: UsersService },
     { provide: IUsersRepositoryPort, useClass: UserRepository },
     { provide: IConsentsRepositoryPort, useClass: ConsentRepository },
   ],
   exports: [
+    { provide: USERS_V1_PACKAGE_NAME, useValue: USERS_V1_PACKAGE_NAME },
     { provide: IUsersServicePort, useClass: UsersService },
     { provide: IUsersRepositoryPort, useClass: UserRepository },
     { provide: IConsentsRepositoryPort, useClass: ConsentRepository },
