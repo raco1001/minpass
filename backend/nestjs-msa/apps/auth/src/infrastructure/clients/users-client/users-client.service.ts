@@ -12,7 +12,6 @@ import {
 import { USERS_SERVICE_CLIENT } from "./users-client.constants";
 import { IUserClientPort } from "@src/core/ports/out/user-client.port";
 
-@UsersServiceControllerMethods()
 @Injectable()
 export class UsersClientService implements IUserClientPort {
   constructor(

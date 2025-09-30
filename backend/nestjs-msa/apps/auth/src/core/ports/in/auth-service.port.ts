@@ -1,10 +1,9 @@
-import { ILoginResult } from "@src/presentation/grpc/dtos/login-result.interface";
+import { ILoginResult } from "@src/presentation/web/dtos/login-result.interface";
 import { SocialUserProfile } from "@src/core/domain/dto/social-user-profile.dto";
 
 export const IAuthServicePort = Symbol("IAuthServicePort");
 export interface IAuthServicePort {
   socialLogin(profile: SocialUserProfile): Promise<ILoginResult>;
-  oauthCallback(code: string, redirectUri: string): Promise<ILoginResult>;
   // generate tokens
   // full logout
   // unlink provider
