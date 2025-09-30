@@ -13,7 +13,7 @@ import {
 import { MICROSERVICE_CLIENTS } from "@common/config/services.constant";
 
 import { USERS_SERVICE_CLIENT } from "./users-client.constants";
-import { UsersClientController } from "./users.client.controller";
+import { UsersClientService } from "./users-client.service";
 
 const fromRoot = (p: string) => resolve(process.cwd(), p);
 
@@ -76,7 +76,8 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
         client.getService<UsersServiceClient>(USERS_SERVICE_NAME),
       inject: [MICROSERVICE_CLIENTS.USERS_SERVICE],
     },
+    UsersClientService,
   ],
-  controllers: [UsersClientController],
+  exports: [USERS_SERVICE_CLIENT, UsersClientService],
 })
 export class UsersClientModule {}
