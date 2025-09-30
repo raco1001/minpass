@@ -26,7 +26,7 @@ import { USERS_V1_PACKAGE_NAME } from "@contracts/generated/users/v1/users";
       (cfg: ConfigService): MariaDbOptions => ({
         name: "users",
         host: cfg.get<string>("DB_HOST", "127.0.0.1"),
-        port: parseInt(cfg.get<string>("DB_PORT", "3307"), 10),
+        port: parseInt(cfg.get<string>("DB_PORT", "3306"), 10),
         user: cfg.get<string>("DB_USER_SCHEMA_NAME", "svc-user"),
         password: cfg.get<string>("DB_USER_SCHEMA_PASSWORD", "user"),
         database: cfg.get<string>("DB_NAME", "minpass"),
@@ -45,10 +45,10 @@ import { USERS_V1_PACKAGE_NAME } from "@contracts/generated/users/v1/users";
     { provide: IConsentsRepositoryPort, useClass: ConsentRepository },
   ],
   exports: [
-    { provide: USERS_V1_PACKAGE_NAME, useValue: USERS_V1_PACKAGE_NAME },
-    { provide: IUsersServicePort, useClass: UsersService },
-    { provide: IUsersRepositoryPort, useClass: UserRepository },
-    { provide: IConsentsRepositoryPort, useClass: ConsentRepository },
+    USERS_V1_PACKAGE_NAME,
+    IUsersServicePort,
+    IUsersRepositoryPort,
+    IConsentsRepositoryPort,
   ],
 })
 export class UsersModule {}
