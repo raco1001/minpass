@@ -6,12 +6,12 @@ import type { DrizzleDb } from "@mariadb/constants/mariadb.types";
 import { DRIZZLE_DB } from "@mariadb/constants/mariadb.constants";
 import { UserStatus } from "@src/core/domain/constants/user.constants";
 import { User } from "@src/core/domain/entities/user.entity";
-import { IUsersRepositoryPort } from "@src/core/ports/out/users.repository.port";
+import { UsersRepositoryPort } from "@src/core/ports/out/users.repository.port";
 
 import { toDomainUser, toRowUser } from "./mappers/user.mapper";
 import { users } from "./schema/users";
 @Injectable()
-export class UserRepository implements IUsersRepositoryPort {
+export class UserRepository implements UsersRepositoryPort {
   constructor(
     @Inject(DRIZZLE_DB("users"))
     private readonly db: DrizzleDb,

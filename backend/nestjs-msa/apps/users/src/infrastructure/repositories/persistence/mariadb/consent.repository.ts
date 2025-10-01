@@ -4,13 +4,13 @@ import { DrizzleDb } from "@mariadb/constants/mariadb.types";
 
 import { DRIZZLE_DB } from "@mariadb/constants/mariadb.constants";
 import { Consent } from "@src/core/domain/entities/consent.entity";
-import { IConsentsRepositoryPort } from "@src/core/ports/out/consents.repository.port";
+import { ConsentsRepositoryPort } from "@src/core/ports/out/consents.repository.port";
 
 import { toDomainConsent, toRowConsent } from "./mappers/consent.mapper";
 import { consents } from "./schema/consents";
 
 @Injectable()
-export class ConsentRepository implements IConsentsRepositoryPort {
+export class ConsentRepository implements ConsentsRepositoryPort {
   constructor(
     @Inject(DRIZZLE_DB("users"))
     private readonly db: DrizzleDb,
