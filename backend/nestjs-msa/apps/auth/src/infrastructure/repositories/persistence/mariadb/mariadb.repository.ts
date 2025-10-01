@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { and, eq } from "drizzle-orm";
 import { DRIZZLE_DB } from "@mariadb/constants/mariadb.constants";
-import { IAuthRepositoryPort } from "@src/core/ports/out/auth.repository.port";
+import { AuthRepositoryPort } from "@src/core/ports/out/auth.repository.port";
 import * as authSchema from "./schema/auth";
 import { OAuthClient } from "@src/core/domain/entities/oauth-client.entity";
 import { OAuthRepositoryMapper } from "./mappers/oauth-repository.mapper";
@@ -13,7 +13,7 @@ import {
 import { DrizzleDb } from "@mariadb/constants/mariadb.types";
 
 @Injectable()
-export class MariadbRepository implements IAuthRepositoryPort {
+export class MariadbRepository implements AuthRepositoryPort {
   constructor(
     @Inject(DRIZZLE_DB("auth"))
     private readonly db: DrizzleDb,

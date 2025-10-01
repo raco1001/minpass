@@ -4,7 +4,7 @@ import { MariaDbModule } from "@mariadb/mariadb.module";
 import { MariaDbOptions } from "@mariadb/constants/mariadb.types";
 import { authClients, authProviders, authTokens } from "./schema/auth";
 import { MariadbRepository } from "./mariadb.repository";
-import { IAuthRepositoryPort } from "@src/core/ports/out/auth.repository.port";
+import { AuthRepositoryPort } from "@src/core/ports/out/auth.repository.port";
 @Module({
   imports: [
     MariaDbModule.registerAsync(
@@ -23,7 +23,7 @@ import { IAuthRepositoryPort } from "@src/core/ports/out/auth.repository.port";
       [ConfigModule],
     ),
   ],
-  providers: [{ provide: IAuthRepositoryPort, useClass: MariadbRepository }],
-  exports: [IAuthRepositoryPort],
+  providers: [{ provide: AuthRepositoryPort, useClass: MariadbRepository }],
+  exports: [AuthRepositoryPort],
 })
 export class MariadbRepositoryModule {}
