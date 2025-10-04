@@ -1,29 +1,24 @@
 // apps/users/infrastructure/repositories/persistence/mariadb/user.repository.ts
 import { Inject, Injectable } from "@nestjs/common";
 import { eq } from "drizzle-orm";
-import { MySql2Database } from "drizzle-orm/mysql2";
+import type { DrizzleDb } from "@mariadb/constants/mariadb.types";
 
 import { DRIZZLE_DB } from "@mariadb/constants/mariadb.constants";
 import { UserStatus } from "@src/core/domain/constants/user.constants";
 import { User } from "@src/core/domain/entities/user.entity";
-import { IUsersRepositoryPort as UserRepositoryPort } from "@src/core/ports/out/users.repository.port";
+import { UsersRepositoryPort } from "@src/core/ports/out/users.repository.port";
 
 import { toDomainUser, toRowUser } from "./mappers/user.mapper";
-import * as dbSchema from "./schema/users";
-
+import { users } from "./schema/users";
 @Injectable()
-export class UserRepository implements UserRepositoryPort {
+export class UserRepository implements UsersRepositoryPort {
   constructor(
     @Inject(DRIZZLE_DB("users"))
-    private readonly db: MySql2Database<typeof dbSchema>,
+    private readonly db: DrizzleDb,
   ) {}
 
   async findById(id: string): Promise<User | null> {
-    const rows = await this.db
-      .select()
-      .from(dbSchema.users)
-      .where(eq(dbSchema.users.id, id))
-      .limit(1);
+    const rows = await this.db.select().from(users).where(eq(users.id, id));
 
     if (rows.length === 0) return null;
     return toDomainUser(rows[0]);
@@ -32,17 +27,16 @@ export class UserRepository implements UserRepositoryPort {
   async findAll(): Promise<User[]> {
     const rows = await this.db
       .select()
-      .from(dbSchema.users)
-      .where(eq(dbSchema.users.status, UserStatus.Active));
+      .from(users)
+      .where(eq(users.status, UserStatus.Active));
     return rows.map(toDomainUser);
   }
 
   async findByEmail(email: string): Promise<User | null> {
     const rows = await this.db
       .select()
-      .from(dbSchema.users)
-      .where(eq(dbSchema.users.email, email))
-      .limit(1);
+      .from(users)
+      .where(eq(users.email, email));
 
     if (rows.length === 0) return null;
     return toDomainUser(rows[0]);
@@ -51,7 +45,7 @@ export class UserRepository implements UserRepositoryPort {
   async save(user: User): Promise<void> {
     const row = toRowUser(user);
     await this.db
-      .insert(dbSchema.users)
+      .insert(users)
       .values(row)
       .onDuplicateKeyUpdate({
         set: {
@@ -66,20 +60,17 @@ export class UserRepository implements UserRepositoryPort {
 
   async update(user: User): Promise<void> {
     const row = toRowUser(user);
-    await this.db
-      .update(dbSchema.users)
-      .set(row)
-      .where(eq(dbSchema.users.id, row.id));
+    await this.db.update(users).set(row).where(eq(users.id, row.id));
   }
 
   async delete(id: string): Promise<void> {
     await this.db
-      .update(dbSchema.users)
+      .update(users)
       .set({
         status: UserStatus.Deleted,
         updatedAt: new Date(),
         deletedAt: new Date(),
       })
-      .where(eq(dbSchema.users.id, id));
+      .where(eq(users.id, id));
   }
 }

@@ -4,9 +4,9 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { MariaDbOptions } from "@mariadb/constants/mariadb.types";
 import { MariaDbModule } from "@mariadb/mariadb.module";
 
-import { IUsersServicePort } from "./core/ports/in/users.service.port";
-import { IConsentsRepositoryPort } from "./core/ports/out/consents.repository.port";
-import { IUsersRepositoryPort } from "./core/ports/out/users.repository.port";
+import { UsersServicePort } from "./core/ports/in/users.service.port";
+import { UsersRepositoryPort } from "./core/ports/out/users.repository.port";
+import { ConsentsRepositoryPort } from "./core/ports/out/consents.repository.port";
 import { ConsentRepository } from "./infrastructure/repositories/persistence/mariadb/consent.repository";
 import { consents } from "./infrastructure/repositories/persistence/mariadb/schema/consents";
 import { users } from "./infrastructure/repositories/persistence/mariadb/schema/users";
@@ -26,7 +26,7 @@ import { USERS_V1_PACKAGE_NAME } from "@contracts/generated/users/v1/users";
       (cfg: ConfigService): MariaDbOptions => ({
         name: "users",
         host: cfg.get<string>("DB_HOST", "127.0.0.1"),
-        port: parseInt(cfg.get<string>("DB_PORT", "3307"), 10),
+        port: parseInt(cfg.get<string>("DB_PORT", "3306"), 10),
         user: cfg.get<string>("DB_USER_SCHEMA_NAME", "svc-user"),
         password: cfg.get<string>("DB_USER_SCHEMA_PASSWORD", "user"),
         database: cfg.get<string>("DB_NAME", "minpass"),
@@ -40,15 +40,15 @@ import { USERS_V1_PACKAGE_NAME } from "@contracts/generated/users/v1/users";
   controllers: [UsersController],
   providers: [
     { provide: USERS_V1_PACKAGE_NAME, useValue: USERS_V1_PACKAGE_NAME },
-    { provide: IUsersServicePort, useClass: UsersService },
-    { provide: IUsersRepositoryPort, useClass: UserRepository },
-    { provide: IConsentsRepositoryPort, useClass: ConsentRepository },
+    { provide: UsersServicePort, useClass: UsersService },
+    { provide: UsersRepositoryPort, useClass: UserRepository },
+    { provide: ConsentsRepositoryPort, useClass: ConsentRepository },
   ],
   exports: [
-    { provide: USERS_V1_PACKAGE_NAME, useValue: USERS_V1_PACKAGE_NAME },
-    { provide: IUsersServicePort, useClass: UsersService },
-    { provide: IUsersRepositoryPort, useClass: UserRepository },
-    { provide: IConsentsRepositoryPort, useClass: ConsentRepository },
+    USERS_V1_PACKAGE_NAME,
+    UsersServicePort,
+    UsersRepositoryPort,
+    ConsentsRepositoryPort,
   ],
 })
 export class UsersModule {}
