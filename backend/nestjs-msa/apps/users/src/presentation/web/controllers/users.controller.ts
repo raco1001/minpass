@@ -16,7 +16,7 @@ import {
   UsersServiceControllerMethods,
   USERS_V1_PACKAGE_NAME,
 } from "@contracts/generated/users/v1/users";
-import { IUsersServicePort } from "@src/core/ports/in/users.service.port";
+import { UsersServicePort } from "@src/core/ports/in/users.service.port";
 
 import { UsersControllerMapper } from "./users.controller.mapper";
 
@@ -24,9 +24,9 @@ import { UsersControllerMapper } from "./users.controller.mapper";
 @Controller()
 export class UsersController implements UsersServiceController {
   constructor(
-    @Inject(IUsersServicePort)
+    @Inject(UsersServicePort)
     @Inject(USERS_V1_PACKAGE_NAME)
-    private readonly usersService: IUsersServicePort,
+    private readonly usersService: UsersServicePort,
   ) {}
   @GrpcMethod("UsersService", "CreateUser")
   async createUser(data: CreateUserRequest): Promise<User> {

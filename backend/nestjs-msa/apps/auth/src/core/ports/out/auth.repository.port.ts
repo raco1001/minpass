@@ -1,20 +1,20 @@
-import { OAuthClient } from "@/core/auth/core/domain/entities/oauth-client.entity";
-import { OAuthToken } from "../../domain/entities/oauth-token.entity";
-export const IAuthRepositoryPort = Symbol("IAuthRepositoryPort");
-export interface IAuthRepositoryPort {
-  findProviderIdByName(name: string, tx?: any): Promise<string | null>;
-  findOAuthClientByClientId(
+import { OAuthClient } from "@src/core/domain/entities/oauth-client.entity";
+import { OAuthToken } from "@src/core/domain/entities/oauth-token.entity";
+import {
+  AuthProvider,
+  AuthProviderType,
+} from "@src/core/domain/entities/auth-provider.entity";
+
+export abstract class AuthRepositoryPort {
+  abstract findProviderByProvider(
+    provider: AuthProviderType,
+  ): Promise<AuthProvider | null>;
+  abstract findOAuthClientByUserIdAndProviderId(
     providerId: string,
-    clientId: string,
-    tx?: any,
+    userId: string,
   ): Promise<OAuthClient | null>;
-  findRoleIdByName(name: string, tx?: any): Promise<string | null>;
-  createOAuthClient(
+  abstract createOAuthClient(
     oauthClient: OAuthClient,
-    tx?: any,
   ): Promise<OAuthClient | null>;
-  createOAuthToken(
-    oauthToken: OAuthToken,
-    tx?: any,
-  ): Promise<OAuthToken | null>;
+  abstract createOAuthToken(oauthToken: OAuthToken): Promise<OAuthToken | null>;
 }

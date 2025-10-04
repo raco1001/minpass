@@ -5,7 +5,7 @@ import { uuidv7Binary } from "@mariadb/util/uuidv7-binary";
 
 export const users = mysqlTable("users", {
   id: uuidv7Binary("id", { length: 16 }).primaryKey(),
-  email: varchar("email", { length: 100 }).notNull(),
+  email: varchar("email", { length: 100 }).unique().notNull(),
   displayName: varchar("display_name", { length: 100 }),
   locale: varchar("locale", { length: 50 }).notNull(),
   status: varchar("status", { length: 50 }).notNull(),

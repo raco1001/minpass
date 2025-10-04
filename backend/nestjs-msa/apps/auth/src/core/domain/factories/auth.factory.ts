@@ -1,18 +1,18 @@
-import { OAuthClient } from "@/core/auth/core/domain/entities/oauth-client.entity";
-import { OAuthToken } from "@/core/auth/core/domain/entities/oauth-token.entity";
-import { SocialUserProfile } from "@/core/auth/core/domain/types/social-user-profile.interface";
-import { v4 as uuidv4 } from "uuid";
+import { OAuthClient } from "@src/core/domain/entities/oauth-client.entity";
+import { OAuthToken } from "@src/core/domain/entities/oauth-token.entity";
+import { SocialUserProfile } from "@src/core/domain/dto/social-user-profile.dto";
+import { v7 as uuidv7 } from "uuid";
 import { AuthProviderType } from "../entities/auth-provider.entity";
 
 export class OAuthClientFactory {
   static getProviderId(provider: AuthProviderType): string {
     switch (provider) {
-      case AuthProviderType.KAKAO:
-        return "kakao";
       case AuthProviderType.GOOGLE:
         return "google";
       case AuthProviderType.GITHUB:
         return "github";
+      default:
+        throw new Error(`Invalid provider: ${provider}`);
     }
   }
 
@@ -25,12 +25,12 @@ export class OAuthClientFactory {
     providerRefreshToken: string,
     refreshToken: string,
     expiresAt: Date,
-  ): OAuthClient {
+  ): { client: OAuthClient; token: OAuthToken } {
     const now = new Date();
     const clientId = profile.clientId.toString();
 
     const client = new OAuthClient(
-      uuidv4(),
+      uuidv7(),
       userId,
       providerId,
       clientId,
@@ -40,9 +40,8 @@ export class OAuthClientFactory {
     );
 
     const token = new OAuthToken(
-      uuidv4(),
+      uuidv7(),
       client.id ?? "",
-      userId,
       providerAccessToken,
       providerRefreshToken,
       refreshToken,
@@ -52,8 +51,6 @@ export class OAuthClientFactory {
       now,
     );
 
-    client.attachToken(token);
-
-    return client;
+    return { client, token };
   }
 }

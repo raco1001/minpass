@@ -1,9 +1,8 @@
-import { ILoginResult } from "@/core/auth/core/domain/types/login-result.interface";
-import { SocialUserProfile } from "@/core/auth/core/domain/types/social-user-profile.interface";
+import { ILoginResult } from "@src/presentation/web/dtos/login-result.interface";
+import { SocialUserProfile } from "@src/core/domain/dto/social-user-profile.dto";
 
-export const IAuthServicePort = Symbol("IAuthServicePort");
-export interface IAuthServicePort {
-  socialLogin(profile: SocialUserProfile): Promise<ILoginResult>;
+export abstract class AuthServicePort {
+  abstract socialLogin(profile: SocialUserProfile): Promise<ILoginResult>;
   // generate tokens
   // full logout
   // unlink provider

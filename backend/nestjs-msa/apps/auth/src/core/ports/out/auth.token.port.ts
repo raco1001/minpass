@@ -1,12 +1,13 @@
-import { User } from "@/core/users/core/domain/entities/user.entity";
-import { OAuthClient } from "../../domain/entities/oauth-client.entity";
-import { ILoginResult } from "../../domain/types/login-result.interface";
-
-export const ITokenHandlerPort = Symbol("ITokenHandlerPort");
-export interface ITokenHandlerPort extends Partial<ILoginResult> {
-  refreshAccessToken(
+import { OAuthClient } from "@src/core/domain/entities/oauth-client.entity";
+import { ILoginResult } from "@src/presentation/web/dtos/login-result.interface";
+import { User } from "@contracts/generated/users/v1/users";
+export abstract class TokenHandlerPort {
+  abstract refreshAccessToken(
     user: User,
     oauthClient: OAuthClient,
   ): Promise<ILoginResult>;
-  generateTokens(user: User, oauthClient: OAuthClient): Promise<ILoginResult>;
+  abstract generateTokens(
+    user: User,
+    oauthClient: OAuthClient,
+  ): Promise<ILoginResult>;
 }
