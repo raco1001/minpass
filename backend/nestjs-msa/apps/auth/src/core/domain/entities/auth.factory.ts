@@ -2,7 +2,7 @@ import { OAuthClient } from "@src/core/domain/entities/oauth-client.entity";
 import { OAuthToken } from "@src/core/domain/entities/oauth-token.entity";
 import { SocialUserProfile } from "@src/core/domain/dto/social-user-profile.dto";
 import { v7 as uuidv7 } from "uuid";
-import { AuthProviderType } from "../entities/auth-provider.entity";
+import { AuthProviderType } from "./auth-provider.entity";
 
 export class OAuthClientFactory {
   static getProviderId(provider: AuthProviderType): string {

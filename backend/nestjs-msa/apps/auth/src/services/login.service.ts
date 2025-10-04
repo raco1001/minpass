@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { AuthServicePort } from "../core/ports/in/auth-service.port";
+import { LoginServicePort } from "../core/ports/in/login-service.port";
 import { SocialUserProfile } from "@src/core/domain/dto/social-user-profile.dto";
 import { ILoginResult } from "@src/presentation/web/dtos/login-result.interface";
 
 @Injectable()
-export class AuthService implements AuthServicePort {
+export class LoginService implements LoginServicePort {
   async socialLogin(profile: SocialUserProfile): Promise<ILoginResult> {
     return Promise.resolve({
       accessToken: "accessToken",
