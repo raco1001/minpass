@@ -1,12 +1,12 @@
 // apps/users/infrastructure/repositories/persistence/mariadb/user.repository.ts
 import { Inject, Injectable } from "@nestjs/common";
 import { eq } from "drizzle-orm";
-import type { DrizzleDb } from "@mariadb/constants/mariadb.types";
+import type { DrizzleDb } from "@app/integrations/mariadb/constants/mariadb.types";
 
-import { DRIZZLE_DB } from "@mariadb/constants/mariadb.constants";
-import { UserStatus } from "@src/core/domain/constants/user.constants";
-import { User } from "@src/core/domain/entities/user.entity";
-import { UsersRepositoryPort } from "@src/core/ports/out/users.repository.port";
+import { DRIZZLE_DB } from "@app/integrations/mariadb/constants/mariadb.constants";
+import { UserStatus } from "@users/core/domain/constants/user.constants";
+import { User } from "@users/core/domain/entities/user.entity";
+import { UsersRepositoryPort } from "@users/core/ports/out/users.repository.port";
 
 import { toDomainUser, toRowUser } from "./mappers/user.mapper";
 import { users } from "./schema/users";

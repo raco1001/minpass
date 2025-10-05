@@ -1,10 +1,10 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { eq } from "drizzle-orm";
-import { DrizzleDb } from "@mariadb/constants/mariadb.types";
+import type { DrizzleDb } from "@app/integrations/mariadb/constants/mariadb.types";
 
-import { DRIZZLE_DB } from "@mariadb/constants/mariadb.constants";
-import { Consent } from "@src/core/domain/entities/consent.entity";
-import { ConsentsRepositoryPort } from "@src/core/ports/out/consents.repository.port";
+import { DRIZZLE_DB } from "@app/integrations/mariadb/constants/mariadb.constants";
+import { Consent } from "@users/core/domain/entities/consent.entity";
+import { ConsentsRepositoryPort } from "@users/core/ports/out/consents.repository.port";
 
 import { toDomainConsent, toRowConsent } from "./mappers/consent.mapper";
 import { consents } from "./schema/consents";

@@ -1,6 +1,4 @@
 {
-  "files": [],
-  "references": [{ "path": "./apps/apis" }, { "path": "./apps/users" }],
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
@@ -20,9 +18,48 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@mariadb/*": ["libs/integrations/database/mariadb/*"],
-      "@common/*": ["libs/common/*"],
-      "@contracts/*": ["libs/contracts/*"]
+      "@app/config": [
+        "libs/config/src"
+      ],
+      "@app/config/*": [
+        "libs/config/src/*"
+      ],
+      "@app/contracts": [
+        "libs/contracts/src"
+      ],
+      "@app/contracts/*": [
+        "libs/contracts/src/*"
+      ],
+      "@app/integrations": [
+        "libs/integrations/src"
+      ],
+      "@app/integrations/*": [
+        "libs/integrations/src/*"
+      ],
+      "@app/logging": [
+        "libs/logging/src"
+      ],
+      "@app/logging/*": [
+        "libs/logging/src/*"
+      ],
+      "@app/util": [
+        "libs/util/src"
+      ],
+      "@app/util/*": [
+        "libs/util/src/*"
+      ],
+      "@auth": [
+        "apps/auth/src"
+      ],
+      "@auth/*": [
+        "apps/auth/src/*"
+      ],
+      "@users": [
+        "apps/users/src"
+      ],
+      "@users/*": [
+        "apps/users/src/*"
+      ]
     }
   }
 }

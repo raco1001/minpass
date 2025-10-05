@@ -1,12 +1,9 @@
-export enum AuthProviderType {
-  GOOGLE = "google",
-  GITHUB = "github",
-}
+import { AuthProvider } from "../constants/auth-providers";
 
-export class AuthProvider {
+export class AuthProviderEntity {
   constructor(
     public readonly id: string,
-    public readonly provider: AuthProviderType,
+    public readonly provider: AuthProvider,
     public readonly imgUrl: string,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
