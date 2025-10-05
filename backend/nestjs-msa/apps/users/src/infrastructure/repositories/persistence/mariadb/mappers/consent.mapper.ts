@@ -1,5 +1,5 @@
-import { Purpose } from "@src/core/domain/constants/consent.constants";
-import { Consent } from "@src/core/domain/entities/consent.entity";
+import { Purpose } from "@users/core/domain/constants/consent.constants";
+import { Consent } from "@users/core/domain/entities/consent.entity";
 import { ConsentRow } from "../schema/consents";
 
 export const toDomainConsent = (row: ConsentRow): Consent =>

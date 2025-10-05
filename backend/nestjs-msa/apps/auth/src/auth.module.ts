@@ -5,7 +5,7 @@ import { LoginService } from "./services/login.service";
 import { ConfigModule } from "@nestjs/config";
 import { InfrastructureModule } from "./infrastructure/infrastructure.module";
 import { LoginServicePort } from "./core/ports/in/login-service.port";
-import { validateEnv } from "./infrastructure/auth-provider-client/env.schema";
+import { validateEnv } from "./infrastructure/auth-provider-client/auth-provider-env.schema";
 
 @Module({
   imports: [

@@ -1,4 +1,4 @@
-import { OAuthProvider } from "../constants/auth-providers";
+import { AuthProvider } from "../constants/auth-providers";
 import {
   IsString,
   IsEmail,
@@ -25,9 +25,9 @@ export class SocialUserProfile {
   nickname: string;
   @IsString()
   profileImage: string;
-  @IsEnum(OAuthProvider)
+  @IsEnum(AuthProvider)
   @IsNotEmpty()
-  provider: OAuthProvider;
+  provider: AuthProvider;
   @IsString()
   providerAccessToken: string;
   @IsString()

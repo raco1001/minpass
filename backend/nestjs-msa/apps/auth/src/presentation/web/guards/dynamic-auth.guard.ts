@@ -5,9 +5,9 @@ import {
   Injectable,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { OAuthProvider } from "@src/core/domain/constants/auth-providers";
-import { OAUTH_PROVIDER_OPTIONS } from "@src/infrastructure/auth-provider-client/provider-client-di-token";
-import { ProviderOptionsMap } from "@src/infrastructure/auth-provider-client/types";
+import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
+import { OAUTH_PROVIDER_OPTIONS } from "@auth/infrastructure/auth-provider-client/auth-provider-client-di-token";
+import { ProviderOptionsMap } from "@auth/infrastructure/auth-provider-client/types";
 
 interface RequestWithProvider {
   params: {
@@ -46,7 +46,7 @@ export class DynamicAuthGuard implements CanActivate {
     return new (AuthGuard(provider))(context).canActivate(context);
   }
 
-  private isValidProvider(provider: string): provider is OAuthProvider {
-    return this.providerOptions.has(provider as OAuthProvider);
+  private isValidProvider(provider: string): provider is AuthProvider {
+    return this.providerOptions.has(provider as AuthProvider);
   }
 }

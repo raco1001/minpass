@@ -9,15 +9,15 @@
     "build": "nest build",
     "build:dev": "nest build apis --watch",
     "build:prod": "nest build apis",
-    "build:users": "nest build users && tsc --build apps/users/tsconfig.json",
-    "build:auth": "nest build auth && tsc --build apps/auth/tsconfig.json",
-    "build:apis": "nest build apis && tsc --build apps/apis/tsconfig.json",
-    "build:activities": "nest build activities && tsc --build apps/activities/tsconfig.json",
-    "build:journals": "nest build journals && tsc --build apps/journals/tsconfig.json",
-    "build:notifications": "nest build notifications && tsc --build apps/notifications/tsconfig.json",
-    "build:ontology": "nest build ontology && tsc --build apps/ontology/tsconfig.json",
-    "build:schedules": "nest build schedules && tsc --build apps/schedules/tsconfig.json",
-    "build:tasks": "nest build tasks && tsc --build apps/tasks/tsconfig.json",
+    "build:users": "nest build users",
+    "build:auth": "nest build auth",
+    "build:apis": "nest build apis",
+    "build:activities": "nest build activities",
+    "build:journals": "nest build journals",
+    "build:notifications": "nest build notifications",
+    "build:ontology": "nest build ontology",
+    "build:schedules": "nest build schedules",
+    "build:tasks": "nest build tasks",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start apis --watch",
@@ -39,7 +39,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/apis/test/jest-e2e.json",
     "proto:clean": "rimraf libs/contracts/generated/*",
-    "proto:gen": "protoc --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=libs/contracts/generated --ts_proto_opt=nestJs=true --proto_path=libs/contracts/proto $(find libs/contracts/proto -type f -name \"*.proto\" -print)",
+    "proto:gen": "protoc --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=libs/contracts/src/generated --ts_proto_opt=nestJs=true --ts_proto_opt=stringEnums=true --proto_path=./proto $(find proto -type f -name \"*.proto\" -print)",
     "proto:watch": "chokidar \"libs/contracts/proto/**/*.proto\" -c \"pnpm proto:gen\""
   },
   "dependencies": {
@@ -126,6 +126,14 @@
     "roots": [
       "<rootDir>/apps/",
       "<rootDir>/libs/"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^@app/config(|/.*)$": "<rootDir>/libs/config/src/$1",
+      "^@app/contracts(|/.*)$": "<rootDir>/libs/contracts/src/$1",
+      "^@app/integrations(|/.*)$": "<rootDir>/libs/integrations/src/$1",
+      "^@app/logging(|/.*)$": "<rootDir>/libs/logging/src/$1",
+      "^@app/util(|/.*)$": "<rootDir>/libs/util/src/$1",
+      "^y/common(|/.*)$": "<rootDir>/libs/common/src/$1"
+    }
   }
 }

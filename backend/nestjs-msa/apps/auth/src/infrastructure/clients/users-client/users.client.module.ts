@@ -1,16 +1,12 @@
 import * as fs from "fs";
-import { resolve } from "path";
+import { join, resolve } from "path";
 
 import { credentials as GrpcCreds } from "@grpc/grpc-js";
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ClientGrpc, ClientsModule, Transport } from "@nestjs/microservices";
 
-import {
-  UsersServiceClient,
-  USERS_SERVICE_NAME,
-} from "@contracts/generated/users/v1/users";
-import { MICROSERVICE_CLIENTS } from "@common/config/services.constant";
+import { users } from "@app/contracts";
 
 import { USERS_SERVICE_CLIENT } from "./users-client.constants";
 import { UsersClientService } from "./users-client.service";
@@ -21,7 +17,7 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
   imports: [
     ClientsModule.registerAsync([
       {
-        name: MICROSERVICE_CLIENTS.USERS_SERVICE,
+        name: "USERS_CLIENT",
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (cfg: ConfigService) => {
@@ -47,15 +43,14 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
             transport: Transport.GRPC,
             options: {
               url: targetUrl,
-              package: ["users.v1"],
-              protoPath: ["users/v1/users.proto", "users/v1/consents.proto"],
+              package: users.protobufPackage,
+              protoPath: join(__dirname, "../users/v1/users.proto"),
               loader: {
                 keepCase: false,
                 longs: String,
                 enums: String,
                 defaults: true,
                 oneofs: true,
-                includeDirs: [fromRoot("libs/contracts/proto")],
               },
               credentials: GrpcCreds.createSsl(ca, clientKey, clientCrt),
               channelOptions: {
@@ -73,8 +68,8 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
     {
       provide: USERS_SERVICE_CLIENT,
       useFactory: (client: ClientGrpc) =>
-        client.getService<UsersServiceClient>(USERS_SERVICE_NAME),
-      inject: [MICROSERVICE_CLIENTS.USERS_SERVICE],
+        client.getService<users.UsersServiceClient>(users.USERS_SERVICE_NAME),
+      inject: ["USERS_CLIENT"],
     },
     UsersClientService,
   ],

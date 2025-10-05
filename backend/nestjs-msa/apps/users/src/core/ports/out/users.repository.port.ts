@@ -1,4 +1,4 @@
-import { User } from "@src/core/domain/entities/user.entity";
+import { User } from "@users/core/domain/entities/user.entity";
 
 export abstract class UsersRepositoryPort {
   abstract save(user: User): Promise<void>;

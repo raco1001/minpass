@@ -1,11 +1,11 @@
-import { OAuthProvider } from "../../core/domain/constants/auth-providers";
+import { AuthProvider } from "../../core/domain/constants/auth-providers";
 
 export interface BaseProviderOptions {
-  provider: OAuthProvider;
+  provider: AuthProvider;
   clientId: string;
   clientSecret: string;
   callbackUrl: string;
   scope?: string[];
 }
 
-export type ProviderOptionsMap = Map<OAuthProvider, BaseProviderOptions>;
+export type ProviderOptionsMap = Map<AuthProvider, BaseProviderOptions>;

@@ -1,11 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-github2";
-import { SocialProfileMapper } from "@src/presentation/web/mappers/social-profile.mapper";
-import { GithubUserProfile } from "@src/presentation/web/dto/gitubUserProfile";
-import { ProviderOptionsMap } from "@src/infrastructure/auth-provider-client/types";
-import { OAUTH_PROVIDER_OPTIONS } from "@src/infrastructure/auth-provider-client/provider-client-di-token";
-import { OAuthProvider } from "@src/core/domain/constants/auth-providers";
+import { SocialProfileMapper } from "@auth/presentation/web/mappers/social-profile.mapper";
+import { GithubUserProfile } from "@auth/presentation/web/dto/gitubUserProfile";
+import { ProviderOptionsMap } from "@auth/infrastructure/auth-provider-client/types";
+import { OAUTH_PROVIDER_OPTIONS } from "@auth/infrastructure/auth-provider-client/auth-provider-client-di-token";
+import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, "github") {
@@ -13,7 +13,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
     @Inject(OAUTH_PROVIDER_OPTIONS)
     providerOptionsMap: ProviderOptionsMap,
   ) {
-    const providerOptions = providerOptionsMap.get(OAuthProvider.GITHUB);
+    const providerOptions = providerOptionsMap.get(AuthProvider.GITHUB);
     if (!providerOptions) {
       throw new Error("Github provider options not found.");
     }
@@ -32,7 +32,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, "github") {
     profile: GithubUserProfile,
   ) {
     if (!profile.id) {
-      throw new Error("카카오 사용자 ID를 가져올 수 없습니다.");
+      throw new Error("Can't get Github user id");
     }
 
     return SocialProfileMapper.fromGithub(profile, accessToken, refreshToken);

@@ -1,8 +1,8 @@
 import { Profile as GoogleUserProfile } from "passport-google-oauth20";
-import { GithubUserProfile } from "@src/presentation/web/dto/gitubUserProfile";
+import { GithubUserProfile } from "@auth/presentation/web/dto/gitubUserProfile";
 import { Profile as KakaoUserProfile } from "passport-kakao";
-import { SocialUserProfile } from "@src/core/domain/dto/social-user-profile.dto";
-import { OAuthProvider } from "@src/core/domain/constants/auth-providers";
+import { SocialUserProfile } from "@auth/core/domain/dto/social-user-profile.dto";
+import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
 
 export class SocialProfileMapper {
   static fromGoogle(
@@ -16,7 +16,7 @@ export class SocialProfileMapper {
       name: profile.name?.givenName + " " + profile.name?.familyName || "",
       nickname: profile.name?.givenName + " " + profile.name?.familyName || "",
       profileImage: profile.photos?.[0]?.value,
-      provider: OAuthProvider.GOOGLE as OAuthProvider,
+      provider: AuthProvider.GOOGLE as AuthProvider,
       providerAccessToken: accessToken,
       providerRefreshToken: refreshToken,
     };
@@ -33,7 +33,7 @@ export class SocialProfileMapper {
       name: profile.username || "",
       nickname: profile.username || "",
       profileImage: profile.photos?.[0]?.value,
-      provider: OAuthProvider.GITHUB as OAuthProvider,
+      provider: AuthProvider.GITHUB as AuthProvider,
       providerAccessToken: accessToken,
       providerRefreshToken: refreshToken,
     };
@@ -50,7 +50,7 @@ export class SocialProfileMapper {
       name: profile.displayName || "",
       nickname: profile.displayName || "",
       profileImage: profile.photos?.[0]?.value,
-      provider: OAuthProvider.KAKAO as OAuthProvider,
+      provider: AuthProvider.KAKAO as AuthProvider,
       providerAccessToken: accessToken,
       providerRefreshToken: refreshToken,
     };

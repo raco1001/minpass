@@ -1,8 +1,8 @@
-import { ILoginResult } from "@src/presentation/web/dtos/login-result.interface";
-import { SocialUserProfile } from "@src/core/domain/dto/social-user-profile.dto";
+import { ILoginResult } from "@auth/presentation/web/dtos/login-result.interface";
+import { SocialLoginRequestDto } from "@auth/presentation/web/dto/socialLogin.request.dto";
 
 export abstract class LoginServicePort {
-  abstract socialLogin(profile: SocialUserProfile): Promise<ILoginResult>;
+  abstract socialLogin(profile: SocialLoginRequestDto): Promise<ILoginResult>;
   // generate tokens
   // full logout
   // unlink provider

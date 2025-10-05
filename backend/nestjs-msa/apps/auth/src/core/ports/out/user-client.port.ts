@@ -3,7 +3,7 @@ import {
   FindOneUserRequest,
   User,
   UsersServiceClient,
-} from "@contracts/generated/users/v1/users";
+} from "@app/contracts/generated/users/v1/users";
 import { Observable } from "rxjs";
 
 export abstract class UserClientPort implements Partial<UsersServiceClient> {

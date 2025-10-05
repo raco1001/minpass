@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { MariaDbModule } from "@mariadb/mariadb.module";
-import { MariaDbOptions } from "@mariadb/constants/mariadb.types";
+import { MariaDbModule } from "@app/integrations/mariadb/mariadb.module";
+import { MariaDbOptions } from "@app/integrations/mariadb/constants/mariadb.types";
 import { authClients, authProviders, authTokens } from "./schema/auth";
 import { MariadbRepository } from "./mariadb.repository";
-import { AuthRepositoryPort } from "@src/core/ports/out/auth.repository.port";
+import { AuthRepositoryPort } from "@auth/core/ports/out/auth.repository.port";
 @Module({
   imports: [
     MariaDbModule.registerAsync(

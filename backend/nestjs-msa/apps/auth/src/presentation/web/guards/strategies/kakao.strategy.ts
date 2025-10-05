@@ -1,10 +1,10 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy, Profile as KakaoUserProfile } from "passport-kakao";
-import { SocialProfileMapper } from "@src/presentation/web/mappers/social-profile.mapper";
-import { OAUTH_PROVIDER_OPTIONS } from "@src/infrastructure/auth-provider-client/provider-client-di-token";
-import { ProviderOptionsMap } from "@src/infrastructure/auth-provider-client/types";
-import { OAuthProvider } from "@src/core/domain/constants/auth-providers";
+import { SocialProfileMapper } from "@auth/presentation/web/mappers/social-profile.mapper";
+import { OAUTH_PROVIDER_OPTIONS } from "@auth/infrastructure/auth-provider-client/auth-provider-client-di-token";
+import { ProviderOptionsMap } from "@auth/infrastructure/auth-provider-client/types";
+import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
 
 @Injectable()
 export class KakaoStrategy extends PassportStrategy(Strategy, "kakao") {
@@ -12,7 +12,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, "kakao") {
     @Inject(OAUTH_PROVIDER_OPTIONS)
     providerOptionsMap: ProviderOptionsMap,
   ) {
-    const providerOptions = providerOptionsMap.get(OAuthProvider.KAKAO);
+    const providerOptions = providerOptionsMap.get(AuthProvider.KAKAO);
     if (!providerOptions) {
       throw new Error("Kakao provider options not found.");
     }
@@ -34,7 +34,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, "kakao") {
     profile: KakaoUserProfile,
   ) {
     if (!profile.id) {
-      throw new Error("카카오 사용자 ID를 가져올 수 없습니다.");
+      throw new Error("Can't get Kakao user id");
     }
 
     return SocialProfileMapper.fromKakao(profile, accessToken, refreshToken);

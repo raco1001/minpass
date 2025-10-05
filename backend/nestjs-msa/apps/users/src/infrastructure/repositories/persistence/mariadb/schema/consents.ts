@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { mysqlTable, varchar, datetime, json } from "drizzle-orm/mysql-core";
 
-import { uuidv7Binary } from "@mariadb/util/uuidv7-binary";
+import { uuidv7Binary } from "@app/integrations/mariadb/util/uuidv7-binary";
 
 import { users } from "./users";
 

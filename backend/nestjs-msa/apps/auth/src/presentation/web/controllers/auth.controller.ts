@@ -1,16 +1,24 @@
-import { Controller, Body, Post, Inject } from "@nestjs/common";
+import { Controller, Inject } from "@nestjs/common";
+import { GrpcMethod } from "@nestjs/microservices";
 
-import { SocialUserProfile } from "@src/core/domain/dto/social-user-profile.dto";
-import { ILoginResult } from "@src/presentation/web/dtos/login-result.interface";
-import { LoginServicePort } from "@src/core/ports/in/login-service.port";
+import { SocialLoginRequestDto } from "../dto/socialLogin.request.dto";
+import { LoginServicePort } from "@auth/core/ports/in/login-service.port";
 
+import { auth } from "@app/contracts";
+
+@auth.AuthServiceControllerMethods()
 @Controller()
-export class AuthController {
-  @Inject(LoginServicePort)
-  private readonly loginService: LoginServicePort;
+export class AuthController implements auth.AuthServiceController {
+  constructor(
+    @Inject(LoginServicePort)
+    private readonly loginService: LoginServicePort,
+  ) {}
+  @GrpcMethod("AuthService", "SocialLogin")
+  socialLogin(data: auth.SocialLoginRequest): Promise<auth.ILoginResult> {
+    const socialLoginRequestDto = new SocialLoginRequestDto();
+    socialLoginRequestDto.provider = data.provider;
+    socialLoginRequestDto.code = data.code;
 
-  @Post()
-  socialLogin(@Body() profile: SocialUserProfile): Promise<ILoginResult> {
-    return this.loginService.socialLogin(profile);
+    return this.loginService.socialLogin(socialLoginRequestDto);
   }
 }
