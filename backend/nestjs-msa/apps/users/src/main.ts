@@ -1,11 +1,13 @@
+import "tsconfig-paths/register";
 import * as fs from "fs";
 import { join } from "path";
 
 import { ServerCredentials } from "@grpc/grpc-js";
 import { NestFactory } from "@nestjs/core";
 import { Transport, MicroserviceOptions } from "@nestjs/microservices";
-
+import { users } from "@app/contracts";
 import { UsersModule } from "./users.module";
+
 async function bootstrap() {
   const ca = fs.readFileSync(process.env.CA_CERT_PATH!);
   const key = fs.readFileSync(process.env.SERVER_KEY_PATH!);
@@ -23,15 +25,15 @@ async function bootstrap() {
       transport: Transport.GRPC,
       options: {
         url: process.env.USERS_GRPC_BIND_URL || "0.0.0.0:4001",
-        package: ["users.v1"],
-        protoPath: ["users/v1/users.proto", "users/v1/consents.proto"],
+        package: users.protobufPackage,
+        protoPath: join(__dirname, "../users/v1/users.proto"),
         loader: {
           keepCase: false,
           longs: String,
           enums: String,
           defaults: true,
           oneofs: true,
-          includeDirs: [join(process.cwd(), "libs/contracts/proto")],
+          includeDirs: [join(__dirname, "../users/v1")],
         },
         credentials: creds,
       },

@@ -1,35 +1,22 @@
 import { Controller, Inject } from "@nestjs/common";
 import { GrpcMethod } from "@nestjs/microservices";
 
-import {
-  Consent,
-  ConsentList,
-  RecordConsentRequest,
-} from "@contracts/generated/users/v1/consents";
-import {
-  CreateUserRequest,
-  FindOneUserRequest,
-  UpdateUserRequest,
-  User,
-  UserList,
-  UsersServiceController,
-  UsersServiceControllerMethods,
-  USERS_V1_PACKAGE_NAME,
-} from "@contracts/generated/users/v1/users";
-import { UsersServicePort } from "@src/core/ports/in/users.service.port";
+import { users } from "@app/contracts";
+
+import { UsersServicePort } from "@users/core/ports/in/users.service.port";
 
 import { UsersControllerMapper } from "./users.controller.mapper";
 
-@UsersServiceControllerMethods()
+@users.UsersServiceControllerMethods()
 @Controller()
-export class UsersController implements UsersServiceController {
+export class UsersController implements users.UsersServiceController {
   constructor(
     @Inject(UsersServicePort)
-    @Inject(USERS_V1_PACKAGE_NAME)
+    @Inject(users.USERS_V1_PACKAGE_NAME)
     private readonly usersService: UsersServicePort,
   ) {}
   @GrpcMethod("UsersService", "CreateUser")
-  async createUser(data: CreateUserRequest): Promise<User> {
+  async createUser(data: users.CreateUserRequest): Promise<users.User> {
     console.log("CreateUser called with:", data);
     const createUserDto = UsersControllerMapper.toCreateUserDto(data);
     return this.usersService
@@ -38,7 +25,7 @@ export class UsersController implements UsersServiceController {
   }
 
   @GrpcMethod("UsersService", "FindAllUsers")
-  async findAllUsers(): Promise<UserList> {
+  async findAllUsers(): Promise<users.UserList> {
     console.log("FindAllUsers called");
     return this.usersService
       .findAll()
@@ -46,7 +33,7 @@ export class UsersController implements UsersServiceController {
   }
 
   @GrpcMethod("UsersService", "FindOneUser")
-  async findOneUser(data: FindOneUserRequest): Promise<User> {
+  async findOneUser(data: users.FindOneUserRequest): Promise<users.User> {
     console.log("FindOneUser called with:", data);
     return this.usersService
       .getById(UsersControllerMapper.toFindOneUserDto(data))
@@ -54,7 +41,7 @@ export class UsersController implements UsersServiceController {
   }
 
   @GrpcMethod("UsersService", "UpdateUser")
-  async updateUser(data: UpdateUserRequest): Promise<User> {
+  async updateUser(data: users.UpdateUserRequest): Promise<users.User> {
     console.log("UpdateUser called with:", data);
     return this.usersService
       .changeDisplayName(UsersControllerMapper.toUpdateUserDto(data))
@@ -62,7 +49,7 @@ export class UsersController implements UsersServiceController {
   }
 
   @GrpcMethod("UsersService", "RemoveUser")
-  async removeUser(data: FindOneUserRequest): Promise<User> {
+  async removeUser(data: users.FindOneUserRequest): Promise<users.User> {
     console.log("RemoveUser called with:", data);
     const user = await this.usersService.getById(
       UsersControllerMapper.toFindOneUserDto(data),
@@ -74,7 +61,9 @@ export class UsersController implements UsersServiceController {
   }
 
   @GrpcMethod("ConsentsService", "RecordConsent")
-  async recordConsent(data: RecordConsentRequest): Promise<Consent> {
+  async recordConsent(
+    data: users.RecordConsentRequest,
+  ): Promise<users.Consent> {
     console.log("RecordConsent called with:", data);
     const createConsentDto = UsersControllerMapper.toCreateConsentDto(data);
     const consent = await this.usersService.recordConsent(createConsentDto);
@@ -82,7 +71,9 @@ export class UsersController implements UsersServiceController {
   }
 
   @GrpcMethod("ConsentsService", "ListConsents")
-  async listConsents(data: FindOneUserRequest): Promise<ConsentList> {
+  async listConsents(
+    data: users.FindOneUserRequest,
+  ): Promise<users.ConsentList> {
     console.log("ListConsents called with:", data);
     const consents = await this.usersService.getConsents(
       UsersControllerMapper.toFindOneUserDto(data),

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package auth.v1; 
+        
+service AuthService {
+  rpc SocialLogin (SocialLoginRequest) returns (ILoginResult);
+}
+
+message SocialLoginRequest {
+  string provider = 1;
+  string code = 2; 
+}
+
+message ILoginResult {
+  string user_id = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+  int32 expires_in = 4;
+  bool is_new_user = 5;
+}

@@ -1,53 +1,43 @@
-import {
-  Purpose as PurposeEnum,
-  RecordConsentRequest,
-} from "@contracts/generated/users/v1/consents";
-import { Consent, ConsentList } from "@contracts/generated/users/v1/consents";
-import {
-  CreateUserRequest,
-  FindOneUserRequest,
-  UpdateUserRequest,
-  User,
-  UserList,
-} from "@contracts/generated/users/v1/users";
-import { Purpose } from "@src/core/domain/constants/consent.constants";
-import { Consent as ConsentEntity } from "@src/core/domain/entities/consent.entity";
-import { User as UserEntity } from "@src/core/domain/entities/user.entity";
-import { CreateConsentDto } from "@src/core/dtos/consent.dtos";
+import { users } from "@app/contracts";
+
+import { Purpose as PurposeEnum } from "@users/core/domain/constants/consent.constants";
+import { Consent as ConsentEntity } from "@users/core/domain/entities/consent.entity";
+import { User as UserEntity } from "@users/core/domain/entities/user.entity";
+import { CreateConsentDto } from "@users/core/dtos/consent.dtos";
 import {
   CreateUserDto,
   FindOneUserDto,
   UpdateUserDto,
-} from "@src/core/dtos/user.dtos";
+} from "@users/core/dtos/user.dtos";
 
 export class PurposeMapper {
-  static toPurpose(purpose: PurposeEnum): Purpose {
+  static toPurpose(purpose: users.Purpose): string {
     switch (purpose) {
-      case PurposeEnum.PURPOSE_TERMS:
-        return "tos";
-      case PurposeEnum.PURPOSE_PRIVACY:
-        return "privacy";
-      case PurposeEnum.PURPOSE_MARKETING:
-        return "marketing";
+      case users.Purpose.PURPOSE_TERMS:
+        return users.Purpose.PURPOSE_TERMS.toString();
+      case users.Purpose.PURPOSE_PRIVACY:
+        return users.Purpose.PURPOSE_PRIVACY.toString();
+      case users.Purpose.PURPOSE_MARKETING:
+        return users.Purpose.PURPOSE_MARKETING.toString();
       default:
         throw new Error("Invalid purpose");
     }
   }
 
-  static toPurposeEnum(purpose: Purpose): PurposeEnum {
+  static toPurposeEnum(purpose: PurposeEnum): string {
     switch (purpose) {
       case "tos":
-        return PurposeEnum.PURPOSE_TERMS;
+        return users.Purpose.PURPOSE_TERMS.toString();
       case "privacy":
-        return PurposeEnum.PURPOSE_PRIVACY;
+        return users.Purpose.PURPOSE_PRIVACY.toString();
       case "marketing":
-        return PurposeEnum.PURPOSE_MARKETING;
+        return users.Purpose.PURPOSE_MARKETING.toString();
     }
   }
 }
 
 export class UsersControllerMapper {
-  static toUserResponse(user: UserEntity): User {
+  static toUserResponse(user: UserEntity): users.User {
     return {
       id: user.id,
       email: user.email,
@@ -58,17 +48,19 @@ export class UsersControllerMapper {
     };
   }
 
-  static toUserListResponse(users: UserEntity[]): UserList {
+  static toUserListResponse(users: UserEntity[]): users.UserList {
     return {
       users: users.map((user) => this.toUserResponse(user)),
     };
   }
 
-  static toConsentResponse(consent: ConsentEntity): Consent {
+  static toConsentResponse(consent: ConsentEntity): users.Consent {
     return {
       id: consent.data.id.toString(),
       userId: consent.data.userId,
-      purpose: PurposeMapper.toPurposeEnum(consent.data.purpose),
+      purpose: PurposeMapper.toPurposeEnum(
+        consent.data.purpose as PurposeEnum,
+      ) as users.Purpose,
       scope: consent.data.scope,
       grantedAt: consent.data.grantedAt.toISOString(),
       revokedAt: consent.data.revokedAt?.toISOString() ?? "",
@@ -76,18 +68,18 @@ export class UsersControllerMapper {
       updatedAt: consent.data.updatedAt.toISOString(),
     };
   }
-  static toConsentsResponse(consents: ConsentEntity[]): ConsentList {
+  static toConsentsResponse(consents: ConsentEntity[]): users.ConsentList {
     return {
       consents: consents.map((c) => this.toConsentResponse(c)),
     };
   }
 
-  static toFindOneUserDto(request: FindOneUserRequest): FindOneUserDto {
+  static toFindOneUserDto(request: users.FindOneUserRequest): FindOneUserDto {
     return {
       id: request.id,
     };
   }
-  static toCreateUserDto(request: CreateUserRequest): CreateUserDto {
+  static toCreateUserDto(request: users.CreateUserRequest): CreateUserDto {
     return {
       email: request.email,
       locale: request.locale,
@@ -95,14 +87,16 @@ export class UsersControllerMapper {
     };
   }
 
-  static toUpdateUserDto(request: UpdateUserRequest): UpdateUserDto {
+  static toUpdateUserDto(request: users.UpdateUserRequest): UpdateUserDto {
     return {
       id: request.id,
       displayName: request.displayName ?? "",
     };
   }
 
-  static toCreateConsentDto(request: RecordConsentRequest): CreateConsentDto {
+  static toCreateConsentDto(
+    request: users.RecordConsentRequest,
+  ): CreateConsentDto {
     return {
       userId: request.userId,
       purpose: PurposeMapper.toPurpose(request.purpose),

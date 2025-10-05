@@ -10,13 +10,7 @@ import {
 } from "@nestjs/common";
 import { Observable } from "rxjs";
 
-import {
-  CreateUserRequest,
-  UpdateUserRequest,
-  User,
-  UserList,
-  UsersServiceClient,
-} from "@contracts/generated/users/v1/users";
+import { users } from "@app/contracts";
 
 import { USERS_SERVICE_CLIENT } from "./users-client.constants";
 
@@ -24,34 +18,34 @@ import { USERS_SERVICE_CLIENT } from "./users-client.constants";
 export class UsersClientController {
   constructor(
     @Inject(USERS_SERVICE_CLIENT)
-    private readonly usersService: UsersServiceClient,
+    private readonly usersService: users.UsersServiceClient,
   ) {}
 
   @Post()
-  createUser(@Body() request: CreateUserRequest): Observable<User> {
+  createUser(@Body() request: users.CreateUserRequest): Observable<users.User> {
     return this.usersService.createUser(request);
   }
 
   @Get()
-  findAllUsers(): Observable<UserList> {
+  findAllUsers(): Observable<users.UserList> {
     return this.usersService.findAllUsers({});
   }
 
   @Get(":id")
-  findOneUser(@Param("id") id: string): Observable<User> {
+  findOneUser(@Param("id") id: string): Observable<users.User> {
     return this.usersService.findOneUser({ id });
   }
 
   @Patch(":id")
   updateUser(
     @Param("id") id: string,
-    @Body() request: Omit<UpdateUserRequest, "id">,
-  ): Observable<User> {
+    @Body() request: Omit<users.UpdateUserRequest, "id">,
+  ): Observable<users.User> {
     return this.usersService.updateUser({ id, ...request });
   }
 
   @Delete(":id")
-  removeUser(@Param("id") id: string): Observable<User> {
+  removeUser(@Param("id") id: string): Observable<users.User> {
     return this.usersService.removeUser({ id });
   }
 }

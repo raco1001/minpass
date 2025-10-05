@@ -1,17 +1,15 @@
-import { OAuthClient } from "@src/core/domain/entities/oauth-client.entity";
+import { AuthClientEntity } from "@auth/core/domain/entities/auth-client.entity";
 import { authClients, authProviders, authTokens } from "../schema/auth";
-import { OAuthToken } from "@src/core/domain/entities/oauth-token.entity";
+import { AuthTokenEntity } from "@auth/core/domain/entities/token.entity";
 import { v7 as uuidv7 } from "uuid";
-import {
-  AuthProvider,
-  AuthProviderType,
-} from "@src/core/domain/entities/auth-provider.entity";
+import { AuthProviderEntity } from "@auth/core/domain/entities/auth-provider.entity";
+import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
 
 export class OAuthRepositoryMapper {
-  static toDomainOAuthClient(
+  static toDomainAuthClient(
     row: typeof authClients.$inferSelect,
-  ): OAuthClient {
-    return new OAuthClient(
+  ): AuthClientEntity {
+    return new AuthClientEntity(
       row.id,
       row.userId,
       row.providerId,
@@ -24,18 +22,20 @@ export class OAuthRepositoryMapper {
 
   static toDomainAuthProvider(
     row: typeof authProviders.$inferSelect,
-  ): AuthProvider {
-    return new AuthProvider(
+  ): AuthProviderEntity {
+    return new AuthProviderEntity(
       row.id,
-      row.provider as AuthProviderType,
+      row.provider as AuthProvider,
       row.imgUrl ?? "",
       row.createdAt,
       row.updatedAt,
     );
   }
 
-  static toDomainOAuthToken(row: typeof authTokens.$inferSelect): OAuthToken {
-    return new OAuthToken(
+  static toDomainAuthToken(
+    row: typeof authTokens.$inferSelect,
+  ): AuthTokenEntity {
+    return new AuthTokenEntity(
       row.id,
       row.authClientId,
       row.providerAccessToken ?? "",
@@ -48,20 +48,20 @@ export class OAuthRepositoryMapper {
     );
   }
 
-  static toRowOAuthClient(
-    oauthClient: OAuthClient,
+  static toRowAuthClient(
+    authClient: AuthClientEntity,
   ): typeof authClients.$inferInsert {
     return {
-      id: oauthClient.id ?? uuidv7(),
-      userId: oauthClient.userId,
-      providerId: oauthClient.providerId,
-      clientId: oauthClient.clientId,
-      salt: oauthClient.salt,
+      id: authClient.id ?? uuidv7(),
+      userId: authClient.userId,
+      providerId: authClient.providerId,
+      clientId: authClient.clientId,
+      salt: authClient.salt,
     };
   }
 
   static toRowAuthProvider(
-    authProvider: AuthProvider,
+    authProvider: AuthProviderEntity,
   ): typeof authProviders.$inferInsert {
     return {
       id: authProvider.id,
@@ -70,19 +70,19 @@ export class OAuthRepositoryMapper {
     };
   }
 
-  static toRowOAuthToken(
-    oauthToken: OAuthToken,
+  static toRowAuthToken(
+    authToken: AuthTokenEntity,
   ): typeof authTokens.$inferInsert {
     return {
-      id: oauthToken.id ?? uuidv7(),
-      authClientId: oauthToken.oauthClientId,
-      providerAccessToken: oauthToken.providerAccessToken,
-      providerRefreshToken: oauthToken.providerRefreshToken,
-      refreshToken: oauthToken.refreshToken,
-      revoked: oauthToken.revoked,
-      expiresAt: oauthToken.expiresAt,
-      createdAt: oauthToken.createdAt,
-      updatedAt: oauthToken.updatedAt,
+      id: authToken.id ?? uuidv7(),
+      authClientId: authToken.authClientId ?? "",
+      providerAccessToken: authToken.providerAccessToken,
+      providerRefreshToken: authToken.providerRefreshToken,
+      refreshToken: authToken.refreshToken,
+      revoked: authToken.revoked,
+      expiresAt: authToken.expiresAt,
+      createdAt: authToken.createdAt,
+      updatedAt: authToken.updatedAt,
     };
   }
 }

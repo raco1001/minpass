@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package users.v1;
+
+message CreateUserRequest {
+  string email = 1;
+  string locale = 2;
+  string display_name = 3;
+}
+
+message FindOneUserRequest {
+  string id = 1; 
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  string display_name = 2;
+}
+
+message User {
+  string id = 1;
+  string email = 2;
+  string locale = 3;
+  string display_name = 4;
+  string created_at = 5;
+  string updated_at = 6;
+}
+
+message UserList {
+  repeated User users = 1;
+}
+
+message Empty {}  
+
+service UsersService {
+  rpc CreateUser (CreateUserRequest) returns (User);
+  rpc FindAllUsers (Empty) returns (UserList);
+  rpc FindOneUser (FindOneUserRequest) returns (User);
+  rpc UpdateUser (UpdateUserRequest) returns (User);
+  rpc RemoveUser (FindOneUserRequest) returns (User);
+}
+
+
+enum Purpose {
+  PURPOSE_UNSPECIFIED = 0;
+  PURPOSE_TERMS       = 1;
+  PURPOSE_PRIVACY     = 2;
+  PURPOSE_MARKETING   = 3;
+}
+
+message RecordConsentRequest {
+  string user_id = 1;
+  Purpose purpose = 2;
+  string scope = 3;
+}
+
+message Consent {
+  string id = 1;
+  string user_id = 2;
+  Purpose purpose = 3;
+  string scope = 4;
+  string granted_at = 5;
+  string revoked_at = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+message ConsentList {
+  repeated Consent consents = 1;
+}
+
+service ConsentsService {
+  rpc RecordConsent (RecordConsentRequest) returns (Consent);
+  rpc ListConsents (FindOneUserRequest) returns (ConsentList);
+}

@@ -6,11 +6,8 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ClientGrpc, ClientsModule, Transport } from "@nestjs/microservices";
 
-import {
-  UsersServiceClient,
-  USERS_SERVICE_NAME,
-} from "@contracts/generated/users/v1/users";
-import { MICROSERVICE_CLIENTS } from "@common/config/services.constant";
+import { users } from "@app/contracts";
+import { MICROSERVICE_CLIENTS } from "@app/config";
 
 import { USERS_SERVICE_CLIENT } from "./users-client.constants";
 import { UsersClientController } from "./users.client.controller";
@@ -73,7 +70,7 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
     {
       provide: USERS_SERVICE_CLIENT,
       useFactory: (client: ClientGrpc) =>
-        client.getService<UsersServiceClient>(USERS_SERVICE_NAME),
+        client.getService<users.UsersServiceClient>(users.USERS_SERVICE_NAME),
       inject: [MICROSERVICE_CLIENTS.USERS_SERVICE],
     },
   ],

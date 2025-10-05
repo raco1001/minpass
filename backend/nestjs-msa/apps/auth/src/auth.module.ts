@@ -1,20 +1,23 @@
 import { Module } from "@nestjs/common";
 
 import { AuthController } from "./presentation/web/controllers/auth.controller";
-import { AuthService } from "./services/auth.service";
+import { LoginService } from "./services/login.service";
 import { ConfigModule } from "@nestjs/config";
 import { InfrastructureModule } from "./infrastructure/infrastructure.module";
-import { AuthServicePort } from "./core/ports/in/auth-service.port";
+import { LoginServicePort } from "./core/ports/in/login-service.port";
+import { validateEnv } from "./infrastructure/auth-provider-client/auth-provider-env.schema";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      expandVariables: true,
+      validate: validateEnv,
     }),
     InfrastructureModule,
   ],
   controllers: [AuthController],
-  providers: [{ provide: AuthServicePort, useClass: AuthService }],
-  exports: [AuthServicePort],
+  providers: [{ provide: LoginServicePort, useClass: LoginService }],
+  exports: [LoginServicePort],
 })
 export class AuthModule {}

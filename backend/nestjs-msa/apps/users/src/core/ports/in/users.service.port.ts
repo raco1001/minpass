@@ -1,8 +1,8 @@
-import { Consent } from "@src/core/domain/entities/consent.entity";
+import { Consent } from "@users/core/domain/entities/consent.entity";
 import { User } from "../../domain/entities/user.entity";
-import { CreateConsentDto } from "@src/core/dtos/consent.dtos";
-import { CreateUserDto, FindOneUserDto } from "@src/core/dtos/user.dtos";
-import { UpdateUserDto } from "@src/core/dtos/user.dtos";
+import { CreateConsentDto } from "@users/core/dtos/consent.dtos";
+import { CreateUserDto, FindOneUserDto } from "@users/core/dtos/user.dtos";
+import { UpdateUserDto } from "@users/core/dtos/user.dtos";
 
 export abstract class UsersServicePort {
   abstract register(createUserDto: CreateUserDto): Promise<User>;

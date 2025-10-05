@@ -1,29 +1,23 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 
-import {
-  CreateUserRequest,
-  FindOneUserRequest,
-  User,
-  UsersServiceClient,
-  UsersServiceControllerMethods,
-} from "@contracts/generated/users/v1/users";
+import { users } from "@app/contracts";
 
 import { USERS_SERVICE_CLIENT } from "./users-client.constants";
-import { UserClientPort } from "@src/core/ports/out/user-client.port";
+import { UserClientPort } from "@auth/core/ports/out/user-client.port";
 
 @Injectable()
 export class UsersClientService implements UserClientPort {
   constructor(
     @Inject(USERS_SERVICE_CLIENT)
-    private readonly usersService: UsersServiceClient,
+    private readonly usersService: users.UsersServiceClient,
   ) {}
 
-  createUser(request: CreateUserRequest): Observable<User> {
+  createUser(request: users.CreateUserRequest): Observable<users.User> {
     return this.usersService.createUser(request);
   }
 
-  findOneUser(request: FindOneUserRequest): Observable<User> {
+  findOneUser(request: users.FindOneUserRequest): Observable<users.User> {
     return this.usersService.findOneUser(request);
   }
 }

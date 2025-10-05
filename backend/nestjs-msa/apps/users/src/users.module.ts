@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 
-import { MariaDbOptions } from "@mariadb/constants/mariadb.types";
-import { MariaDbModule } from "@mariadb/mariadb.module";
+import { MariaDbOptions } from "@app/integrations/mariadb/constants/mariadb.types";
+import { MariaDbModule } from "@app/integrations/mariadb/mariadb.module";
 
 import { UsersServicePort } from "./core/ports/in/users.service.port";
 import { UsersRepositoryPort } from "./core/ports/out/users.repository.port";
@@ -13,7 +13,7 @@ import { users } from "./infrastructure/repositories/persistence/mariadb/schema/
 import { UserRepository } from "./infrastructure/repositories/persistence/mariadb/user.repository";
 import { UsersController } from "./presentation/web/controllers/users.controller";
 import { UsersService } from "./services/users.service";
-import { USERS_V1_PACKAGE_NAME } from "@contracts/generated/users/v1/users";
+import { users as usersContract } from "@app/contracts";
 
 @Module({
   imports: [
@@ -39,13 +39,16 @@ import { USERS_V1_PACKAGE_NAME } from "@contracts/generated/users/v1/users";
   ],
   controllers: [UsersController],
   providers: [
-    { provide: USERS_V1_PACKAGE_NAME, useValue: USERS_V1_PACKAGE_NAME },
+    {
+      provide: usersContract.protobufPackage,
+      useValue: usersContract.protobufPackage,
+    },
     { provide: UsersServicePort, useClass: UsersService },
     { provide: UsersRepositoryPort, useClass: UserRepository },
     { provide: ConsentsRepositoryPort, useClass: ConsentRepository },
   ],
   exports: [
-    USERS_V1_PACKAGE_NAME,
+    usersContract.protobufPackage,
     UsersServicePort,
     UsersRepositoryPort,
     ConsentsRepositoryPort,
