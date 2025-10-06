@@ -35,7 +35,7 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
           );
           const targetUrl = cfg.get<string>(
             "USERS_GRPC_TARGET_URL",
-            "127.0.0.1:4001",
+            "localhost:4001",
           );
 
           const ca = fs.readFileSync(fromRoot(caPath));
@@ -75,7 +75,6 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
         client.getService<users.UsersServiceClient>(users.USERS_SERVICE_NAME),
       inject: [MICROSERVICE_CLIENTS.USERS_SERVICE],
     },
-    UsersGrpcClientAdapter,
     {
       provide: UsersQueryPort,
       useClass: UsersGrpcClientAdapter,

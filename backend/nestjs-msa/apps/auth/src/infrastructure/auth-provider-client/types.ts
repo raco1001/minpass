@@ -1,4 +1,4 @@
-import { AuthProvider } from "../../core/domain/constants/auth-providers";
+import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
 
 export interface BaseProviderOptions {
   provider: AuthProvider;
