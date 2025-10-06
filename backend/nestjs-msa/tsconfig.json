@@ -18,48 +18,22 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/config": [
-        "libs/config/src"
-      ],
-      "@app/config/*": [
-        "libs/config/src/*"
-      ],
-      "@app/contracts": [
-        "libs/contracts/src"
-      ],
-      "@app/contracts/*": [
-        "libs/contracts/src/*"
-      ],
-      "@app/integrations": [
-        "libs/integrations/src"
-      ],
-      "@app/integrations/*": [
-        "libs/integrations/src/*"
-      ],
-      "@app/logging": [
-        "libs/logging/src"
-      ],
-      "@app/logging/*": [
-        "libs/logging/src/*"
-      ],
-      "@app/util": [
-        "libs/util/src"
-      ],
-      "@app/util/*": [
-        "libs/util/src/*"
-      ],
-      "@auth": [
-        "apps/auth/src"
-      ],
-      "@auth/*": [
-        "apps/auth/src/*"
-      ],
-      "@users": [
-        "apps/users/src"
-      ],
-      "@users/*": [
-        "apps/users/src/*"
-      ]
+      "@app/config": ["libs/config/src"],
+      "@app/config/*": ["libs/config/src/*"],
+      "@app/contracts": ["libs/contracts/src"],
+      "@app/contracts/*": ["libs/contracts/src/*"],
+      "@app/integrations": ["libs/integrations/src"],
+      "@app/integrations/*": ["libs/integrations/src/*"],
+      "@app/logging": ["libs/logging/src"],
+      "@app/logging/*": ["libs/logging/src/*"],
+      "@app/util": ["libs/util/src"],
+      "@app/util/*": ["libs/util/src/*"],
+      "@apis": ["apps/apis/src"],
+      "@apis/*": ["apps/apis/src/*"],
+      "@auth": ["apps/auth/src"],
+      "@auth/*": ["apps/auth/src/*"],
+      "@users": ["apps/users/src"],
+      "@users/*": ["apps/users/src/*"]
     }
   }
 }

@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import { resolve } from "path";
 
 import { credentials as GrpcCreds } from "@grpc/grpc-js";
 import { Module } from "@nestjs/common";
@@ -9,8 +8,11 @@ import { ClientGrpc, ClientsModule, Transport } from "@nestjs/microservices";
 import { users } from "@app/contracts";
 import { MICROSERVICE_CLIENTS } from "@app/config";
 
-import { USERS_SERVICE_CLIENT } from "./users-client.constants";
-import { UsersClientController } from "./users.client.controller";
+import { USERS_SERVICE_CLIENT } from "./users.grpc.client.constants";
+import { join, resolve } from "path";
+import { UsersGrpcClientAdapter } from "./users.grpc.client.adapter";
+import { UsersQueryPort } from "@apis/core/ports/out/users.query.port";
+import { UsersCommandPort } from "@apis/core/ports/out/users.command.port";
 
 const fromRoot = (p: string) => resolve(process.cwd(), p);
 
@@ -22,14 +24,14 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (cfg: ConfigService) => {
-          const caPath = cfg.get<string>("CA_CERT_PATH", "libs/common/ca.crt");
+          const caPath = cfg.get<string>("CA_CERT_PATH", "certs/ca.crt");
           const keyPath = cfg.get<string>(
             "CLIENT_KEY_PATH",
-            "libs/common/certs/client.key",
+            "certs/client.key",
           );
           const certPath = cfg.get<string>(
             "CLIENT_CERT_PATH",
-            "libs/common/certs/client.crt",
+            "certs/client.crt",
           );
           const targetUrl = cfg.get<string>(
             "USERS_GRPC_TARGET_URL",
@@ -38,23 +40,23 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
 
           const ca = fs.readFileSync(fromRoot(caPath));
           const clientKey = fs.readFileSync(fromRoot(keyPath));
-          const clientCrt = fs.readFileSync(fromRoot(certPath));
+          const clientCert = fs.readFileSync(fromRoot(certPath));
 
           return {
             transport: Transport.GRPC,
             options: {
               url: targetUrl,
               package: ["users.v1"],
-              protoPath: ["users/v1/users.proto", "users/v1/consents.proto"],
+              protoPath: [join(__dirname, "../users/v1/users.proto")],
               loader: {
                 keepCase: false,
                 longs: String,
                 enums: String,
                 defaults: true,
                 oneofs: true,
-                includeDirs: [fromRoot("libs/contracts/proto")],
+                includeDirs: [join(__dirname, "../users/v1")],
               },
-              credentials: GrpcCreds.createSsl(ca, clientKey, clientCrt),
+              credentials: GrpcCreds.createSsl(ca, clientKey, clientCert),
               channelOptions: {
                 "grpc.keepalive_time_ms": 20_000,
                 "grpc.keepalive_timeout_ms": 5_000,
@@ -73,7 +75,16 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
         client.getService<users.UsersServiceClient>(users.USERS_SERVICE_NAME),
       inject: [MICROSERVICE_CLIENTS.USERS_SERVICE],
     },
+    UsersGrpcClientAdapter,
+    {
+      provide: UsersQueryPort,
+      useClass: UsersGrpcClientAdapter,
+    },
+    {
+      provide: UsersCommandPort,
+      useClass: UsersGrpcClientAdapter,
+    },
   ],
-  controllers: [UsersClientController],
+  exports: [UsersQueryPort, UsersCommandPort],
 })
-export class UsersClientModule {}
+export class UsersGrpcClientModule {}
