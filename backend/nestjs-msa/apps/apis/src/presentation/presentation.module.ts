@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
 
-import { UsersClientModule } from "./clients/users-client/users-client.module";
+import { HttpModule } from "./http/http.module";
 
 @Module({
-  imports: [UsersClientModule],
-  exports: [UsersClientModule],
+  imports: [HttpModule],
+  exports: [HttpModule],
 })
 export class PresentationModule {}

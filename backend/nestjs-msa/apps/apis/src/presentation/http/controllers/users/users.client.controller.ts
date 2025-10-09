@@ -12,13 +12,13 @@ import { Observable } from "rxjs";
 
 import { users } from "@app/contracts";
 
-import { USERS_SERVICE_CLIENT } from "./users-client.constants";
+import { UsersClientServicePort } from "@apis/core/ports/in/users.client.service.port";
 
 @Controller("users")
 export class UsersClientController {
   constructor(
-    @Inject(USERS_SERVICE_CLIENT)
-    private readonly usersService: users.UsersServiceClient,
+    @Inject(UsersClientServicePort)
+    private readonly usersService: UsersClientServicePort,
   ) {}
 
   @Post()
@@ -28,7 +28,7 @@ export class UsersClientController {
 
   @Get()
   findAllUsers(): Observable<users.UserList> {
-    return this.usersService.findAllUsers({});
+    return this.usersService.findAllUsers();
   }
 
   @Get(":id")
@@ -46,6 +46,6 @@ export class UsersClientController {
 
   @Delete(":id")
   removeUser(@Param("id") id: string): Observable<users.User> {
-    return this.usersService.removeUser({ id });
+    return this.usersService.deleteUser({ id });
   }
 }

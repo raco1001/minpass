@@ -25,7 +25,7 @@
       "sourceRoot": "./",
       "compilerOptions": {
         "tsConfigPath": "apps/apis/tsconfig.app.json",
-        "assets": ["proto/auth/v1/*.proto"],
+        "assets": ["proto/auth/v1/*.proto", "proto/users/v1/*.proto"],
         "watchAssets": true
       }
     },
