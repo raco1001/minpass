@@ -1,14 +1,12 @@
-import {
-  CreateUserRequest,
-  FindOneUserRequest,
-  UpdateUserRequest,
-  User,
-  UsersServiceClient,
-} from "@app/contracts/generated/users/v1/users";
+import { users } from "@app/contracts";
 import { Observable } from "rxjs";
 
-export abstract class UsersCommandPort implements Partial<UsersServiceClient> {
-  abstract createUser(request: CreateUserRequest): Observable<User>;
-  abstract updateUser(request: UpdateUserRequest): Observable<User>;
-  abstract deleteUser(request: FindOneUserRequest): Observable<User>;
+export abstract class UsersCommandPort
+  implements Partial<users.UsersServiceClient>
+{
+  abstract createUser(request: users.CreateUserRequest): Observable<users.User>;
+  abstract updateUser(request: users.UpdateUserRequest): Observable<users.User>;
+  abstract deleteUser(
+    request: users.FindOneUserRequest,
+  ): Observable<users.User>;
 }
