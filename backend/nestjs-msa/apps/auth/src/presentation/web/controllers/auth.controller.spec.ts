@@ -1,6 +1,6 @@
 import { Test, TestingModule } from "@nestjs/testing";
 
-import { AuthService } from "../../../services/auth.service";
+import { LoginService } from "@auth/services/login.service";
 
 import { AuthController } from "./auth.controller";
 
@@ -10,7 +10,7 @@ describe("AuthController", () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [AuthService],
+      providers: [LoginService],
     }).compile();
 
     authController = app.get<AuthController>(AuthController);
@@ -18,7 +18,9 @@ describe("AuthController", () => {
 
   describe("root", () => {
     it('should return "Hello World!"', () => {
-      expect(authController.getHello()).toBe("Hello World!");
+      expect(
+        authController.socialLogin({ provider: "google", code: "code" }),
+      ).toBe("Hello World!");
     });
   });
 });

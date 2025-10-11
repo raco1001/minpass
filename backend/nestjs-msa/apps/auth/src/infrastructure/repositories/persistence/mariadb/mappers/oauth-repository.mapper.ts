@@ -4,6 +4,15 @@ import { AuthTokenEntity } from "@auth/core/domain/entities/token.entity";
 import { v7 as uuidv7 } from "uuid";
 import { AuthProviderEntity } from "@auth/core/domain/entities/auth-provider.entity";
 import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
+import { AuthTokenInfo } from "@auth/core/ports/out/auth.repository.port";
+
+import {
+  CreateAuthTokenDto,
+  UpdateAuthTokenDto,
+  FindAuthTokenDto,
+  CreateAuthClientDto,
+  UpdateAuthClientDto,
+} from "../dtos/auth-tokens-request.dtos";
 
 export class OAuthRepositoryMapper {
   static toDomainAuthClient(
@@ -56,7 +65,7 @@ export class OAuthRepositoryMapper {
       userId: authClient.userId,
       providerId: authClient.providerId,
       clientId: authClient.clientId,
-      salt: authClient.salt,
+      salt: authClient.salt ?? "",
     };
   }
 
@@ -75,14 +84,27 @@ export class OAuthRepositoryMapper {
   ): typeof authTokens.$inferInsert {
     return {
       id: authToken.id ?? uuidv7(),
+      authClientId: authToken.authClientId || "",
+      providerAccessToken: authToken.providerAccessToken,
+      providerRefreshToken: authToken.providerRefreshToken,
+      refreshToken: authToken.refreshToken,
+      revoked: authToken.revoked ?? false,
+      expiresAt: authToken.expiresAt ?? new Date(),
+      createdAt: authToken.createdAt ?? new Date(),
+      updatedAt: authToken.updatedAt ?? new Date(),
+    };
+  }
+
+  static toRowUpdateAuthToken(
+    authToken: AuthTokenInfo,
+  ): typeof authTokens.$inferSelect {
+    return {
+      id: authToken.id,
       authClientId: authToken.authClientId ?? "",
       providerAccessToken: authToken.providerAccessToken,
       providerRefreshToken: authToken.providerRefreshToken,
       refreshToken: authToken.refreshToken,
-      revoked: authToken.revoked,
-      expiresAt: authToken.expiresAt,
-      createdAt: authToken.createdAt,
-      updatedAt: authToken.updatedAt,
+      revoked: authToken.revoked ?? false,
     };
   }
 }

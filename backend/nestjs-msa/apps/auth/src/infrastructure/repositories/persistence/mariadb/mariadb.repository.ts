@@ -1,7 +1,10 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { and, eq } from "drizzle-orm";
 import { DRIZZLE_DB } from "@app/integrations/mariadb/constants/mariadb.constants";
-import { AuthRepositoryPort } from "@auth/core/ports/out/auth.repository.port";
+import {
+  AuthRepositoryPort,
+  AuthTokenInfo,
+} from "@auth/core/ports/out/auth.repository.port";
 import * as authSchema from "./schema/auth";
 import { AuthClientEntity } from "@auth/core/domain/entities/auth-client.entity";
 import { OAuthRepositoryMapper } from "./mappers/oauth-repository.mapper";
@@ -9,6 +12,13 @@ import { AuthTokenEntity } from "@auth/core/domain/entities/token.entity";
 import { AuthProviderEntity } from "@auth/core/domain/entities/auth-provider.entity";
 import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
 import { DrizzleDb } from "@app/integrations/mariadb/constants/mariadb.types";
+import {
+  CreateAuthTokenDto,
+  UpdateAuthTokenDto,
+  FindAuthTokenDto,
+  CreateAuthClientDto,
+  UpdateAuthClientDto,
+} from "./dtos/auth-tokens-request.dtos";
 
 @Injectable()
 export class MariadbRepository implements AuthRepositoryPort {
@@ -30,9 +40,9 @@ export class MariadbRepository implements AuthRepositoryPort {
     return providers[0] ?? null;
   }
 
-  async findAuthClientByUserIdAndProviderId(
+  async findAuthClientByClientIdAndProviderId(
     providerId: string,
-    userId: string,
+    clientId: string,
   ): Promise<AuthClientEntity | null> {
     const client = await this.db
       .select()
@@ -40,7 +50,7 @@ export class MariadbRepository implements AuthRepositoryPort {
       .where(
         and(
           eq(authSchema.authClients.providerId, providerId),
-          eq(authSchema.authClients.userId, userId),
+          eq(authSchema.authClients.clientId, clientId),
         ),
       )
       .then((clients) => clients.map(OAuthRepositoryMapper.toDomainAuthClient))
@@ -67,6 +77,40 @@ export class MariadbRepository implements AuthRepositoryPort {
       .insert(authSchema.authTokens)
       .values(OAuthRepositoryMapper.toRowAuthToken(authToken))
       .$returningId()
+      .then((tokens) => tokens.map(OAuthRepositoryMapper.toDomainAuthToken))
+      .then((tokens) => tokens[0] ?? null);
+    return token ?? null;
+  }
+
+  async updateAuthClientTimestamp(
+    authClientId: UpdateAuthClientDto,
+  ): Promise<boolean> {
+    const isUpdated = await this.db
+      .update(authSchema.authClients)
+      .set({ updatedAt: new Date() })
+      .where(eq(authSchema.authClients.id, authClientId.id ?? ""))
+      .then((clients) => clients[0] ?? null);
+    return isUpdated ? true : false;
+  }
+
+  async updateAuthTokens(authTokenInfo: AuthTokenInfo): Promise<boolean> {
+    const isUpdated = await this.db
+      .update(authSchema.authTokens)
+      .set(
+        OAuthRepositoryMapper.toRowAuthToken(authTokenInfo as AuthTokenEntity),
+      )
+      .where(eq(authSchema.authTokens.id, authTokenInfo.id ?? ""))
+      .then((tokens) => tokens[0] ?? null);
+    return isUpdated ? true : false;
+  }
+
+  async findAuthTokenInfoByClientId(
+    clientId: AuthClientEntity["id"],
+  ): Promise<AuthTokenInfo | null> {
+    const token = await this.db
+      .select()
+      .from(authSchema.authTokens)
+      .where(eq(authSchema.authTokens.authClientId, clientId))
       .then((tokens) => tokens.map(OAuthRepositoryMapper.toDomainAuthToken))
       .then((tokens) => tokens[0] ?? null);
     return token ?? null;

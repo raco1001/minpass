@@ -3,7 +3,7 @@ import { SocialUserProfile } from "../dto/social-user-profile.dto";
 
 export class AuthTokenEntity {
   constructor(
-    public readonly id: string | null = null,
+    public readonly id: string,
     public readonly authClientId: AuthClientEntity["id"],
     public readonly providerAccessToken: SocialUserProfile["providerAccessToken"],
     public readonly providerRefreshToken: SocialUserProfile["providerRefreshToken"],
@@ -12,5 +12,12 @@ export class AuthTokenEntity {
     public readonly expiresAt: Date = new Date(),
     public readonly createdAt: Date = new Date(),
     public readonly updatedAt: Date = new Date(),
+  ) {}
+}
+
+export class TokensEntity {
+  constructor(
+    public readonly accessToken: string,
+    public readonly refreshToken: string,
   ) {}
 }

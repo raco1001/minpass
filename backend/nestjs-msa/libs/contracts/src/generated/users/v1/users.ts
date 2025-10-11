@@ -28,6 +28,10 @@ export interface FindOneUserRequest {
   id: string;
 }
 
+export interface FindOneUserByEmailRequest {
+  email: string;
+}
+
 export interface UpdateUserRequest {
   id: string;
   displayName: string;
@@ -79,6 +83,8 @@ export interface UsersServiceClient {
 
   findOneUser(request: FindOneUserRequest): Observable<User>;
 
+  findOneUserByEmail(request: FindOneUserByEmailRequest): Observable<User>;
+
   updateUser(request: UpdateUserRequest): Observable<User>;
 
   removeUser(request: FindOneUserRequest): Observable<User>;
@@ -91,6 +97,8 @@ export interface UsersServiceController {
 
   findOneUser(request: FindOneUserRequest): Promise<User> | Observable<User> | User;
 
+  findOneUserByEmail(request: FindOneUserByEmailRequest): Promise<User> | Observable<User> | User;
+
   updateUser(request: UpdateUserRequest): Promise<User> | Observable<User> | User;
 
   removeUser(request: FindOneUserRequest): Promise<User> | Observable<User> | User;
@@ -98,7 +106,14 @@ export interface UsersServiceController {
 
 export function UsersServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createUser", "findAllUsers", "findOneUser", "updateUser", "removeUser"];
+    const grpcMethods: string[] = [
+      "createUser",
+      "findAllUsers",
+      "findOneUser",
+      "findOneUserByEmail",
+      "updateUser",
+      "removeUser",
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("UsersService", method)(constructor.prototype[method], method, descriptor);
