@@ -95,7 +95,7 @@ export class LoginService implements LoginServicePort {
       const newUser = await firstValueFrom(
         this.userClient.createUser({
           email: dto.socialUserProfile.email,
-          locale: "KO",
+          locale: "ko",
           displayName: dto.socialUserProfile.name,
         }),
       );
