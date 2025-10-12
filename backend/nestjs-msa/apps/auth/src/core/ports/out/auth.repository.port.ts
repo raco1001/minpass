@@ -1,47 +1,49 @@
-import { AuthClientEntity } from "@auth/core/domain/entities/auth-client.entity";
 import { AuthTokenEntity } from "@auth/core/domain/entities/token.entity";
-import { AuthProviderEntity } from "@auth/core/domain/entities/auth-provider.entity";
-import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
-import { CreateAuthTokenDto } from "@auth/infrastructure/repositories/persistence/mariadb/dtos/auth-tokens-request.dtos";
-import { UpdateAuthTokenDto } from "@auth/infrastructure/repositories/persistence/mariadb/dtos/auth-tokens-request.dtos";
-import { FindAuthTokenDto } from "@auth/infrastructure/repositories/persistence/mariadb/dtos/auth-tokens-request.dtos";
-import { CreateAuthClientDto } from "@auth/infrastructure/repositories/persistence/mariadb/dtos/auth-tokens-request.dtos";
-import { UpdateAuthClientDto } from "@auth/infrastructure/repositories/persistence/mariadb/dtos/auth-tokens-request.dtos";
 
-export class AuthTokenInfo implements Partial<AuthTokenEntity> {
-  id?: AuthTokenEntity["id"];
-  authClientId: AuthTokenEntity["authClientId"];
-  providerAccessToken: AuthTokenEntity["providerAccessToken"];
-  providerRefreshToken: AuthTokenEntity["providerRefreshToken"];
-  refreshToken: AuthTokenEntity["refreshToken"];
-  revoked: AuthTokenEntity["revoked"];
-}
+import {
+  FindProviderByProviderDomainRequestDto,
+  FindAuthTokenDomainRequestDto,
+  FindAuthClientByClientIdAndProviderIdDomainRequestDto,
+  FindAuthClientByClientIdAndProviderIdDomainResponseDto,
+  FindProviderByProviderDomainResponseDto,
+  FindAuthTokenDomainResponseDto,
+} from "@auth/core/domain/dtos/auth-query.dto";
+import {
+  CreateAuthTokenDomainRequestDto,
+  UpdateAuthTokensInfoDomainRequestDto,
+  CreateAuthClientDomainRequestDto,
+  CreateAuthClientDomainResponseDto,
+  CreateAuthTokenDomainResponseDto,
+  UpdateAuthClientDomainResponseDto,
+  UpdateAuthTokensInfoDomainResponseDto,
+} from "@auth/core/domain/dtos/auth-command.dtos";
 
 export abstract class AuthRepositoryPort {
   abstract findProviderByProvider(
-    provider: AuthProvider,
-  ): Promise<AuthProviderEntity | null>;
+    provider: FindProviderByProviderDomainRequestDto,
+  ): Promise<FindProviderByProviderDomainResponseDto | null>;
 
   abstract findAuthClientByClientIdAndProviderId(
-    providerId: string,
-    clientId: string,
-  ): Promise<AuthClientEntity | null>;
+    authClient: FindAuthClientByClientIdAndProviderIdDomainRequestDto,
+  ): Promise<FindAuthClientByClientIdAndProviderIdDomainResponseDto | null>;
 
   abstract findAuthTokenInfoByClientId(
-    clientId: AuthClientEntity["id"],
-  ): Promise<AuthTokenInfo | null>;
+    request: FindAuthTokenDomainRequestDto,
+  ): Promise<FindAuthTokenDomainResponseDto | null>;
 
   abstract createAuthClient(
-    authClient: CreateAuthClientDto,
-  ): Promise<AuthClientEntity | null>;
+    authClient: CreateAuthClientDomainRequestDto,
+  ): Promise<CreateAuthClientDomainResponseDto | null>;
 
   abstract createAuthToken(
-    authToken: CreateAuthTokenDto,
-  ): Promise<AuthTokenEntity | null>;
+    authToken: CreateAuthTokenDomainRequestDto,
+  ): Promise<CreateAuthTokenDomainResponseDto | null>;
 
   abstract updateAuthClientTimestamp(
-    authClientId: UpdateAuthClientDto,
-  ): Promise<boolean>;
+    authClient: UpdateAuthClientDomainResponseDto,
+  ): Promise<UpdateAuthClientDomainResponseDto | null>;
 
-  abstract updateAuthTokens(authTokenInfo: AuthTokenInfo): Promise<boolean>;
+  abstract updateAuthTokens(
+    authTokenInfo: UpdateAuthTokensInfoDomainRequestDto,
+  ): Promise<UpdateAuthTokensInfoDomainResponseDto | null>;
 }

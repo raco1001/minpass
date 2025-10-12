@@ -1,5 +1,5 @@
 import { AuthClientEntity } from "./auth-client.entity";
-import { SocialUserProfile } from "../dto/social-user-profile.dto";
+import { SocialUserProfile } from "../dtos/social-user-profile.dto";
 
 export class AuthTokenEntity {
   constructor(

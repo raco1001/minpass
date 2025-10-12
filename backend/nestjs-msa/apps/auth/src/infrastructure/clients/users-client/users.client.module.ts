@@ -10,6 +10,7 @@ import { users } from "@app/contracts";
 
 import { USERS_SERVICE_CLIENT } from "./users-client.constants";
 import { UsersClientService } from "./users-client.service";
+import { UserClientPort } from "@auth/core/ports/out/user-client.port";
 
 const fromRoot = (p: string) => resolve(process.cwd(), p);
 
@@ -71,8 +72,12 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
         client.getService<users.UsersServiceClient>(users.USERS_SERVICE_NAME),
       inject: ["USERS_CLIENT"],
     },
+    {
+      provide: UserClientPort,
+      useClass: UsersClientService,
+    },
     UsersClientService,
   ],
-  exports: [USERS_SERVICE_CLIENT, UsersClientService],
+  exports: [USERS_SERVICE_CLIENT, UserClientPort, UsersClientService],
 })
 export class UsersClientModule {}

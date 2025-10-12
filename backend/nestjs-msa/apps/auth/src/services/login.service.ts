@@ -1,16 +1,21 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { LoginServicePort } from "@auth/core/ports/in/login-service.port";
 import { auth } from "@app/contracts";
-import {
-  AuthRepositoryPort,
-  AuthTokenInfo,
-} from "@auth/core/ports/out/auth.repository.port";
+import { AuthRepositoryPort } from "@auth/core/ports/out/auth.repository.port";
 import { AuthTokenPort } from "@auth/core/ports/out/auth.token.port";
 import { UserClientPort } from "@auth/core/ports/out/user-client.port";
 import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
-import { AuthTokenEntity } from "@auth/core/domain/entities/token.entity";
 import { firstValueFrom } from "rxjs";
-import { SocialUserProfile } from "@auth/core/domain/dto/social-user-profile.dto";
+import {
+  FindAuthClientByClientIdAndProviderIdDomainRequestDto,
+  FindAuthTokenDomainRequestDto,
+  FindProviderByProviderDomainRequestDto,
+} from "@auth/core/domain/dtos/auth-query.dto";
+import {
+  CreateAuthTokenDomainRequestDto,
+  UpdateAuthTokensInfoDomainRequestDto,
+} from "@auth/core/domain/dtos/auth-command.dtos";
+
 @Injectable()
 export class LoginService implements LoginServicePort {
   constructor(
@@ -23,7 +28,7 @@ export class LoginService implements LoginServicePort {
   ) {}
   async socialLogin(dto: auth.SocialLoginRequest): Promise<auth.ILoginResult> {
     const provider = await this.authRepository.findProviderByProvider(
-      dto.provider as AuthProvider,
+      new FindProviderByProviderDomainRequestDto(dto.provider as AuthProvider),
     );
     if (!provider) {
       throw new Error("Provider not found");
@@ -33,8 +38,10 @@ export class LoginService implements LoginServicePort {
     }
     const client =
       await this.authRepository.findAuthClientByClientIdAndProviderId(
-        provider.id,
-        dto.socialUserProfile.clientId,
+        new FindAuthClientByClientIdAndProviderIdDomainRequestDto(
+          provider.id,
+          dto.socialUserProfile.clientId,
+        ),
       );
     if (client) {
       const isNewUser = false;
@@ -47,18 +54,12 @@ export class LoginService implements LoginServicePort {
         throw new Error("User not found");
       }
 
-      const isClientUpdated =
-        await this.authRepository.updateAuthClientTimestamp(client.id);
-      if (!isClientUpdated) {
-        throw new Error("Failed to update auth client timestamp");
-      }
-
       const tokens = await this.authToken.generateTokens({
         userId: user.id,
         email: user.email,
       });
       const tokenInfo = await this.authRepository.findAuthTokenInfoByClientId(
-        client.id,
+        new FindAuthTokenDomainRequestDto(client.id),
       );
       if (!tokenInfo) {
         throw new Error("Failed to find auth token info");
@@ -69,16 +70,18 @@ export class LoginService implements LoginServicePort {
         providerRefreshToken: dto.socialUserProfile.providerRefreshToken,
         refreshToken: tokens.refreshToken,
         revoked: false,
-      } as AuthTokenInfo);
+      } as UpdateAuthTokensInfoDomainRequestDto);
 
       const newTokenInfo =
-        await this.authRepository.findAuthTokenInfoByClientId(client.id);
+        await this.authRepository.findAuthTokenInfoByClientId(
+          new FindAuthTokenDomainRequestDto(client.id),
+        );
       if (!newTokenInfo) {
         throw new Error("Failed to find auth token info");
       }
       return {
         userId: user.id,
-        accessToken: newTokenInfo.providerAccessToken,
+        accessToken: tokens.accessToken,
         isNewUser: isNewUser,
       };
     } else {
@@ -98,7 +101,9 @@ export class LoginService implements LoginServicePort {
       );
 
       const provider = await this.authRepository.findProviderByProvider(
-        dto.provider as AuthProvider,
+        new FindProviderByProviderDomainRequestDto(
+          dto.provider as AuthProvider,
+        ),
       );
       if (!provider) {
         throw new Error("Provider not found");
@@ -108,10 +113,7 @@ export class LoginService implements LoginServicePort {
         userId: newUser.id,
         providerId: provider.id,
         clientId: dto.socialUserProfile.clientId,
-        id: null,
         salt: null,
-        createdAt: new Date(),
-        updatedAt: new Date(),
       });
       if (!newAuthClient) {
         throw new Error("Failed to create auth client");
@@ -121,18 +123,18 @@ export class LoginService implements LoginServicePort {
         email: newUser.email,
       });
       const tokenInfo = await this.authRepository.createAuthToken({
-        authClientId: newAuthClient.id,
+        authClientId: newAuthClient.clientId,
         providerAccessToken: dto.socialUserProfile.providerAccessToken,
         providerRefreshToken: dto.socialUserProfile.providerRefreshToken,
         refreshToken: tokens.refreshToken,
         revoked: false,
-      } as AuthTokenEntity);
+      } as CreateAuthTokenDomainRequestDto);
       if (!tokenInfo) {
         throw new Error("Failed to create auth token");
       }
       return {
         userId: newUser.id,
-        accessToken: tokenInfo.providerAccessToken,
+        accessToken: tokens.accessToken,
         isNewUser: isNewUser,
       };
     }
