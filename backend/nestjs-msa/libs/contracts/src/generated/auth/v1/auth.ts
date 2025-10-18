@@ -13,14 +13,24 @@ export const protobufPackage = "auth.v1";
 export interface SocialLoginRequest {
   provider: string;
   code: string;
+  socialUserProfile: ISocialUserProfile | undefined;
 }
 
 export interface ILoginResult {
   userId: string;
   accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
   isNewUser: boolean;
+}
+
+export interface ISocialUserProfile {
+  clientId: string;
+  email: string;
+  name: string;
+  nickname: string;
+  profileImage: string;
+  provider: string;
+  providerAccessToken: string;
+  providerRefreshToken: string;
 }
 
 export const AUTH_V1_PACKAGE_NAME = "auth.v1";

@@ -20,6 +20,12 @@ export class FindOneUserDto {
   readonly id: string;
 }
 
+export class FindOneUserByEmailDto {
+  @IsNotEmpty()
+  @IsEmail()
+  readonly email: string;
+}
+
 export class UpdateUserDto {
   @IsNotEmpty()
   @IsString()

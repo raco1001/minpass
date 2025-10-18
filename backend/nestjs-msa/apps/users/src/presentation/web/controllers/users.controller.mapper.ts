@@ -7,6 +7,7 @@ import { CreateConsentDto } from "@users/core/dtos/consent.dtos";
 import {
   CreateUserDto,
   FindOneUserDto,
+  FindOneUserByEmailDto,
   UpdateUserDto,
 } from "@users/core/dtos/user.dtos";
 
@@ -77,6 +78,13 @@ export class UsersControllerMapper {
   static toFindOneUserDto(request: users.FindOneUserRequest): FindOneUserDto {
     return {
       id: request.id,
+    };
+  }
+  static toFindOneUserByEmailDto(
+    request: users.FindOneUserByEmailRequest,
+  ): FindOneUserByEmailDto {
+    return {
+      email: request.email,
     };
   }
   static toCreateUserDto(request: users.CreateUserRequest): CreateUserDto {

@@ -1,4 +1,4 @@
-import { SocialUserProfile } from "@auth/core/domain/dto/social-user-profile.dto";
+import { SocialUserProfile } from "@auth/core/domain/dtos/social-user-profile.dto";
 export abstract class AuthHandlerPort {
   abstract getUserInfo(user: SocialUserProfile): Promise<void>;
   abstract validateToken(user: SocialUserProfile): Promise<void>;

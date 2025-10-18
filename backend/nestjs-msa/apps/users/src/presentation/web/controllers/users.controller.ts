@@ -40,6 +40,16 @@ export class UsersController implements users.UsersServiceController {
       .then((user) => UsersControllerMapper.toUserResponse(user!));
   }
 
+  @GrpcMethod("UsersService", "FindOneUserByEmail")
+  async findOneUserByEmail(
+    data: users.FindOneUserByEmailRequest,
+  ): Promise<users.User> {
+    console.log("FindOneUserByEmail called with:", data);
+    return this.usersService
+      .getByEmail(UsersControllerMapper.toFindOneUserByEmailDto(data))
+      .then((user) => UsersControllerMapper.toUserResponse(user!));
+  }
+
   @GrpcMethod("UsersService", "UpdateUser")
   async updateUser(data: users.UpdateUserRequest): Promise<users.User> {
     console.log("UpdateUser called with:", data);
