@@ -1,7 +1,11 @@
 import { Consent } from "@users/core/domain/entities/consent.entity";
 import { User } from "../../domain/entities/user.entity";
 import { CreateConsentDto } from "@users/core/dtos/consent.dtos";
-import { CreateUserDto, FindOneUserDto } from "@users/core/dtos/user.dtos";
+import {
+  CreateUserDto,
+  FindOneUserDto,
+  FindOneUserByEmailDto,
+} from "@users/core/dtos/user.dtos";
 import { UpdateUserDto } from "@users/core/dtos/user.dtos";
 
 export abstract class UsersServicePort {
@@ -12,4 +16,7 @@ export abstract class UsersServicePort {
   abstract deleteUser(findOneUserDto: FindOneUserDto): Promise<void>;
   abstract recordConsent(createConsentDto: CreateConsentDto): Promise<Consent>;
   abstract getConsents(findOneUserDto: FindOneUserDto): Promise<Consent[]>;
+  abstract getByEmail(
+    findOneUserByEmailDto: FindOneUserByEmailDto,
+  ): Promise<User | null>;
 }

@@ -1,7 +1,7 @@
 import { Profile as GoogleUserProfile } from "passport-google-oauth20";
-import { GithubUserProfile } from "@auth/presentation/web/dto/gitubUserProfile";
+import { GithubUserProfile } from "@apis/presentation/http/controllers/auth/dtos/gitubUserProfile";
 import { Profile as KakaoUserProfile } from "passport-kakao";
-import { SocialUserProfile } from "@auth/core/domain/dto/social-user-profile.dto";
+import { SocialUserProfile } from "@auth/core/domain/dtos/social-user-profile.dto";
 import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
 
 export class SocialProfileMapper {

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy, Profile as GoogleProfile } from "passport-google-oauth20";
-import { SocialProfileMapper } from "@auth/presentation/web/mappers/social-profile.mapper";
+import { SocialProfileMapper } from "@apis/presentation/http/controllers/mappers/social-profile.mapper";
 import { ProviderOptionsMap } from "@auth/infrastructure/auth-provider-client/types";
 import { OAUTH_PROVIDER_OPTIONS } from "@auth/infrastructure/auth-provider-client/auth-provider-client-di-token";
 import { AuthProvider } from "@auth/core/domain/constants/auth-providers";

@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-github2";
-import { SocialProfileMapper } from "@auth/presentation/web/mappers/social-profile.mapper";
-import { GithubUserProfile } from "@auth/presentation/web/dto/gitubUserProfile";
+import { SocialProfileMapper } from "@apis/presentation/http/controllers/mappers/social-profile.mapper";
+import { GithubUserProfile } from "@apis/presentation/http/controllers/auth/dtos/gitubUserProfile";
 import { ProviderOptionsMap } from "@auth/infrastructure/auth-provider-client/types";
 import { OAUTH_PROVIDER_OPTIONS } from "@auth/infrastructure/auth-provider-client/auth-provider-client-di-token";
 import { AuthProvider } from "@auth/core/domain/constants/auth-providers";

@@ -1,5 +1,6 @@
 import {
   CreateUserRequest,
+  FindOneUserByEmailRequest,
   FindOneUserRequest,
   User,
   UsersServiceClient,
@@ -9,4 +10,7 @@ import { Observable } from "rxjs";
 export abstract class UserClientPort implements Partial<UsersServiceClient> {
   abstract createUser(request: CreateUserRequest): Observable<User>;
   abstract findOneUser(request: FindOneUserRequest): Observable<User>;
+  abstract findOneUserByEmail(
+    request: FindOneUserByEmailRequest,
+  ): Observable<User>;
 }
