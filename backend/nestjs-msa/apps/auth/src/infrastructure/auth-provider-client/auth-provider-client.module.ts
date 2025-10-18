@@ -3,10 +3,10 @@ import { ConfigService } from "@nestjs/config";
 import { AuthProvider } from "../../core/domain/constants/auth-providers";
 import { BaseProviderOptions, ProviderOptionsMap } from "./types";
 import { OAUTH_PROVIDER_OPTIONS } from "./auth-provider-client-di-token";
-import { GoogleStrategy } from "@auth/presentation/web/guards/strategies/google.strategy";
-import { GithubStrategy } from "@auth/presentation/web/guards/strategies/github.strategy";
-import { KakaoStrategy } from "@auth/presentation/web/guards/strategies/kakao.strategy";
-import { DynamicAuthGuard } from "@auth/presentation/web/guards/dynamic-auth.guard";
+import { GoogleStrategy } from "@apis/presentation/http/controllers/guards/strategies/google.strategy";
+import { GithubStrategy } from "@apis/presentation/http/controllers/guards/strategies/github.strategy";
+import { KakaoStrategy } from "@apis/presentation/http/controllers/guards/strategies/kakao.strategy";
+import { DynamicAuthGuard } from "@apis/presentation/http/controllers/guards/dynamic-auth.guard";
 
 function buildCallbackUrl(base: string, path: string) {
   return new URL(path, base).toString();

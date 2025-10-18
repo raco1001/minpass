@@ -7,6 +7,7 @@ import { CreateConsentDto } from "@users/core/dtos/consent.dtos";
 import {
   CreateUserDto,
   FindOneUserDto,
+  FindOneUserByEmailDto,
   UpdateUserDto,
 } from "@users/core/dtos/user.dtos";
 import { UsersServicePort } from "@users/core/ports/in/users.service.port";
@@ -38,6 +39,10 @@ export class UsersService implements UsersServicePort {
 
   async getById(findOneUserDto: FindOneUserDto) {
     return await this.users.findById(findOneUserDto.id);
+  }
+
+  async getByEmail(findOneUserByEmailDto: FindOneUserByEmailDto) {
+    return await this.users.findByEmail(findOneUserByEmailDto.email);
   }
 
   async changeDisplayName(updateUserDto: UpdateUserDto) {

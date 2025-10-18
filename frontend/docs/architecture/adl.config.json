@@ -1,0 +1,8 @@
+{
+  "sort": "updated",
+  "order": "desc",
+  "group": "status",
+  "statusOrder": ["Proposed", "Accepted", "Deprecated", "Superseded"],
+  "indexTitle": "Decision Records Index",
+  "note": "Auto-generated. Do not edit manually — run `pnpm adl:index`."
+}

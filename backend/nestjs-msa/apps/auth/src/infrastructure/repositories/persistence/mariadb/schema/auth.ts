@@ -39,8 +39,8 @@ export const authTokens = mysqlTable("auth_tokens", {
   providerAccessToken: varchar("provider_access_token", { length: 1000 }),
   providerRefreshToken: varchar("provider_refresh_token", { length: 1000 }),
   refreshToken: varchar("refresh_token", { length: 1000 }),
-  revoked: boolean("revoked"),
-  expiresAt: datetime("expires_at"),
+  revoked: boolean("revoked").notNull(),
+  expiresAt: datetime("expires_at").notNull(),
   createdAt: datetime("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

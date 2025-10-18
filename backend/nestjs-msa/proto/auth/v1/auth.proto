@@ -9,12 +9,22 @@ service AuthService {
 message SocialLoginRequest {
   string provider = 1;
   string code = 2; 
+  ISocialUserProfile social_user_profile = 3;
 }
 
 message ILoginResult {
   string user_id = 1;
   string access_token = 2;
-  string refresh_token = 3;
-  int32 expires_in = 4;
-  bool is_new_user = 5;
+  bool is_new_user = 3;
+}
+
+message ISocialUserProfile {
+  string client_id = 1;
+  string email = 2;
+  string name = 3;
+  string nickname = 4;
+  string profile_image = 5;
+  string provider = 6;
+  string provider_access_token = 7;
+  string provider_refresh_token = 8;
 }

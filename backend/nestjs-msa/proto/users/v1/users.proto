@@ -12,6 +12,10 @@ message FindOneUserRequest {
   string id = 1; 
 }
 
+message FindOneUserByEmailRequest {
+  string email = 1;
+}
+
 message UpdateUserRequest {
   string id = 1;
   string display_name = 2;
@@ -36,6 +40,7 @@ service UsersService {
   rpc CreateUser (CreateUserRequest) returns (User);
   rpc FindAllUsers (Empty) returns (UserList);
   rpc FindOneUser (FindOneUserRequest) returns (User);
+  rpc FindOneUserByEmail (FindOneUserByEmailRequest) returns (User);
   rpc UpdateUser (UpdateUserRequest) returns (User);
   rpc RemoveUser (FindOneUserRequest) returns (User);
 }

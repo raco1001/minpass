@@ -20,4 +20,10 @@ export class UsersClientService implements UserClientPort {
   findOneUser(request: users.FindOneUserRequest): Observable<users.User> {
     return this.usersService.findOneUser(request);
   }
+
+  findOneUserByEmail(
+    request: users.FindOneUserByEmailRequest,
+  ): Observable<users.User> {
+    return this.usersService.findOneUserByEmail(request);
+  }
 }
