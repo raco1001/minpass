@@ -6,6 +6,10 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "adl:new": "sh scripts/new-dr.sh",
+    "adl:index": "node scripts/gen-adl-index.mjs",
+    "adl:index:flat": "node scripts/gen-adl-index.mjs --group=none --sort=created --order=desc",
+    "adl:index:status": "node scripts/gen-adl-index.mjs --group=status --sort=updated --order=desc",
     "build": "nest build",
     "build:dev": "nest build apis --watch",
     "build:prod": "nest build apis",
