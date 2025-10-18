@@ -1,30 +1,30 @@
-# Auth MS 테스트 가이드
+# Auth MS Test Guide
 
-Hexagonal Architecture 기반 테스트 전략 및 베스트 프랙티스
+Hexagonal Architecture Based Test Strategies & Best Practices
 
-## 📊 테스트 전략 개요
+## 📊 Test Strategy Summary
 
-### 테스트 피라미드
+### Test Pyramid
 
-```
+```bash
         /\
-       /E2E\          ← 10% (전체 플로우)
+       /E2E\          ← 10% (Entire Flow)
       /------\
-     /Integration\    ← 20% (레이어 간 통합)
+     /Integration\    ← 20% (Inter-layer Integration)
     /------------\
-   /  Unit Tests  \   ← 70% (비즈니스 로직)
+   /  Unit Tests  \   ← 70% (Business Logics)
   /----------------\
 ```
 
-## 🎯 레이어별 테스트 전략
+## 🎯 Test Strategies per Layers
 
 ### 1. Domain Layer Tests (Unit)
 
-**목적**: 순수 비즈니스 로직, Entity, DTO 검증  
-**특징**: 외부 의존성 없음, 가장 빠르고 간단
+**Objectives**: Validate pure business logic, entities, and DTOs  
+**Characteristics**: No external dependencies; fastest and simplest
 
 ```typescript
-// DTO 테스트
+// DTO test
 describe('FindProviderByProviderDomainRequestDto', () => {
   it('should create DTO correctly', () => {
     const dto = new FindProviderByProviderDomainRequestDto(AuthProvider.GOOGLE);
@@ -32,7 +32,7 @@ describe('FindProviderByProviderDomainRequestDto', () => {
   });
 });
 
-// Entity 테스트
+// Entity test
 describe('AuthClientEntity', () => {
   it('should validate business rules', () => {
     const entity = new AuthClientEntity(...);
@@ -41,14 +41,14 @@ describe('AuthClientEntity', () => {
 });
 ```
 
-**위치**: `src/core/domain/**/*.spec.ts`
+**Location**: `src/core/domain/**/*.spec.ts`
 
 ---
 
 ### 2. Application Layer Tests (Unit)
 
-**목적**: Service 비즈니스 로직 검증 (Port를 Mock으로 대체)  
-**핵심**: **Port를 통한 완전한 격리**
+**Objectives**: Verify service business logic (ports mocked)  
+**Core principles**: **Complete isolation via ports**
 
 ```typescript
 describe("LoginService", () => {
@@ -82,7 +82,7 @@ describe("LoginService", () => {
   });
 
   it("should handle existing user login", async () => {
-    // Given - Test Data 준비
+    // Given - Test Data Preparation
     const mockProvider = TestDataFactory.createMockProvider();
     const mockClient = TestDataFactory.createMockAuthClient();
 
@@ -91,31 +91,31 @@ describe("LoginService", () => {
       mockClient,
     );
 
-    // When - 실행
+    // When - Running
     const result = await service.socialLogin(request);
 
-    // Then - 검증
+    // Then - Verification
     expect(result.isNewUser).toBe(false);
     expect(mockAuthRepository.findProviderByProvider).toHaveBeenCalled();
   });
 });
 ```
 
-**핵심 원칙**:
+**Core principles**:
 
-- ✅ Port를 Mock으로 대체하여 완전히 격리
-- ✅ 외부 의존성 없이 빠른 테스트
-- ✅ 비즈니스 로직에만 집중
-- ✅ TestDataFactory 사용으로 중복 제거
+- ✅ Replace ports with mocks for complete isolation
+- ✅ Fast tests without external dependencies
+- ✅ Focus solely on business logic
+- ✅ Use TestDataFactory to eliminate duplication
 
-**위치**: `src/services/**/*.spec.ts`
+**Location**: `src/services/**/*.spec.ts`
 
 ---
 
 ### 3. Adapter Layer Tests (Integration)
 
-**목적**: Repository, Client 등 외부 시스템과의 통합 검증  
-**특징**: 실제 DB 또는 TestContainer 사용
+**Objectives**: Validate integration with external systems (repositories, clients)  
+**Characteristics**: Use a real database or Testcontainers
 
 ```typescript
 describe('MariadbRepository (Integration)', () => {
@@ -128,7 +128,7 @@ describe('MariadbRepository (Integration)', () => {
         MariaDbModule.registerAsync(
           'auth',
           () => ({
-            // Test DB 설정
+            // Test DB configuration
             database: 'minpass_test',
             // ...
           }),
@@ -144,7 +144,7 @@ describe('MariadbRepository (Integration)', () => {
   });
 
   afterEach(async () => {
-    // 테스트 데이터 정리
+    // Clean up test data
     await db.delete(authTokens);
     await db.delete(authClients);
   });
@@ -168,21 +168,21 @@ describe('MariadbRepository (Integration)', () => {
 });
 ```
 
-**핵심 원칙**:
+**Core principles**:
 
-- ✅ 실제 DB와 통합하여 테스트
-- ✅ 각 테스트 후 데이터 정리 (clean state)
-- ✅ Transaction 또는 TestContainer 활용
-- ❌ Mock 사용하지 않음 (실제 통합 검증)
+- ✅ Test against a real database
+- ✅ Clean state after each test
+- ✅ Use transactions or Testcontainers
+- ❌ Do not use mocks (verify real integration)
 
-**위치**: `src/infrastructure/**/*.spec.ts`
+**Location**: `src/infrastructure/**/*.spec.ts`
 
 ---
 
 ### 4. E2E Tests
 
-**목적**: 전체 시스템 통합 테스트  
-**특징**: 실제 환경과 유사한 설정
+**Objectives**: Full system integration tests  
+**Characteristics**: Configuration closely mirrors production
 
 ```typescript
 describe('Auth MS (E2E)', () => {
@@ -225,30 +225,30 @@ describe('Auth MS (E2E)', () => {
 });
 ```
 
-**위치**: `test/**/*.e2e-spec.ts`
+**Location**: `test/**/*.e2e-spec.ts`
 
 ---
 
-## 🛠️ 테스트 유틸리티 사용법
+## 🛠️ Test utilities
 
 ### TestDataFactory
 
-Mock 데이터를 일관되게 생성:
+Create consistent mock data:
 
 ```typescript
-// Provider 생성
+// Create provider
 const provider = TestDataFactory.createMockProvider(AuthProvider.GOOGLE);
 
-// User 생성 (기본값 + override)
+// Create user (defaults + override)
 const user = TestDataFactory.createMockUser({ email: "custom@example.com" });
 
-// SocialLoginRequest 생성
+// Create SocialLoginRequest
 const request = TestDataFactory.createSocialLoginRequest();
 ```
 
 ### MockPortFactory
 
-Port Mock을 쉽게 생성:
+Create port mocks easily:
 
 ```typescript
 const mockRepository = MockPortFactory.createAuthRepositoryPort();
@@ -258,86 +258,86 @@ const mockUserClient = MockPortFactory.createUserClientPort();
 
 ---
 
-## 📝 테스트 작성 체크리스트
+## 📝 Test authoring checklist
 
-### ✅ Application Layer (Service) 테스트
+### ✅ Application layer (service) tests
 
-- [ ] 모든 Port를 Mock으로 대체
-- [ ] Happy Path 테스트
-- [ ] Error Case 테스트
-- [ ] Edge Case 테스트
-- [ ] Port 호출 검증 (`toHaveBeenCalledWith`)
-- [ ] 반환값 검증
-- [ ] TestDataFactory 사용
+- [ ] Replace all ports with mocks
+- [ ] Happy path tests
+- [ ] Error case tests
+- [ ] Edge case tests
+- [ ] Verify port calls (`toHaveBeenCalledWith`)
+- [ ] Validate return values
+- [ ] Use TestDataFactory
 
-### ✅ Adapter Layer (Repository) 테스트
+### ✅ Adapter layer (repository) tests
 
-- [ ] 실제 DB 연결 설정
-- [ ] 테스트 후 데이터 정리
-- [ ] CRUD 작동 확인
-- [ ] 트랜잭션 동작 확인
-- [ ] Unique Constraint 검증
-- [ ] Foreign Key 검증
+- [ ] Configure real DB connection
+- [ ] Clean up after tests
+- [ ] Verify CRUD operations
+- [ ] Verify transaction behavior
+- [ ] Validate unique constraints
+- [ ] Validate foreign keys
 
-### ✅ E2E 테스트
+### ✅ E2E tests
 
-- [ ] 전체 Module 로드
-- [ ] 실제 gRPC 통신
-- [ ] 전체 플로우 검증
-- [ ] 에러 처리 검증
+- [ ] Load the entire module
+- [ ] Real gRPC communication
+- [ ] Verify the end-to-end flow
+- [ ] Verify error handling
 
 ---
 
-## 🚀 테스트 실행 명령어
+## 🚀 Test commands
 
 ```bash
-# 모든 Unit 테스트 실행
-npm test auth
+# Run all unit tests (auth microservice)
+pnpm test:auth
 
-# Watch 모드로 테스트
-npm run test:watch auth
+# Watch mode
+pnpm test:auth:watch
 
-# Coverage 리포트 생성
-npm run test:cov auth
+# Generate coverage report
+pnpm test:auth:cov
 
-# E2E 테스트 실행
-npm run test:e2e auth
+# Run E2E tests
+pnpm test:auth:e2e
 
-# 특정 파일만 테스트
-npm test -- login.service.spec.ts
+# Run a specific test file
+pnpm test:auth -- login.service.spec.ts
 ```
 
 ---
 
-## 📊 Coverage 목표
+## 📊 Coverage targets
 
-| 구분              | 목표 Coverage |
-| ----------------- | ------------- |
-| Application Layer | 90%+          |
-| Domain Layer      | 95%+          |
-| Adapter Layer     | 80%+          |
-| Overall           | 85%+          |
+| Layer             | Target coverage |
+| ----------------- | --------------- |
+| Application Layer | 90%+            |
+| Domain Layer      | 95%+            |
+| Adapter Layer     | 80%+            |
+| Overall           | 85%+            |
 
 ---
 
-## 💡 베스트 프랙티스
+## 💡 Best practices
 
-### 1. AAA 패턴 사용
+### 1. Use the AAA pattern
 
 ```typescript
 it("should do something", () => {
-  // Given (Arrange) - 테스트 데이터 준비
+  // Given (Arrange) - prepare test data
   const input = TestDataFactory.createMockUser();
 
-  // When (Act) - 실행
+  // When (Act) - act
   const result = service.doSomething(input);
 
-  // Then (Assert) - 검증
+  // Then (Assert) - assert
   expect(result).toBe(expected);
 });
 ```
 
-### 2. 의미 있는 테스트 이름
+### 2. Use meaningful test names
 
 ❌ Bad:
 
@@ -354,14 +354,14 @@ it('should create new user when client does not exist', () => { ... });
 it('should throw error when provider is not found', () => { ... });
 ```
 
-### 3. 하나의 테스트는 하나의 케이스만
+### 3. One test per case
 
 ❌ Bad:
 
 ```typescript
 it("should handle login and logout", () => {
-  // login 테스트
-  // logout 테스트 - 분리해야 함!
+  // login test
+  // logout test — should be split
 });
 ```
 
@@ -372,44 +372,44 @@ it('should handle login successfully', () => { ... });
 it('should handle logout successfully', () => { ... });
 ```
 
-### 4. Mock 설정 명확히
+### 4. Define mocks explicitly
 
 ```typescript
-// ✅ 명확한 Mock 설정
+// ✅ Explicit mocks
 mockRepository.findUser.mockResolvedValue(expectedUser);
 mockRepository.findUser.mockRejectedValue(new Error("Not found"));
 
-// ❌ 불명확한 Mock 설정
+// ❌ Ambiguous mocks
 mockRepository.findUser.mockReturnValue(Promise.resolve(null));
 ```
 
-### 5. 테스트 격리
+### 5. Test isolation
 
 ```typescript
 afterEach(() => {
-  jest.clearAllMocks(); // Mock 상태 초기화
+  jest.clearAllMocks(); // reset mock state
 });
 
 afterEach(async () => {
-  await cleanDatabase(); // DB 데이터 정리
+  await cleanDatabase(); // clean DB state
 });
 ```
 
 ---
 
-## 🔍 디버깅 팁
+## 🔍 Debugging tips
 
-### Jest 디버그 모드
+### Jest debug mode
 
 ```bash
-# VSCode에서 디버깅
+# Debug with VS Code
 node --inspect-brk node_modules/.bin/jest --runInBand
 
-# 특정 테스트만 디버깅
+# Debug a specific test
 npm test -- --testNamePattern="should login existing user"
 ```
 
-### Mock 호출 확인
+### Inspect mock calls
 
 ```typescript
 console.log(mockRepository.findUser.mock.calls);
@@ -418,7 +418,7 @@ console.log(mockRepository.findUser.mock.results);
 
 ---
 
-## 📚 참고 자료
+## 📚 References
 
 - [NestJS Testing Documentation](https://docs.nestjs.com/fundamentals/testing)
 - [Jest Documentation](https://jestjs.io/docs/getting-started)

@@ -8,7 +8,6 @@ import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
 import { firstValueFrom } from "rxjs";
 import {
   FindAuthClientByClientIdAndProviderIdDomainRequestDto,
-  FindAuthTokenDomainRequestDto,
   FindProviderByProviderDomainRequestDto,
 } from "@auth/core/domain/dtos/auth-query.dto";
 import {
@@ -36,6 +35,7 @@ export class LoginService implements LoginServicePort {
     if (!dto.socialUserProfile) {
       throw new Error("Social user profile not found");
     }
+
     const client =
       await this.authRepository.findAuthClientByClientIdAndProviderId(
         new FindAuthClientByClientIdAndProviderIdDomainRequestDto(
@@ -58,27 +58,17 @@ export class LoginService implements LoginServicePort {
         userId: user.id,
         email: user.email,
       });
-      const tokenInfo = await this.authRepository.findAuthTokenInfoByClientId(
-        new FindAuthTokenDomainRequestDto(client.id),
-      );
-      if (!tokenInfo) {
-        throw new Error("Failed to find auth token info");
-      }
-      await this.authRepository.updateAuthTokens({
+      const updatedTokenInfo = await this.authRepository.updateAuthTokens({
         authClientId: client.id,
         providerAccessToken: dto.socialUserProfile.providerAccessToken,
         providerRefreshToken: dto.socialUserProfile.providerRefreshToken,
         refreshToken: tokens.refreshToken,
         revoked: false,
       } as UpdateAuthTokensInfoDomainRequestDto);
-
-      const newTokenInfo =
-        await this.authRepository.findAuthTokenInfoByClientId(
-          new FindAuthTokenDomainRequestDto(client.id),
-        );
-      if (!newTokenInfo) {
-        throw new Error("Failed to find auth token info");
+      if (!updatedTokenInfo) {
+        throw new Error("Failed to update auth token info");
       }
+
       return {
         userId: user.id,
         accessToken: tokens.accessToken,
@@ -86,10 +76,12 @@ export class LoginService implements LoginServicePort {
       };
     } else {
       const isNewUser = true;
-      const isUserExists = await this.userClient.findOneUserByEmail({
-        email: dto.socialUserProfile.email,
-      });
-      if (isUserExists) {
+      const existingUser = await firstValueFrom(
+        this.userClient.findOneUserByEmail({
+          email: dto.socialUserProfile.email,
+        }),
+      ).catch(() => null);
+      if (existingUser) {
         throw new Error("User already exists");
       }
       const newUser = await firstValueFrom(
@@ -99,15 +91,6 @@ export class LoginService implements LoginServicePort {
           displayName: dto.socialUserProfile.name,
         }),
       );
-
-      const provider = await this.authRepository.findProviderByProvider(
-        new FindProviderByProviderDomainRequestDto(
-          dto.provider as AuthProvider,
-        ),
-      );
-      if (!provider) {
-        throw new Error("Provider not found");
-      }
 
       const newAuthClient = await this.authRepository.createAuthClient({
         userId: newUser.id,
@@ -122,14 +105,24 @@ export class LoginService implements LoginServicePort {
         userId: newUser.id,
         email: newUser.email,
       });
-      const tokenInfo = await this.authRepository.createAuthToken({
-        authClientId: newAuthClient.clientId,
+      const createdAuthClient =
+        await this.authRepository.findAuthClientByClientIdAndProviderId(
+          new FindAuthClientByClientIdAndProviderIdDomainRequestDto(
+            provider.id,
+            dto.socialUserProfile.clientId,
+          ),
+        );
+      if (!createdAuthClient) {
+        throw new Error("Failed to resolve created auth client id");
+      }
+      const createdTokenInfo = await this.authRepository.createAuthToken({
+        authClientId: createdAuthClient.id,
         providerAccessToken: dto.socialUserProfile.providerAccessToken,
         providerRefreshToken: dto.socialUserProfile.providerRefreshToken,
         refreshToken: tokens.refreshToken,
         revoked: false,
       } as CreateAuthTokenDomainRequestDto);
-      if (!tokenInfo) {
+      if (!createdTokenInfo) {
         throw new Error("Failed to create auth token");
       }
       return {
