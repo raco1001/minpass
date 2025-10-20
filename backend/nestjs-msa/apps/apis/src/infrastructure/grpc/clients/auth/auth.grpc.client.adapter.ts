@@ -14,7 +14,7 @@ export class AuthGrpcClientAdapter implements AuthCommandPort {
     private readonly client: auth.AuthServiceClient,
   ) {}
 
-  socialLogin(request: auth.SocialLoginRequest): Observable<auth.ILoginResult> {
+  socialLogin(request: auth.SocialLoginRequest): Observable<auth.LoginResult> {
     return this.client.socialLogin(request);
   }
 }

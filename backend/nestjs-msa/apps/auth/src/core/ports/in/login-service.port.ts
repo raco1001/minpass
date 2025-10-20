@@ -3,7 +3,7 @@ import { auth } from "@app/contracts";
 export abstract class LoginServicePort {
   abstract socialLogin(
     profile: auth.SocialLoginRequest,
-  ): Promise<auth.ILoginResult>;
+  ): Promise<auth.LoginResult>;
   // generate tokens
   // full logout
   // unlink provider

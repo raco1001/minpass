@@ -6,5 +6,5 @@ export abstract class AuthClientServicePort
 {
   abstract socialLogin(
     request: auth.SocialLoginRequest,
-  ): Observable<auth.ILoginResult>;
+  ): Observable<auth.LoginResult>;
 }

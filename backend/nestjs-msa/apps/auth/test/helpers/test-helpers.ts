@@ -75,7 +75,6 @@ export class TestDataFactory {
   ): auth.SocialLoginRequest {
     return {
       provider,
-      code: "test-auth-code",
       socialUserProfile: {
         provider,
         clientId: "google-client-id",
