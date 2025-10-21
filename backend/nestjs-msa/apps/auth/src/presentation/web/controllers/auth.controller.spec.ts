@@ -38,7 +38,6 @@ describe("AuthController (Unit)", () => {
       // Given
       const request: auth.SocialLoginRequest = {
         provider: AuthProvider.GOOGLE,
-        code: "test-auth-code",
         socialUserProfile: {
           provider: AuthProvider.GOOGLE,
           clientId: "google-client-id",
@@ -51,7 +50,7 @@ describe("AuthController (Unit)", () => {
         },
       };
 
-      const expectedResult: auth.ILoginResult = {
+      const expectedResult: auth.LoginResult = {
         userId: "user-uuid",
         accessToken: "test-access-token",
         isNewUser: false,
@@ -72,7 +71,6 @@ describe("AuthController (Unit)", () => {
       // Given
       const request: auth.SocialLoginRequest = {
         provider: AuthProvider.GOOGLE,
-        code: "test-auth-code",
         socialUserProfile: {
           provider: AuthProvider.GOOGLE,
           clientId: "new-google-client-id",
@@ -85,7 +83,7 @@ describe("AuthController (Unit)", () => {
         },
       };
 
-      const expectedResult: auth.ILoginResult = {
+      const expectedResult: auth.LoginResult = {
         userId: "new-user-uuid",
         accessToken: "new-access-token",
         isNewUser: true,
@@ -109,7 +107,6 @@ describe("AuthController (Unit)", () => {
       // Given
       const request: auth.SocialLoginRequest = {
         provider: AuthProvider.GOOGLE,
-        code: "test-auth-code",
         socialUserProfile: {
           provider: AuthProvider.GOOGLE,
           clientId: "google-client-id",
@@ -136,7 +133,6 @@ describe("AuthController (Unit)", () => {
       // Given
       const request: auth.SocialLoginRequest = {
         provider: AuthProvider.KAKAO,
-        code: "kakao-auth-code",
         socialUserProfile: {
           provider: AuthProvider.KAKAO,
           clientId: "kakao-client-id",
@@ -149,7 +145,7 @@ describe("AuthController (Unit)", () => {
         },
       };
 
-      const expectedResult: auth.ILoginResult = {
+      const expectedResult: auth.LoginResult = {
         userId: "kakao-user-uuid",
         accessToken: "kakao-access-token",
         isNewUser: false,

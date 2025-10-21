@@ -10,37 +10,70 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "auth.v1";
 
+/**
+ * Social Login Request
+ * Contains OAuth provider information and user profile data
+ * Note: Authorization code exchange is handled by API Gateway,
+ * so we only need the user profile and tokens here
+ */
 export interface SocialLoginRequest {
+  /** OAuth provider (google, github, kakao) */
   provider: string;
-  code: string;
-  socialUserProfile: ISocialUserProfile | undefined;
+  socialUserProfile: SocialUserProfile | undefined;
 }
 
-export interface ILoginResult {
+/**
+ * Login Result
+ * Contains JWT tokens and user information
+ */
+export interface LoginResult {
   userId: string;
   accessToken: string;
   isNewUser: boolean;
 }
 
-export interface ISocialUserProfile {
+/**
+ * Social User Profile
+ * Standardized user profile from OAuth providers
+ * Populated by Passport strategies in API Gateway
+ */
+export interface SocialUserProfile {
+  /** OAuth provider's unique user ID */
   clientId: string;
+  /** User's email address */
   email: string;
+  /** User's full name */
   name: string;
+  /** User's display name/nickname */
   nickname: string;
+  /** URL to user's profile image */
   profileImage: string;
+  /** OAuth provider name */
   provider: string;
+  /** Access token from OAuth provider */
   providerAccessToken: string;
+  /** Refresh token from OAuth provider */
   providerRefreshToken: string;
 }
 
 export const AUTH_V1_PACKAGE_NAME = "auth.v1";
 
+/**
+ * Authentication Service
+ * Handles OAuth-based social login and JWT token generation
+ */
+
 export interface AuthServiceClient {
-  socialLogin(request: SocialLoginRequest): Observable<ILoginResult>;
+  socialLogin(request: SocialLoginRequest): Observable<LoginResult>;
 }
 
+/**
+ * Authentication Service
+ * Handles OAuth-based social login and JWT token generation
+ */
+
 export interface AuthServiceController {
-  socialLogin(request: SocialLoginRequest): Promise<ILoginResult> | Observable<ILoginResult> | ILoginResult;
+  socialLogin(request: SocialLoginRequest): Promise<LoginResult> | Observable<LoginResult> | LoginResult;
 }
 
 export function AuthServiceControllerMethods() {

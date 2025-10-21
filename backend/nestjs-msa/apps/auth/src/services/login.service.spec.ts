@@ -325,7 +325,7 @@ describe("LoginService (Unit)", () => {
 
         // When & Then - act and assert
         await expect(service.socialLogin(request)).rejects.toThrow(
-          "Provider not found",
+          "OAuth provider 'google' not found or not configured",
         );
 
         expect(authRepository.findProviderByProvider).toHaveBeenCalledTimes(1);
@@ -337,7 +337,6 @@ describe("LoginService (Unit)", () => {
 
         const request: auth.SocialLoginRequest = {
           provider: AuthProvider.GOOGLE,
-          code: "test-auth-code",
           socialUserProfile: null as any,
         };
 
@@ -345,7 +344,7 @@ describe("LoginService (Unit)", () => {
 
         // When & Then - act and assert
         await expect(service.socialLogin(request)).rejects.toThrow(
-          "Social user profile not found",
+          "Social user profile is required",
         );
       });
 
@@ -363,7 +362,7 @@ describe("LoginService (Unit)", () => {
 
         // When & Then - act and assert
         await expect(service.socialLogin(request)).rejects.toThrow(
-          "User not found",
+          `User with ID '${mockClient.userId}' not found`,
         );
       });
 
@@ -387,7 +386,7 @@ describe("LoginService (Unit)", () => {
 
         // When & Then
         await expect(service.socialLogin(request)).rejects.toThrow(
-          "Failed to update auth token info",
+          "Failed to update auth tokens",
         );
       });
 
@@ -451,7 +450,7 @@ describe("LoginService (Unit)", () => {
 
         // When & Then
         await expect(service.socialLogin(request)).rejects.toThrow(
-          "Failed to create auth token",
+          "Failed to save auth tokens",
         );
       });
 
@@ -471,7 +470,7 @@ describe("LoginService (Unit)", () => {
 
         // When & Then - act and assert
         await expect(service.socialLogin(request)).rejects.toThrow(
-          "Failed to resolve created auth client id",
+          "Failed to retrieve created auth client",
         );
       });
     });

@@ -13,7 +13,7 @@ export class AuthController implements auth.AuthServiceController {
   ) {}
 
   @GrpcMethod("AuthService", "SocialLogin")
-  socialLogin(data: auth.SocialLoginRequest): Promise<auth.ILoginResult> {
+  socialLogin(data: auth.SocialLoginRequest): Promise<auth.LoginResult> {
     return this.loginService.socialLogin(data);
   }
 }

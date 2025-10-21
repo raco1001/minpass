@@ -1,4 +1,11 @@
-import { Inject, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { LoginServicePort } from "@auth/core/ports/in/login-service.port";
 import { auth } from "@app/contracts";
 import { AuthRepositoryPort } from "@auth/core/ports/out/auth.repository.port";
@@ -15,6 +22,12 @@ import {
   UpdateAuthTokensInfoDomainRequestDto,
 } from "@auth/core/domain/dtos/auth-command.dtos";
 
+/**
+ * LoginService
+ *
+ * Handles OAuth-based social login flows, user account creation/linking,
+ * and JWT token generation.
+ */
 @Injectable()
 export class LoginService implements LoginServicePort {
   constructor(
@@ -25,111 +38,249 @@ export class LoginService implements LoginServicePort {
     @Inject(UserClientPort)
     private readonly userClient: UserClientPort,
   ) {}
-  async socialLogin(dto: auth.SocialLoginRequest): Promise<auth.ILoginResult> {
-    const provider = await this.authRepository.findProviderByProvider(
-      new FindProviderByProviderDomainRequestDto(dto.provider as AuthProvider),
-    );
-    if (!provider) {
-      throw new Error("Provider not found");
-    }
+
+  /**
+   * Main social login handler
+   * Determines if user is new or existing and routes accordingly
+   */
+  async socialLogin(dto: auth.SocialLoginRequest): Promise<auth.LoginResult> {
+    // Validate input
     if (!dto.socialUserProfile) {
-      throw new Error("Social user profile not found");
+      throw new BadRequestException("Social user profile is required");
     }
 
-    const client =
+    // Find OAuth provider configuration
+    const provider = await this.validateProvider(dto.provider);
+
+    // Try to find existing auth client
+    const existingClient =
       await this.authRepository.findAuthClientByClientIdAndProviderId(
         new FindAuthClientByClientIdAndProviderIdDomainRequestDto(
           provider.id,
           dto.socialUserProfile.clientId,
         ),
       );
-    if (client) {
-      const isNewUser = false;
-      const userId = client.userId;
-      const user = await firstValueFrom(
-        this.userClient.findOneUser({ id: userId }),
-      );
 
-      if (!user) {
-        throw new Error("User not found");
-      }
-
-      const tokens = await this.authToken.generateTokens({
-        userId: user.id,
-        email: user.email,
-      });
-      const updatedTokenInfo = await this.authRepository.updateAuthTokens({
-        authClientId: client.id,
-        providerAccessToken: dto.socialUserProfile.providerAccessToken,
-        providerRefreshToken: dto.socialUserProfile.providerRefreshToken,
-        refreshToken: tokens.refreshToken,
-        revoked: false,
-      } as UpdateAuthTokensInfoDomainRequestDto);
-      if (!updatedTokenInfo) {
-        throw new Error("Failed to update auth token info");
-      }
-
-      return {
-        userId: user.id,
-        accessToken: tokens.accessToken,
-        isNewUser: isNewUser,
-      };
+    // Route to existing or new user flow
+    if (existingClient) {
+      return await this.handleExistingUser(existingClient, dto);
     } else {
-      const isNewUser = true;
-      const existingUser = await firstValueFrom(
-        this.userClient.findOneUserByEmail({
-          email: dto.socialUserProfile.email,
-        }),
-      ).catch(() => null);
-      if (existingUser) {
-        throw new Error("User already exists");
-      }
-      const newUser = await firstValueFrom(
-        this.userClient.createUser({
-          email: dto.socialUserProfile.email,
-          locale: "ko",
-          displayName: dto.socialUserProfile.name,
-        }),
+      return await this.handleNewUser(provider, dto);
+    }
+  }
+
+  /**
+   * Validates that the OAuth provider exists and is configured
+   */
+  private async validateProvider(providerName: string) {
+    const provider = await this.authRepository.findProviderByProvider(
+      new FindProviderByProviderDomainRequestDto(providerName as AuthProvider),
+    );
+
+    if (!provider) {
+      throw new NotFoundException(
+        `OAuth provider '${providerName}' not found or not configured`,
+      );
+    }
+
+    return provider;
+  }
+
+  /**
+   * Handles login for existing users
+   * Updates tokens and returns login result
+   */
+  private async handleExistingUser(
+    authClient: any,
+    dto: auth.SocialLoginRequest,
+  ): Promise<auth.LoginResult> {
+    // Fetch user details
+    const user = await firstValueFrom(
+      this.userClient.findOneUser({ id: authClient.userId }),
+    );
+
+    if (!user) {
+      throw new NotFoundException(
+        `User with ID '${authClient.userId}' not found`,
+      );
+    }
+
+    // Generate new JWT tokens
+    const tokens = await this.authToken.generateTokens({
+      userId: user.id,
+      email: user.email,
+    });
+
+    // Update provider tokens
+    await this.updateProviderTokens(authClient.id, dto, tokens.refreshToken);
+
+    return {
+      userId: user.id,
+      accessToken: tokens.accessToken,
+      isNewUser: false,
+    };
+  }
+
+  /**
+   * Handles login for new users
+   * Creates user account, auth client, and tokens
+   */
+  private async handleNewUser(
+    provider: any,
+    dto: auth.SocialLoginRequest,
+  ): Promise<auth.LoginResult> {
+    // Ensure email is not already in use
+    await this.validateNewUserEmail(dto.socialUserProfile!.email);
+
+    // Create new user account
+    const newUser = await this.createNewUserAccount(dto.socialUserProfile!);
+
+    // Create auth client linking
+    const authClient = await this.createAuthClient(
+      newUser.id,
+      provider.id,
+      dto.socialUserProfile!.clientId,
+    );
+
+    // Generate and save tokens
+    await this.generateAndSaveTokens(
+      authClient.id,
+      newUser.id,
+      newUser.email,
+      dto,
+    );
+
+    // Generate JWT tokens for response
+    const tokens = await this.authToken.generateTokens({
+      userId: newUser.id,
+      email: newUser.email,
+    });
+
+    return {
+      userId: newUser.id,
+      accessToken: tokens.accessToken,
+      isNewUser: true,
+    };
+  }
+
+  /**
+   * Validates that email is not already registered
+   */
+  private async validateNewUserEmail(email: string): Promise<void> {
+    const existingUser = await firstValueFrom(
+      this.userClient.findOneUserByEmail({ email }),
+    ).catch(() => null);
+
+    if (existingUser) {
+      throw new ConflictException(
+        `User with email '${email}' already exists. Please link your account instead.`,
+      );
+    }
+  }
+
+  /**
+   * Creates new user account via User microservice
+   */
+  private async createNewUserAccount(
+    profile: auth.SocialUserProfile,
+  ): Promise<any> {
+    const newUser = await firstValueFrom(
+      this.userClient.createUser({
+        email: profile.email,
+        locale: "ko",
+        displayName: profile.name,
+      }),
+    );
+
+    if (!newUser) {
+      throw new InternalServerErrorException("Failed to create user account");
+    }
+
+    return newUser;
+  }
+
+  /**
+   * Creates AuthClient record linking user to OAuth provider
+   */
+  private async createAuthClient(
+    userId: string,
+    providerId: string,
+    clientId: string,
+  ): Promise<any> {
+    const authClient = await this.authRepository.createAuthClient({
+      userId,
+      providerId,
+      clientId,
+      salt: null,
+    });
+
+    if (!authClient) {
+      throw new InternalServerErrorException("Failed to create auth client");
+    }
+
+    // Need to fetch the created client to get its ID
+    const createdClient =
+      await this.authRepository.findAuthClientByClientIdAndProviderId(
+        new FindAuthClientByClientIdAndProviderIdDomainRequestDto(
+          providerId,
+          clientId,
+        ),
       );
 
-      const newAuthClient = await this.authRepository.createAuthClient({
-        userId: newUser.id,
-        providerId: provider.id,
-        clientId: dto.socialUserProfile.clientId,
-        salt: null,
-      });
-      if (!newAuthClient) {
-        throw new Error("Failed to create auth client");
-      }
-      const tokens = await this.authToken.generateTokens({
-        userId: newUser.id,
-        email: newUser.email,
-      });
-      const createdAuthClient =
-        await this.authRepository.findAuthClientByClientIdAndProviderId(
-          new FindAuthClientByClientIdAndProviderIdDomainRequestDto(
-            provider.id,
-            dto.socialUserProfile.clientId,
-          ),
-        );
-      if (!createdAuthClient) {
-        throw new Error("Failed to resolve created auth client id");
-      }
-      const createdTokenInfo = await this.authRepository.createAuthToken({
-        authClientId: createdAuthClient.id,
-        providerAccessToken: dto.socialUserProfile.providerAccessToken,
-        providerRefreshToken: dto.socialUserProfile.providerRefreshToken,
-        refreshToken: tokens.refreshToken,
-        revoked: false,
-      } as CreateAuthTokenDomainRequestDto);
-      if (!createdTokenInfo) {
-        throw new Error("Failed to create auth token");
-      }
-      return {
-        userId: newUser.id,
-        accessToken: tokens.accessToken,
-        isNewUser: isNewUser,
-      };
+    if (!createdClient) {
+      throw new InternalServerErrorException(
+        "Failed to retrieve created auth client",
+      );
+    }
+
+    return createdClient;
+  }
+
+  /**
+   * Generates JWT tokens and saves provider tokens
+   */
+  private async generateAndSaveTokens(
+    authClientId: string,
+    userId: string,
+    userEmail: string,
+    dto: auth.SocialLoginRequest,
+  ): Promise<void> {
+    const tokens = await this.authToken.generateTokens({
+      userId,
+      email: userEmail,
+    });
+
+    const tokenInfo = await this.authRepository.createAuthToken({
+      authClientId,
+      providerAccessToken: dto.socialUserProfile!.providerAccessToken,
+      providerRefreshToken: dto.socialUserProfile!.providerRefreshToken,
+      refreshToken: tokens.refreshToken,
+      revoked: false,
+    } as CreateAuthTokenDomainRequestDto);
+
+    if (!tokenInfo) {
+      throw new InternalServerErrorException("Failed to save auth tokens");
+    }
+  }
+
+  /**
+   * Updates OAuth provider tokens for existing users
+   */
+  private async updateProviderTokens(
+    authClientId: string,
+    dto: auth.SocialLoginRequest,
+    refreshToken: string,
+  ): Promise<void> {
+    const updatedTokenInfo = await this.authRepository.updateAuthTokens({
+      authClientId,
+      providerAccessToken: dto.socialUserProfile!.providerAccessToken,
+      providerRefreshToken: dto.socialUserProfile!.providerRefreshToken,
+      refreshToken,
+      revoked: false,
+    } as UpdateAuthTokensInfoDomainRequestDto);
+
+    if (!updatedTokenInfo) {
+      throw new InternalServerErrorException("Failed to update auth tokens");
     }
   }
 }
