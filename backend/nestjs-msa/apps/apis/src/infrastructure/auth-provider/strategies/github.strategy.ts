@@ -3,8 +3,8 @@ import { PassportStrategy } from "@nestjs/passport";
 import { Strategy } from "passport-github2";
 import { SocialProfileMapper } from "@apis/presentation/http/controllers/mappers/social-profile.mapper";
 import { GithubUserProfile } from "@apis/presentation/http/controllers/auth/dtos/gitubUserProfile";
-import { ProviderOptionsMap } from "@auth/infrastructure/auth-provider-client/types";
-import { OAUTH_PROVIDER_OPTIONS } from "@auth/infrastructure/auth-provider-client/auth-provider-client-di-token";
+import { ProviderOptionsMap } from "@apis/infrastructure/auth-provider/types";
+import { OAUTH_PROVIDER_OPTIONS } from "@apis/infrastructure/auth-provider/auth-provider-di-token";
 import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
 
 @Injectable()

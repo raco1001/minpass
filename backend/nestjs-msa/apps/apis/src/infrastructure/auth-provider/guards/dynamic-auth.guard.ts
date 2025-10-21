@@ -6,8 +6,8 @@ import {
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { AuthProvider } from "@auth/core/domain/constants/auth-providers";
-import { OAUTH_PROVIDER_OPTIONS } from "@auth/infrastructure/auth-provider-client/auth-provider-client-di-token";
-import { ProviderOptionsMap } from "@auth/infrastructure/auth-provider-client/types";
+import { OAUTH_PROVIDER_OPTIONS } from "@apis/infrastructure/auth-provider/auth-provider-di-token";
+import { ProviderOptionsMap } from "@apis/infrastructure/auth-provider/types";
 
 interface RequestWithProvider {
   params: {

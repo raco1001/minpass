@@ -1,30 +1,48 @@
 syntax = "proto3";
 
 package auth.v1; 
-        
+
+/**
+ * Authentication Service
+ * Handles OAuth-based social login and JWT token generation
+ */
 service AuthService {
-  rpc SocialLogin (SocialLoginRequest) returns (ILoginResult);
+  rpc SocialLogin (SocialLoginRequest) returns (LoginResult);
 }
 
+/**
+ * Social Login Request
+ * Contains OAuth provider information and user profile data
+ * Note: Authorization code exchange is handled by API Gateway,
+ * so we only need the user profile and tokens here
+ */
 message SocialLoginRequest {
-  string provider = 1;
-  string code = 2; 
-  ISocialUserProfile social_user_profile = 3;
+  string provider = 1;  // OAuth provider (google, github, kakao)
+  SocialUserProfile social_user_profile = 2;
 }
 
-message ILoginResult {
+/**
+ * Login Result
+ * Contains JWT tokens and user information
+ */
+message LoginResult {
   string user_id = 1;
   string access_token = 2;
   bool is_new_user = 3;
 }
 
-message ISocialUserProfile {
-  string client_id = 1;
-  string email = 2;
-  string name = 3;
-  string nickname = 4;
-  string profile_image = 5;
-  string provider = 6;
-  string provider_access_token = 7;
-  string provider_refresh_token = 8;
+/**
+ * Social User Profile
+ * Standardized user profile from OAuth providers
+ * Populated by Passport strategies in API Gateway
+ */
+message SocialUserProfile {
+  string client_id = 1;  // OAuth provider's unique user ID
+  string email = 2;  // User's email address
+  string name = 3;  // User's full name
+  string nickname = 4;  // User's display name/nickname
+  string profile_image = 5;  // URL to user's profile image
+  string provider = 6;  // OAuth provider name
+  string provider_access_token = 7;  // Access token from OAuth provider
+  string provider_refresh_token = 8;  // Refresh token from OAuth provider
 }
