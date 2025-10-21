@@ -5,15 +5,16 @@ import { Input } from '@/shared/ui/Input'
 import { useState } from 'react'
 import { loginSchema } from '../lib/validators'
 import { useLogin } from '../model/useLogin'
-
+import { SocialLoginButtons } from './SocialLoginButtons'
 
 export function LoginForm() {
   const m = useLogin()
   const { push } = useToast()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
-
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {},
+  )
 
   const onSubmit = () => {
     const parsed = loginSchema.safeParse({ email, password })
@@ -34,23 +35,52 @@ export function LoginForm() {
       },
       onSuccess: () => {
         push('로그인 성공', 'success')
-      }
+      },
     })
   }
 
-
   return (
-    <Form onSubmit={(e) => { e.preventDefault(); onSubmit() }}>
-      <h1>Sign in</h1>
-      <div>
-        <Input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        {errors.email && <small style={{ color: '#e87979' }}>{errors.email}</small>}
+    <div className="flex flex-col gap-6">
+      <Form
+        onSubmit={(e) => {
+          e.preventDefault()
+          onSubmit()
+        }}
+      >
+        <h1>Sign in</h1>
+        <div>
+          <Input
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {errors.email && (
+            <small style={{ color: '#e87979' }}>{errors.email}</small>
+          )}
+        </div>
+        <div>
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {errors.password && (
+            <small style={{ color: '#e87979' }}>{errors.password}</small>
+          )}
+        </div>
+        <Button type="submit" disabled={m.isPending}>
+          {m.isPending ? 'Signing in…' : 'Login'}
+        </Button>
+      </Form>
+
+      <div className="flex items-center gap-3">
+        <div className="h-px flex-1 bg-gray-200" />
+        <span className="text-sm text-gray-500">또는</span>
+        <div className="h-px flex-1 bg-gray-200" />
       </div>
-      <div>
-        <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        {errors.password && <small style={{ color: '#e87979' }}>{errors.password}</small>}
-      </div>
-      <Button type="submit" disabled={m.isPending}>{m.isPending ? 'Signing in…' : 'Login'}</Button>
-    </Form>
+
+      <SocialLoginButtons />
+    </div>
   )
 }
