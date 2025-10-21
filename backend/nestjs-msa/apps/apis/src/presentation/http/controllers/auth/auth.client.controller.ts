@@ -65,7 +65,6 @@ export class AuthClientController {
       },
     };
 
-    // Call Auth microservice via gRPC
     return await firstValueFrom(this.authClientService.socialLogin(request));
   }
 }
