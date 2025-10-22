@@ -19,7 +19,7 @@ import {
 } from "@auth/core/domain/dtos/auth-query.dto";
 import {
   CreateAuthTokenDomainRequestDto,
-  UpdateAuthTokensInfoDomainRequestDto,
+  UpsertAuthTokensInfoDomainRequestDto,
 } from "@auth/core/domain/dtos/auth-command.dtos";
 
 /**
@@ -271,15 +271,17 @@ export class LoginService implements LoginServicePort {
     dto: auth.SocialLoginRequest,
     refreshToken: string,
   ): Promise<void> {
-    const updatedTokenInfo = await this.authRepository.updateAuthTokens({
+    const upsertedTokenInfo = await this.authRepository.upsertAuthTokens({
       authClientId,
       providerAccessToken: dto.socialUserProfile!.providerAccessToken,
       providerRefreshToken: dto.socialUserProfile!.providerRefreshToken,
       refreshToken,
       revoked: false,
-    } as UpdateAuthTokensInfoDomainRequestDto);
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+      updatedAt: new Date(Date.now()),
+    } as UpsertAuthTokensInfoDomainRequestDto);
 
-    if (!updatedTokenInfo) {
+    if (!upsertedTokenInfo) {
       throw new InternalServerErrorException("Failed to update auth tokens");
     }
   }

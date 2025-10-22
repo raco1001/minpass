@@ -24,7 +24,7 @@ export class CreateAuthTokensInfoPersistenceRequestDto
   }
 }
 
-export class UpdateAuthTokensInfoPersistenceRequestDto {
+export class UpsertAuthTokensInfoPersistenceRequestDto {
   authClientId: (typeof authClients.$inferSelect)["id"];
   providerAccessToken: (typeof authTokens.$inferSelect)["providerAccessToken"];
   providerRefreshToken: (typeof authTokens.$inferSelect)["providerRefreshToken"];
