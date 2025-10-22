@@ -35,6 +35,7 @@ export const authTokens = mysqlTable("auth_tokens", {
   id: uuidv7Binary("id", { length: 16 }).primaryKey(),
   authClientId: uuidv7Binary("auth_client_id", { length: 16 })
     .notNull()
+    .unique() // ✅ unique constraint 추가
     .references(() => authClients.id),
   providerAccessToken: varchar("provider_access_token", { length: 1000 }),
   providerRefreshToken: varchar("provider_refresh_token", { length: 1000 }),

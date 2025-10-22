@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { resolve } from "path";
 
 import { MariaDbOptions } from "@app/integrations/mariadb/constants/mariadb.types";
 import { MariaDbModule } from "@app/integrations/mariadb/mariadb.module";
@@ -19,6 +20,21 @@ import { users as usersContract } from "@app/contracts";
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      cache: true,
+      expandVariables: true,
+      envFilePath: [
+        // Users 서비스 전용 환경 변수 (우선순위 높음)
+        resolve(process.cwd(), "apps/users/.env.local"),
+        resolve(process.cwd(), "apps/users/.env"),
+        // 공통 환경 변수 (fallback)
+        resolve(process.cwd(), ".env.local"),
+        resolve(process.cwd(), ".env"),
+        // 폴백: 빌드된 dist 디렉토리에서 실행될 경우
+        resolve(__dirname, "../../../apps/users/.env.local"),
+        resolve(__dirname, "../../../apps/users/.env"),
+        resolve(__dirname, "../../../.env.local"),
+        resolve(__dirname, "../../../.env"),
+      ],
     }),
 
     MariaDbModule.registerAsync(

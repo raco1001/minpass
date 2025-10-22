@@ -41,7 +41,7 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 .env.local
-
+*/**/*.env.backup*
 # temp directory
 .temp
 .tmp
@@ -61,3 +61,9 @@ libs/common/certs/*
 dist
 lib
 certs
+certs*
+certs/*
+*.crt
+*.key
+*.csr
+*.srl

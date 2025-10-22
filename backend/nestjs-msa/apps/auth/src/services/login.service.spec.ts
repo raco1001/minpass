@@ -10,6 +10,7 @@ import {
   TestDataFactory,
   MockPortFactory,
 } from "../../test/helpers/test-helpers";
+import { UpsertAuthTokensInfoDomainResponseDto } from "@auth/core/domain/dtos/auth-command.dtos";
 
 describe("LoginService (Unit)", () => {
   let service: LoginService;
@@ -80,10 +81,7 @@ describe("LoginService (Unit)", () => {
         );
         userClient.findOneUser.mockReturnValue(of(mockUser as any));
         authToken.generateTokens.mockResolvedValue(mockTokens);
-        authRepository.updateAuthTokens.mockResolvedValue({
-          ...mockTokenInfo,
-          updatedAt: new Date(),
-        });
+        authRepository.upsertAuthTokens.mockResolvedValue(mockTokenInfo); // ✅ 추가
 
         // When
         const result = await service.socialLogin(request);
@@ -112,6 +110,12 @@ describe("LoginService (Unit)", () => {
           userId: mockUser.id,
           email: mockUser.email,
         });
+        // ✅ upsertAuthTokens 검증 추가
+        expect(authRepository.upsertAuthTokens).toHaveBeenCalledWith(
+          expect.objectContaining({
+            authClientId: mockClient.id,
+          }),
+        );
       });
 
       it("SocialLogin should be successful for existing user with KAKAO provider", async () => {
@@ -153,10 +157,7 @@ describe("LoginService (Unit)", () => {
         );
         userClient.findOneUser.mockReturnValue(of(mockUser as any));
         authToken.generateTokens.mockResolvedValue(mockTokens);
-        authRepository.updateAuthTokens.mockResolvedValue({
-          ...mockTokenInfo,
-          updatedAt: new Date(),
-        });
+        authRepository.upsertAuthTokens.mockResolvedValue(mockTokenInfo); // ✅ 추가
 
         // When - act
         const result = await service.socialLogin(request);
@@ -366,7 +367,7 @@ describe("LoginService (Unit)", () => {
         );
       });
 
-      it("should throw an error if token update fails", async () => {
+      it("should throw an error if token upsert fails", async () => {
         // Given
         const mockProvider = TestDataFactory.createMockProvider();
         const mockClient = TestDataFactory.createMockAuthClient();
@@ -382,11 +383,11 @@ describe("LoginService (Unit)", () => {
         );
         userClient.findOneUser.mockReturnValue(of(mockUser as any));
         authToken.generateTokens.mockResolvedValue(mockTokens);
-        authRepository.updateAuthTokens.mockResolvedValue(null); // fail
+        authRepository.upsertAuthTokens.mockResolvedValue(null); // ✅ upsert 실패
 
         // When & Then
         await expect(service.socialLogin(request)).rejects.toThrow(
-          "Failed to update auth tokens",
+          "Failed to update auth tokens", // ✅ 메시지 수정
         );
       });
 
@@ -513,7 +514,7 @@ describe("LoginService (Unit)", () => {
           .mockResolvedValueOnce(null)
           .mockResolvedValueOnce(mockNewClient);
         authToken.generateTokens.mockResolvedValue(mockTokens);
-        authRepository.createAuthToken.mockResolvedValue(mockTokenInfo);
+        authRepository.createAuthToken.mockResolvedValue(mockTokenInfo); // ✅ 추가
 
         // When - act
         const result = await service.socialLogin(request);
@@ -555,10 +556,7 @@ describe("LoginService (Unit)", () => {
         );
         userClient.findOneUser.mockReturnValue(of(mockUser as any));
         authToken.generateTokens.mockResolvedValue(mockTokens);
-        authRepository.updateAuthTokens.mockResolvedValue({
-          ...mockTokenInfo,
-          updatedAt: new Date(),
-        });
+        authRepository.upsertAuthTokens.mockResolvedValue(mockTokenInfo); // ✅ 추가
 
         // When
         const result = await service.socialLogin(request);

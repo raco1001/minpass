@@ -22,7 +22,7 @@ export class CreateAuthTokenDomainRequestDto {
   }
 }
 
-export class UpdateAuthTokensInfoDomainRequestDto {
+export class UpsertAuthTokensInfoDomainRequestDto {
   authClientId: AuthClientEntity["id"];
   providerAccessToken: AuthTokenEntity["providerAccessToken"];
   providerRefreshToken: AuthTokenEntity["providerRefreshToken"];
@@ -126,7 +126,7 @@ export class UpdateAuthClientDomainResponseDto {
   }
 }
 
-export class UpdateAuthTokensInfoDomainResponseDto {
+export class UpsertAuthTokensInfoDomainResponseDto {
   id: AuthTokenEntity["id"];
   authClientId: AuthTokenEntity["authClientId"];
   revoked: AuthTokenEntity["revoked"];

@@ -46,7 +46,8 @@
     "test:auth:e2e": "jest --config apps/auth/test/jest-e2e.config.js",
     "proto:clean": "rimraf libs/contracts/generated/*",
     "proto:gen": "protoc --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=libs/contracts/src/generated --ts_proto_opt=nestJs=true --ts_proto_opt=stringEnums=true --proto_path=./proto $(find proto -type f -name \"*.proto\" -print)",
-    "proto:watch": "chokidar \"libs/contracts/proto/**/*.proto\" -c \"pnpm proto:gen\""
+    "proto:watch": "chokidar \"libs/contracts/proto/**/*.proto\" -c \"pnpm proto:gen\"",
+    "auth:seed-providers": "tsx apps/auth/scripts/seed-providers.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
