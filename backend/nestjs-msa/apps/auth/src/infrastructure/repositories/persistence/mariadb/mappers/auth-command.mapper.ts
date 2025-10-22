@@ -4,8 +4,8 @@ import {
   CreateAuthTokensInfoPersistenceRequestDto,
   CreateAuthTokensInfoPersistenceResponseDto,
   UpdateAuthClientPersistenceResponseDto,
-  UpdateAuthTokensInfoPersistenceRequestDto,
   UpdateAuthTokensInfoPersistenceResponseDto,
+  UpsertAuthTokensInfoPersistenceRequestDto,
 } from "../dtos/auth-repository-command.dto";
 import {
   CreateAuthClientDomainRequestDto,
@@ -13,8 +13,8 @@ import {
   CreateAuthTokenDomainRequestDto,
   CreateAuthTokenDomainResponseDto,
   UpdateAuthClientDomainResponseDto,
-  UpdateAuthTokensInfoDomainRequestDto,
-  UpdateAuthTokensInfoDomainResponseDto,
+  UpsertAuthTokensInfoDomainRequestDto,
+  UpsertAuthTokensInfoDomainResponseDto,
 } from "@auth/core/domain/dtos/auth-command.dtos";
 
 export class AuthCommandMapper {
@@ -30,14 +30,14 @@ export class AuthCommandMapper {
   }
 
   static toRowUpdateAuthTokensInfo(
-    authTokensInfo: UpdateAuthTokensInfoDomainRequestDto,
-  ): UpdateAuthTokensInfoPersistenceRequestDto {
-    return new UpdateAuthTokensInfoPersistenceRequestDto(
+    authTokensInfo: UpsertAuthTokensInfoDomainRequestDto,
+  ): UpsertAuthTokensInfoPersistenceRequestDto {
+    return new UpsertAuthTokensInfoPersistenceRequestDto(
       authTokensInfo.authClientId,
       authTokensInfo.providerAccessToken,
       authTokensInfo.providerRefreshToken,
       authTokensInfo.refreshToken,
-      authTokensInfo.revoked,
+      authTokensInfo.revoked ?? false,
       authTokensInfo.expiresAt,
       authTokensInfo.updatedAt,
     );
@@ -87,15 +87,15 @@ export class AuthCommandMapper {
     );
   }
 
-  static toDomainUpdateAuthTokensInfo(
+  static toDomainUpsertAuthTokensInfo(
     row: UpdateAuthTokensInfoPersistenceResponseDto,
-  ): UpdateAuthTokensInfoDomainResponseDto {
-    return new UpdateAuthTokensInfoDomainResponseDto(
+  ): UpsertAuthTokensInfoDomainResponseDto {
+    return new UpsertAuthTokensInfoDomainResponseDto(
       row.id,
       row.authClientId,
-      row.revoked,
-      row.expiresAt,
-      row.updatedAt,
+      row.revoked ?? false,
+      row.expiresAt ?? new Date(),
+      row.updatedAt ?? new Date(),
     );
   }
 }

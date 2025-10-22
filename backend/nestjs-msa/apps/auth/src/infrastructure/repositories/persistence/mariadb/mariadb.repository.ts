@@ -21,8 +21,8 @@ import {
   CreateAuthTokenDomainRequestDto,
   CreateAuthTokenDomainResponseDto,
   UpdateAuthClientDomainResponseDto,
-  UpdateAuthTokensInfoDomainRequestDto,
-  UpdateAuthTokensInfoDomainResponseDto,
+  UpsertAuthTokensInfoDomainRequestDto,
+  UpsertAuthTokensInfoDomainResponseDto,
 } from "@auth/core/domain/dtos/auth-command.dtos";
 
 @Injectable()
@@ -175,24 +175,35 @@ export class MariadbRepository implements AuthRepositoryPort {
     return updated[0] ?? null;
   }
 
-  async updateAuthTokens(
-    authTokenInfo: UpdateAuthTokensInfoDomainRequestDto,
-  ): Promise<UpdateAuthTokensInfoDomainResponseDto | null> {
+  async upsertAuthTokens(
+    authTokenInfo: UpsertAuthTokensInfoDomainRequestDto,
+  ): Promise<UpsertAuthTokensInfoDomainResponseDto | null> {
+    // MariaDB의 INSERT ... ON DUPLICATE KEY UPDATE 사용
+    // authClientId가 unique이므로, 존재하면 update, 없으면 insert
     await this.db
-      .update(authSchema.authTokens)
-      .set({
+      .insert(authSchema.authTokens)
+      .values({
+        id: uuidv7(), // 새 레코드일 경우 사용될 ID
+        authClientId: authTokenInfo.authClientId,
         providerAccessToken: authTokenInfo.providerAccessToken,
         providerRefreshToken: authTokenInfo.providerRefreshToken,
         refreshToken: authTokenInfo.refreshToken,
         revoked: authTokenInfo.revoked,
         expiresAt: authTokenInfo.expiresAt,
-        updatedAt: authTokenInfo.updatedAt,
       })
-      .where(
-        eq(authSchema.authTokens.authClientId, authTokenInfo.authClientId),
-      );
+      .onDuplicateKeyUpdate({
+        set: {
+          providerAccessToken: authTokenInfo.providerAccessToken,
+          providerRefreshToken: authTokenInfo.providerRefreshToken,
+          refreshToken: authTokenInfo.refreshToken,
+          revoked: authTokenInfo.revoked,
+          expiresAt: authTokenInfo.expiresAt,
+          updatedAt: new Date(),
+        },
+      });
 
-    const updated = await this.db
+    // upsert 후 결과 조회
+    const result = await this.db
       .select({
         id: authSchema.authTokens.id,
         authClientId: authSchema.authTokens.authClientId,
@@ -203,10 +214,10 @@ export class MariadbRepository implements AuthRepositoryPort {
       .from(authSchema.authTokens)
       .where(eq(authSchema.authTokens.authClientId, authTokenInfo.authClientId))
       .then((tokens) =>
-        tokens.map(AuthCommandMapper.toDomainUpdateAuthTokensInfo),
+        tokens.map(AuthCommandMapper.toDomainUpsertAuthTokensInfo),
       );
 
-    return updated[0] ?? null;
+    return result[0] ?? null;
   }
 
   async findAuthTokenInfoByClientId(

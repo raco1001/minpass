@@ -106,6 +106,7 @@ export class MockPortFactory {
       createAuthToken: jest.fn(),
       updateAuthClientTimestamp: jest.fn(),
       updateAuthTokens: jest.fn(),
+      upsertAuthTokens: jest.fn(),
     };
   }
 

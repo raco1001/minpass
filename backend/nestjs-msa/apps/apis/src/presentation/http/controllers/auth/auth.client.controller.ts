@@ -1,5 +1,14 @@
 import { AuthClientServicePort } from "@apis/core/ports/in/auth.client.service.port";
-import { Controller, Get, Inject, Param, Req, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Req,
+  Res,
+  UseGuards,
+} from "@nestjs/common";
+import type { Response } from "express";
 import { firstValueFrom } from "rxjs";
 import { auth } from "@app/contracts";
 import { DynamicAuthGuard } from "@apis/infrastructure/auth-provider/guards/dynamic-auth.guard";
@@ -39,7 +48,8 @@ export class AuthClientController {
    *
    * @param provider - OAuth provider name
    * @param req - Request object with user profile injected by Passport
-   * @returns Login result with JWT tokens
+   * @param res - Response object for redirection
+   * @returns Redirects to frontend with tokens
    * @example GET /auth/login/google/callback?code=...
    */
   @Get("login/:provider/callback")
@@ -47,7 +57,8 @@ export class AuthClientController {
   async handleOAuthCallback(
     @Param("provider") provider: string,
     @Req() req: { user: auth.SocialUserProfile },
-  ): Promise<auth.LoginResult> {
+    @Res() res: Response,
+  ): Promise<void> {
     // Passport strategy has already validated and populated req.user
     const socialProfile = req.user;
 
@@ -65,6 +76,45 @@ export class AuthClientController {
       },
     };
 
-    return await firstValueFrom(this.authClientService.socialLogin(request));
+    const result = await firstValueFrom(
+      this.authClientService.socialLogin(request),
+    );
+
+    // 프론트엔드 URL (환경변수로 설정 권장)
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5174";
+
+    // 방법 1: Query string으로 토큰 전달 (간단하지만 보안상 권장하지 않음)
+    // const redirectUrl = `${frontendUrl}/auth/callback?token=${result.accessToken}&userId=${result.userId}&isNewUser=${result.isNewUser}`;
+
+    // 방법 2: 팝업 창을 위한 HTML 페이지 반환
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>로그인 완료</title>
+        <script>
+          // 부모 창(opener)이 있으면 메시지 전달
+          if (window.opener) {
+            window.opener.postMessage({
+              type: 'oauth-success',
+              accessToken: '${result.accessToken}',
+              userId: '${result.userId}',
+              isNewUser: ${result.isNewUser}
+            }, '${frontendUrl}');
+            window.close();
+          } else {
+            // 리디렉션 방식인 경우
+            window.location.href = '${frontendUrl}/auth/callback?token=${result.accessToken}&userId=${result.userId}&isNewUser=${result.isNewUser}';
+          }
+        </script>
+      </head>
+      <body>
+        <p>로그인 처리 중...</p>
+      </body>
+      </html>
+    `;
+
+    res.setHeader("Content-Type", "text/html");
+    res.send(html);
   }
 }

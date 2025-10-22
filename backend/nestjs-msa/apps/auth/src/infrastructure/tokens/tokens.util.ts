@@ -1,6 +1,8 @@
+import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 
+@Injectable()
 export class TokensUtil {
   constructor(
     private readonly jwtService: JwtService,
@@ -16,11 +18,18 @@ export class TokensUtil {
       email: user.email,
       type: isAccessToken ? "access" : "refresh",
     };
+
+    const secret = isAccessToken
+      ? this.configService.get("JWT_SECRET")
+      : this.configService.get("REFRESH_TOKEN_SECRET");
+
+    const expiresIn = isAccessToken
+      ? this.configService.get("JWT_EXPIRATION", "15m")
+      : this.configService.get("REFRESH_TOKEN_EXPIRATION", "7d");
+
     const token: string = this.jwtService.sign(payload, {
-      secret: isAccessToken
-        ? this.configService.get("JWT_SECRET")
-        : this.configService.get("JWT_REFRESH_SECRET"),
-      expiresIn: isAccessToken ? 3600 : 7 * 24 * 3600, // access: 1시간, refresh: 7일
+      secret,
+      expiresIn,
     });
     return token;
   }

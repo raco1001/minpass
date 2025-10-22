@@ -13,8 +13,16 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     providerOptionsMap: ProviderOptionsMap,
   ) {
     const providerOptions = providerOptionsMap.get(AuthProvider.GOOGLE);
+
+    // Provider가 활성화되지 않았으면 기본값으로 초기화 (사용되지 않음)
     if (!providerOptions) {
-      throw new Error("Google provider options not found.");
+      super({
+        clientID: "not-configured",
+        clientSecret: "not-configured",
+        callbackURL: "http://localhost:3000/auth/login/google/callback",
+        scope: ["email", "profile"],
+      });
+      return;
     }
 
     super({
