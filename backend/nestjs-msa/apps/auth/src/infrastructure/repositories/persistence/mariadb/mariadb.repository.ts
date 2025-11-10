@@ -178,31 +178,37 @@ export class MariadbRepository implements AuthRepositoryPort {
   async upsertAuthTokens(
     authTokenInfo: UpsertAuthTokensInfoDomainRequestDto,
   ): Promise<UpsertAuthTokensInfoDomainResponseDto | null> {
-    // MariaDB의 INSERT ... ON DUPLICATE KEY UPDATE 사용
-    // authClientId가 unique이므로, 존재하면 update, 없으면 insert
-    await this.db
-      .insert(authSchema.authTokens)
-      .values({
-        id: uuidv7(), // 새 레코드일 경우 사용될 ID
-        authClientId: authTokenInfo.authClientId,
-        providerAccessToken: authTokenInfo.providerAccessToken,
-        providerRefreshToken: authTokenInfo.providerRefreshToken,
-        refreshToken: authTokenInfo.refreshToken,
-        revoked: authTokenInfo.revoked,
-        expiresAt: authTokenInfo.expiresAt,
-      })
-      .onDuplicateKeyUpdate({
-        set: {
+    const existingToken = await this.db
+      .select({ id: authSchema.authTokens.id })
+      .from(authSchema.authTokens)
+      .where(eq(authSchema.authTokens.authClientId, authTokenInfo.authClientId))
+      .then((tokens) => tokens[0] ?? null);
+
+    if (existingToken) {
+      await this.db
+        .update(authSchema.authTokens)
+        .set({
           providerAccessToken: authTokenInfo.providerAccessToken,
           providerRefreshToken: authTokenInfo.providerRefreshToken,
           refreshToken: authTokenInfo.refreshToken,
           revoked: authTokenInfo.revoked,
           expiresAt: authTokenInfo.expiresAt,
           updatedAt: new Date(),
-        },
+        })
+        .where(eq(authSchema.authTokens.id, existingToken.id));
+    } else {
+      await this.db.insert(authSchema.authTokens).values({
+        id: uuidv7(),
+        authClientId: authTokenInfo.authClientId,
+        providerAccessToken: authTokenInfo.providerAccessToken,
+        providerRefreshToken: authTokenInfo.providerRefreshToken,
+        refreshToken: authTokenInfo.refreshToken,
+        revoked: authTokenInfo.revoked,
+        expiresAt: authTokenInfo.expiresAt,
       });
+    }
 
-    // upsert 후 결과 조회
+    // Step 3: upsert 후 결과 조회
     const result = await this.db
       .select({
         id: authSchema.authTokens.id,

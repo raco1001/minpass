@@ -1,8 +1,8 @@
 import { mapAuthUser } from '@/entities/users/lib/mapUser'
 import { useUserStore } from '@/entities/users/model/user.store'
 import {
-  socialLogin,
   initiateLogin,
+  socialLogin,
   type AuthUser,
   type Provider,
   type SocialLoginRequest,
@@ -15,7 +15,9 @@ export function useInitiateSocialLogin(): UseMutationResult<
   Provider
 > {
   return useMutation({
-    mutationFn: (provider: Provider) => initiateLogin(provider),
+    mutationFn: async (provider: Provider) => {
+      initiateLogin(provider)
+    },
   })
 }
 

@@ -1,6 +1,4 @@
-import { mapAuthUser } from '@/entities/users/lib/mapUser'
 import { useUserStore } from '@/entities/users/model/user.store'
-import { me } from '@/shared/apis/auth.api'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
@@ -17,32 +15,26 @@ export function AuthCallbackPage() {
       const isNewUser = searchParams.get('isNewUser') === 'true'
 
       try {
-        // URL 파라미터에 토큰이 있으면 저장 (JWT 토큰 방식)
-        if (token && userId) {
-          localStorage.setItem('accessToken', token)
-          localStorage.setItem('userId', userId)
+        // URL 파라미터 검증
+        if (!token || !userId) {
+          throw new Error('Missing authentication parameters')
         }
 
-        // HttpOnly 쿠키 방식인 경우 토큰이 URL에 없을 수 있음
-        // 어떤 방식이든 /auth/me로 사용자 정보를 조회하여 확인
+        // 토큰과 userId 저장
+        localStorage.setItem('accessToken', token)
+        localStorage.setItem('userId', userId)
 
-        // 사용자 정보 조회 및 store 업데이트
-        const authUser = await me()
-        setUser(mapAuthUser(authUser))
+        // 사용자 상태 설정 (URL 파라미터의 정보 직접 사용)
+        setUser({
+          id: userId,
+          isNewUser: isNewUser,
+        })
 
-        // 원래 페이지로 복귀 또는 대시보드로
-        const returnUrl = localStorage.getItem('returnUrl') || '/'
-        localStorage.removeItem('returnUrl')
-
-        if (isNewUser) {
-          // 신규 사용자는 온보딩 페이지로 (현재는 대시보드로)
-          navigate('/')
-        } else {
-          navigate(returnUrl)
-        }
+        // 로그인 성공 후 캘린더 페이지로 이동
+        navigate('/calendar')
       } catch (e) {
         console.error('Auth callback error:', e)
-        setError('로그인 처리 중 오류가 발생했습니다.')
+        setError('Login processing failed. Please try again.')
         setTimeout(() => navigate('/login'), 2000)
       }
     }
@@ -51,24 +43,47 @@ export function AuthCallbackPage() {
   }, [searchParams, navigate, setUser])
 
   return (
-    <div style={{ height: '100%', display: 'grid', placeItems: 'center' }}>
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#000',
+      display: 'grid',
+      placeItems: 'center'
+    }}>
       <div style={{ textAlign: 'center' }}>
         {error ? (
           <div>
-            <p style={{ color: 'red' }}>{error}</p>
-            <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
-              로그인 페이지로 이동합니다...
+            <p style={{ color: '#ef4444', fontSize: '1.125rem', marginBottom: '0.5rem' }}>
+              {error}
+            </p>
+            <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.6)' }}>
+              Redirecting to login page...
             </p>
           </div>
         ) : (
           <div>
-            <p>로그인 처리 중...</p>
-            <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
-              잠시만 기다려주세요.
+            <div style={{
+              width: '40px',
+              height: '40px',
+              border: '3px solid rgba(59, 130, 246, 0.2)',
+              borderTopColor: '#3b82f6',
+              borderRadius: '50%',
+              animation: 'spin 0.8s linear infinite',
+              margin: '0 auto 1.5rem'
+            }} />
+            <p style={{ color: 'white', fontSize: '1.125rem', marginBottom: '0.5rem' }}>
+              Processing login...
+            </p>
+            <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.6)' }}>
+              Please wait a moment.
             </p>
           </div>
         )}
       </div>
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   )
 }

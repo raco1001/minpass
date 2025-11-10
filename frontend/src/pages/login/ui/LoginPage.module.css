@@ -1,0 +1,21 @@
+.page {
+  min-height: 100vh;
+  background-color: #000;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem 4rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 450px;
+}
+
