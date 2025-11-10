@@ -10,9 +10,10 @@ import { MICROSERVICE_CLIENTS } from "@app/config";
 
 import { USERS_SERVICE_CLIENT } from "./users.grpc.client.constants";
 import { join, resolve } from "path";
-import { UsersGrpcClientAdapter } from "./users.grpc.client.adapter";
+import { UsersGrpcClientQueryAdapter } from "./users.grpc.client.query.adapter";
 import { UsersQueryPort } from "@apis/core/ports/out/users.query.port";
 import { UsersCommandPort } from "@apis/core/ports/out/users.command.port";
+import { UsersGrpcClientCommandAdapter } from "./users.grpc.client.command.adapter";
 
 const fromRoot = (p: string) => resolve(process.cwd(), p);
 
@@ -35,7 +36,7 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
           );
           const targetUrl = cfg.get<string>(
             "USERS_GRPC_TARGET_URL",
-            "localhost:4001",
+            "127.0.0.1:4001",
           );
 
           const ca = fs.readFileSync(fromRoot(caPath));
@@ -77,11 +78,11 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
     },
     {
       provide: UsersQueryPort,
-      useClass: UsersGrpcClientAdapter,
+      useClass: UsersGrpcClientQueryAdapter,
     },
     {
       provide: UsersCommandPort,
-      useClass: UsersGrpcClientAdapter,
+      useClass: UsersGrpcClientCommandAdapter,
     },
   ],
   exports: [UsersQueryPort, UsersCommandPort],

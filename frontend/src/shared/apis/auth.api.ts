@@ -18,6 +18,8 @@ export type AuthUser = {
   email: string
   name?: string
   roles?: string[]
+  accessToken?: string
+  isNewUser?: boolean
 }
 
 export async function login(dto: LoginDto): Promise<AuthUser> {
@@ -25,15 +27,9 @@ export async function login(dto: LoginDto): Promise<AuthUser> {
   return data.user
 }
 
-/**
- * OAuth 로그인 시작 (전체 페이지 리디렉션)
- * 백엔드의 OAuth 엔드포인트로 리디렉션합니다.
- */
 export function initiateLogin(provider: Provider): void {
-  // 현재 페이지 저장 (로그인 후 돌아오기 위해)
   localStorage.setItem('returnUrl', window.location.pathname)
 
-  // OAuth 로그인 페이지로 리디렉션
   const apiUrl = import.meta.env.VITE_API_URL as string
   window.location.href = `${apiUrl}/auth/login/${provider}`
 }
