@@ -49,7 +49,7 @@ export async function socialLogin(
 }
 
 export async function me(): Promise<AuthUser> {
-  const { data } = await api.get('/auth/me')
+  const { data } = await api.get('/users/me')
   return data.user
 }
 

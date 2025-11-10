@@ -7,12 +7,15 @@ import { UsersCommandPort } from "@apis/core/ports/out/users.command.port";
 
 @Injectable()
 export class UsersGrpcClientAdapter
-  implements UsersQueryPort, UsersCommandPort
+  extends UsersQueryPort
+  implements UsersCommandPort
 {
   constructor(
     @Inject(USERS_SERVICE_CLIENT)
     private readonly client: users.UsersServiceClient,
-  ) {}
+  ) {
+    super();
+  }
 
   createUser(request: users.CreateUserRequest): Observable<users.User> {
     return this.client.createUser(request);
@@ -26,11 +29,15 @@ export class UsersGrpcClientAdapter
     return this.client.removeUser(request);
   }
 
+  findOneUser(request: users.FindOneUserRequest): Observable<users.User> {
+    return this.client.findOneUser(request);
+  }
+
   findAllUsers(): Observable<users.UserList> {
     return this.client.findAllUsers({});
   }
 
-  findOneUser(request: users.FindOneUserRequest): Observable<users.User> {
-    return this.client.findOneUser(request);
+  findMeUser(userId: string): Observable<users.User> {
+    return this.findOneUser({ id: userId });
   }
 }
