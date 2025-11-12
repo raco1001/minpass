@@ -4,7 +4,7 @@
 > **Representatives**: Front-End | Designer | Back-End  
 > **Version**: v1.0  
 > **Last Updated**: 2025-11-10  
-> **Author**: AI Assistant
+> **Author**: Dane
 
 ---
 

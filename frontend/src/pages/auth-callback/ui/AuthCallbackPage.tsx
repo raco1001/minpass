@@ -15,22 +15,18 @@ export function AuthCallbackPage() {
       const isNewUser = searchParams.get('isNewUser') === 'true'
 
       try {
-        // URL 파라미터 검증
         if (!token || !userId) {
           throw new Error('Missing authentication parameters')
         }
 
-        // 토큰과 userId 저장
         localStorage.setItem('accessToken', token)
         localStorage.setItem('userId', userId)
 
-        // 사용자 상태 설정 (URL 파라미터의 정보 직접 사용)
         setUser({
           id: userId,
           isNewUser: isNewUser,
         })
 
-        // 로그인 성공 후 캘린더 페이지로 이동
         navigate('/calendar')
       } catch (e) {
         console.error('Auth callback error:', e)

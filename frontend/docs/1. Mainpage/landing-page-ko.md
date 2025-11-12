@@ -4,7 +4,7 @@
 > **Representatives**: Front-End | Designer | Back-End  
 > **Version**: v1.0  
 > **Last Updated**: 2025-11-10  
-> **Author**: AI Assistant
+> **Author**: Dane
 
 ---
 
@@ -62,7 +62,6 @@ LandingPage
 
 ## 3. UI Components
 
-```
 | 컴포넌트          | 역할                          | 관련 파일                                       | Props / Interface | 연관 모듈    |
 | ----------------- | ----------------------------- | ----------------------------------------------- | ----------------- | ------------ |
 | Header            | 네비게이션 및 인증 버튼       | `src/widgets/header/ui/Header.tsx`              | -                 | useUserStore |
@@ -70,7 +69,6 @@ LandingPage
 | Feature Card      | 개별 기능 소개 카드           | `src/pages/landing/ui/LandingPage.tsx` (inline) | -                 | -            |
 | CTA Section       | 하단 전환 유도 섹션           | `src/pages/landing/ui/LandingPage.tsx` (inline) | -                 | -            |
 | Features Dropdown | 헤더의 Features 메뉴 드롭다운 | `src/widgets/header/ui/Header.tsx`              | -                 | React Router |
-```
 
 ---
 
@@ -227,36 +225,14 @@ interface FeatureCardData {
 
 ### Hero Section
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  MinPass    Home  About  Features▼  Contact    Sign In  Sign Up  │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  Automated                    ┌───────────────┐            │
-│  Productivity                 │               │            │
-│  Feedback                     │   Lightning   │            │
-│                               │     Icon      │            │
-│  Get continuous, intelligent  │   (Pulse)     │            │
-│  feedback on your daily...    │               │            │
-│                               └───────────────┘            │
-│  [Get Started Free] [Watch Demo]                           │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
+### Hero Section
+
+![Hero](./images/main1.png)
 
 ### Why MinPass Section
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  Why MinPass?                                               │
-│                                                             │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐       │
-│  │ Calendar    │  │ Task Mgmt   │  │ Analytics   │       │
-│  │ Integration │  │             │  │             │       │
-│  │             │  │             │  │             │       │
-│  └─────────────┘  └─────────────┘  └─────────────┘       │
-└─────────────────────────────────────────────────────────────┘
-```
+![Why MinPass](./images/main2.png)
+![Footer](./images/footer.png)
 
 ---
 

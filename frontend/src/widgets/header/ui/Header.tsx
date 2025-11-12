@@ -10,12 +10,9 @@ export function Header() {
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    // localStorage 정리
     localStorage.removeItem('accessToken')
     localStorage.removeItem('userId')
-    // 사용자 상태 초기화
     setUser(null)
-    // 메인 페이지로 이동
     navigate('/')
   }
 

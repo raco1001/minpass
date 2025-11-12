@@ -17,7 +17,6 @@ export const api = axios.create({
 })
 
 
-// Request interceptor: Authorization 헤더에 토큰 추가 (JWT 방식)
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken')
@@ -30,7 +29,6 @@ api.interceptors.request.use(
 )
 
 
-// Response interceptor: 에러 처리
 api.interceptors.response.use(
   r => r,
   (error) => {
