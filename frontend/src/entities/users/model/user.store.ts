@@ -2,9 +2,9 @@ import { create } from 'zustand'
 import type { User } from './user.types'
 
 
-type State = { user: User | null }
+type State = { user: User | Partial<User> | null }
 interface Actions {
-  setUser: (u: User | null) => void
+  setUser: (u: User | Partial<User> | null) => void
 }
 
 

@@ -2,7 +2,7 @@
 
 ## 🔍 문제 원인
 
-```
+```bash
 Error: 14 UNAVAILABLE: Name resolution failed for target dns:http://localhost:4001
 ```
 

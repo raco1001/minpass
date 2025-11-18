@@ -53,10 +53,13 @@ REDIRECT_BASE_URL=http://localhost:3000
 2. **"OAuth 클라이언트 ID"** 선택
 3. 애플리케이션 유형: **"웹 애플리케이션"** 선택
 4. **승인된 리디렉션 URI** 추가:
-   ```
+5.
+
+```bash
    http://localhost:3000/auth/login/google/callback
-   ```
-5. "만들기" 클릭 후 **Client ID**와 **Client Secret** 복사
+```
+
+6. "만들기" 클릭 후 **Client ID**와 **Client Secret** 복사
 
 ### 3. .env 파일에 추가
 
@@ -91,7 +94,7 @@ GOOGLE_CALLBACK_PATH=/auth/login/google/callback
 
 ### 2. App 정보 입력
 
-```
+```bash
 Application name: MinPass (또는 원하는 이름)
 Homepage URL: http://localhost:3000
 Authorization callback URL: http://localhost:3000/auth/login/github/callback
@@ -134,7 +137,8 @@ GITHUB_CALLBACK_PATH=/auth/login/github/callback
 2. "카카오 로그인 활성화" → **ON**
 3. **"Redirect URI 등록"** 클릭
 4. Redirect URI 추가:
-   ```
+
+   ```bash
    http://localhost:3000/auth/login/kakao/callback
    ```
 
@@ -187,7 +191,7 @@ pnpm start:apis
 
 **확인할 로그:**
 
-```
+```bash
 [AuthProviderModule] ✅ Google OAuth configured
 [AuthProviderModule] ✅ GitHub OAuth configured
 [AuthProviderModule] ✅ Kakao OAuth configured
