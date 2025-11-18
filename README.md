@@ -33,6 +33,19 @@ Comprehensive documentation (SRS, Architecture, ERD, Use Cases, etc.)
 
 This README guides you through the project at a high level, while detailed documentation can be found under each sub-directory.
 
+### Project Guide Documents (Links)
+
+0. [Document CheckLists](docs/intermediates/0.DocumentCheckLists.md)
+1. [Requirements](docs/intermediates/1.Requirements.md)
+2. [Product Vision](docs/intermediates/2.ProductVision.md)
+3. [Project Scope Statement](docs/intermediates/3.ProjectScopeStatement.md)
+4. [Software Requirements Specification](docs/intermediates/4.SoftwareRequirementsSpecification.md)
+5. [Use Cases](docs/intermediates/5.UseCases.md)
+6. [User Journey Map](docs/intermediates/6.UserJourneyMap.md)
+7. [System Architecture Diagram](docs/intermediates/7.SystemArchitectureDiagram.md)
+8. [Data Architecture ERD](docs/intermediates/8.DataArchitectureERD.md)
+9. [API](docs/intermediates/9.API.md)
+
 ## 2. Repository Structure
 
 ```bash
