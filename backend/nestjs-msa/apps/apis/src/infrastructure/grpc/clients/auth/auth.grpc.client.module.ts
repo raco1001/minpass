@@ -33,7 +33,7 @@ const fromRoot = (p: string) => resolve(process.cwd(), p);
           );
           const targetUrl = cfg.get<string>(
             "AUTH_GRPC_TARGET_URL",
-            "localhost:4002",
+            "127.0.0.1:4002",
           );
 
           const ca = fs.readFileSync(fromRoot(caPath));

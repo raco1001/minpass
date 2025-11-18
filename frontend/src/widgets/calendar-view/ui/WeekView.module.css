@@ -1,0 +1,116 @@
+.weekView {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10;
+}
+
+.timeColumn {
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dayHeader {
+  padding: 1rem;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dayHeader:last-child {
+  border-right: none;
+}
+
+.dayHeader.today {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.dayName {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.dayNumber {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
+
+.dayHeader.today .dayNumber {
+  color: #3b82f6;
+}
+
+.body {
+  flex: 1;
+}
+
+.hourRow {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  min-height: 60px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.timeLabel {
+  padding: 0.5rem;
+  text-align: right;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hourCell {
+  position: relative;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.25rem;
+  transition: background-color 0.2s;
+}
+
+.hourCell:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hourCell:last-child {
+  border-right: none;
+}
+
+.event {
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 0.25rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.event:hover {
+  opacity: 0.9;
+  transform: translateX(2px);
+}
+
+.eventTime {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.125rem;
+  opacity: 0.9;
+}
+
+.eventTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

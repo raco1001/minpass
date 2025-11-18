@@ -4,5 +4,5 @@ import { Observable } from "rxjs";
 export abstract class AuthCommandPort {
   abstract socialLogin(
     request: auth.SocialLoginRequest,
-  ): Observable<auth.ILoginResult>;
+  ): Observable<auth.LoginResult>;
 }

@@ -11,6 +11,7 @@ export abstract class UsersClientServicePort {
   abstract createUser(request: CreateUserRequest): Observable<User>;
   abstract updateUser(request: UpdateUserRequest): Observable<User>;
   abstract deleteUser(request: FindOneUserRequest): Observable<User>;
-  abstract findAllUsers(): Observable<UserList>;
+  abstract findMeUser(userId: string): Observable<User>;
   abstract findOneUser(request: FindOneUserRequest): Observable<User>;
+  abstract findAllUsers(): Observable<UserList>;
 }

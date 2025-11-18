@@ -75,7 +75,6 @@ export class TestDataFactory {
   ): auth.SocialLoginRequest {
     return {
       provider,
-      code: "test-auth-code",
       socialUserProfile: {
         provider,
         clientId: "google-client-id",
@@ -107,6 +106,7 @@ export class MockPortFactory {
       createAuthToken: jest.fn(),
       updateAuthClientTimestamp: jest.fn(),
       updateAuthTokens: jest.fn(),
+      upsertAuthTokens: jest.fn(),
     };
   }
 

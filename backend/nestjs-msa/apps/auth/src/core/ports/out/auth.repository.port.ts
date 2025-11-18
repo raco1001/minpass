@@ -10,12 +10,12 @@ import {
 } from "@auth/core/domain/dtos/auth-query.dto";
 import {
   CreateAuthTokenDomainRequestDto,
-  UpdateAuthTokensInfoDomainRequestDto,
   CreateAuthClientDomainRequestDto,
   CreateAuthClientDomainResponseDto,
   CreateAuthTokenDomainResponseDto,
   UpdateAuthClientDomainResponseDto,
-  UpdateAuthTokensInfoDomainResponseDto,
+  UpsertAuthTokensInfoDomainRequestDto,
+  UpsertAuthTokensInfoDomainResponseDto,
 } from "@auth/core/domain/dtos/auth-command.dtos";
 
 export abstract class AuthRepositoryPort {
@@ -43,7 +43,7 @@ export abstract class AuthRepositoryPort {
     authClient: UpdateAuthClientDomainResponseDto,
   ): Promise<UpdateAuthClientDomainResponseDto | null>;
 
-  abstract updateAuthTokens(
-    authTokenInfo: UpdateAuthTokensInfoDomainRequestDto,
-  ): Promise<UpdateAuthTokensInfoDomainResponseDto | null>;
+  abstract upsertAuthTokens(
+    authTokenInfo: UpsertAuthTokensInfoDomainRequestDto,
+  ): Promise<UpsertAuthTokensInfoDomainResponseDto | null>;
 }

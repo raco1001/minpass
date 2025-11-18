@@ -10,7 +10,7 @@ export class AuthClientService implements AuthClientServicePort {
     @Inject(AuthCommandPort)
     private readonly authCommand: AuthCommandPort,
   ) {}
-  socialLogin(request: auth.SocialLoginRequest): Observable<auth.ILoginResult> {
+  socialLogin(request: auth.SocialLoginRequest): Observable<auth.LoginResult> {
     return this.authCommand.socialLogin(request);
   }
 }

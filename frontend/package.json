@@ -14,8 +14,13 @@
     "adl:index:status": "node scripts/gen-adl-index.mjs --group=status --sort=updated --order=desc"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@tanstack/react-query": "^5.90.2",
     "axios": "^1.12.2",
+    "date-fns": "^4.1.0",
+    "msw": "^2.12.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.4",
@@ -39,5 +44,10 @@
     "typescript-eslint": "^8.45.0",
     "vite": "^7.1.7",
     "vite-tsconfig-paths": "^5.1.4"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }

@@ -26,6 +26,10 @@ export class UsersClientService implements UsersClientServicePort {
     return this.usersCommand.deleteUser(request);
   }
 
+  findMeUser(userId: string): Observable<users.User> {
+    return this.usersQuery.findMeUser(userId);
+  }
+
   findAllUsers(): Observable<users.UserList> {
     return this.usersQuery.findAllUsers();
   }
